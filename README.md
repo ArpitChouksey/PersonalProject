@@ -143,3 +143,7 @@ aws elbv2 describe-load-balancers --query 'LoadBalancers[].LoadBalancerName'
 
 
 Note: This project was built using a hybrid approach of manual console configuration followed by a Terraform Import to bring existing resources under state management
+
+AI REF CHAT: 
+https://chatgpt.com/share/6947f93a-ff44-8001-aa9b-3a4eb0f13f5f
+https://gemini.google.com/share/05feacec228a
