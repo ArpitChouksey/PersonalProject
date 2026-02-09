@@ -1,0 +1,32 @@
+replicaCount: 1
+
+image:
+  repository: jenkins/jenkins
+  tag: lts
+  pullPolicy: IfNotPresent
+
+service:
+  type: NodePort
+  port: 8080
+  nodePort: 32000
+
+resources:
+  requests:
+    cpu: "500m"
+    memory: "1Gi"
+  limits:
+    cpu: "1"
+    memory: "2Gi"
+
+persistence:
+  enabled: true
+  size: 10Gi
+  storageClass: ""
+
+serviceAccount:
+  create: true
+  name: jenkins
+
+rbac:
+  create: true
+

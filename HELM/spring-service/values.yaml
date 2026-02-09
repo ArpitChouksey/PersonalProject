@@ -1,0 +1,18 @@
+replicaCount: 1
+
+image:
+  repository: 211811255273.dkr.ecr.ap-south-1.amazonaws.com/eks-app-repo
+  tag: spring-v2
+  pullPolicy: IfNotPresent
+
+
+service:
+  type: ClusterIP
+  port: 8080
+
+env:
+  DB_URL: jdbc:postgresql://postgres-service:5432/appdb
+  PYTHON_SERVICE_URL: http://python-service:8000
+
+resources: {}
+

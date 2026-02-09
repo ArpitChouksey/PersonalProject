@@ -1,0 +1,16 @@
+replicaCount: 1
+
+image:
+  repository: 211811255273.dkr.ecr.ap-south-1.amazonaws.com/eks-app-repo
+  tag: python-v2
+  pullPolicy: IfNotPresent
+
+service:
+  type: ClusterIP
+  port: 8000
+
+env:
+  DJANGO_DEBUG: "true"
+
+resources: {}
+
