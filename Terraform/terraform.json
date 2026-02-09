@@ -1,0 +1,394 @@
+{
+  "version": 4,
+  "terraform_version": "1.13.4",
+  "serial": 28,
+  "lineage": "ae497bd4-a31c-ff8a-d5c6-e64c20ffd782",
+  "outputs": {},
+  "resources": [
+    {
+      "module": "module.ecr",
+      "mode": "managed",
+      "type": "aws_ecr_repository",
+      "name": "this",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "arn": "arn:aws:ecr:ap-south-1:211811255273:repository/eks-app-repo",
+            "encryption_configuration": [
+              {
+                "encryption_type": "AES256",
+                "kms_key": ""
+              }
+            ],
+            "force_delete": null,
+            "id": "eks-app-repo",
+            "image_scanning_configuration": [
+              {
+                "scan_on_push": false
+              }
+            ],
+            "image_tag_mutability": "IMMUTABLE",
+            "name": "eks-app-repo",
+            "registry_id": "211811255273",
+            "repository_url": "211811255273.dkr.ecr.ap-south-1.amazonaws.com/eks-app-repo",
+            "tags": {
+              "Name": "eks-app-repo"
+            },
+            "tags_all": {
+              "Name": "eks-app-repo"
+            },
+            "timeouts": null
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "eyJlMmJmYjczMC1lY2FhLTExZTYtOGY4OC0zNDM2M2JjN2M0YzAiOnsiZGVsZXRlIjoxMjAwMDAwMDAwMDAwfX0="
+        }
+      ]
+    },
+    {
+      "module": "module.eks",
+      "mode": "managed",
+      "type": "aws_eks_cluster",
+      "name": "this",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 1,
+          "attributes": {
+            "access_config": [
+              {
+                "authentication_mode": "API",
+                "bootstrap_cluster_creator_admin_permissions": true
+              }
+            ],
+            "arn": "arn:aws:eks:ap-south-1:211811255273:cluster/eks-prod-cluster",
+            "bootstrap_self_managed_addons": false,
+            "certificate_authority": [
+              {
+                "data": "LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSURCVENDQWUyZ0F3SUJBZ0lJYVd4ZEVaTEJjUEF3RFFZSktvWklodmNOQVFFTEJRQXdGVEVUTUJFR0ExVUUKQXhNS2EzVmlaWEp1WlhSbGN6QWVGdzB5TmpBeU1EY3hNRFV5TWpkYUZ3MHpOakF5TURVeE1EVTNNamRhTUJVeApFekFSQmdOVkJBTVRDbXQxWW1WeWJtVjBaWE13Z2dFaU1BMEdDU3FHU0liM0RRRUJBUVVBQTRJQkR3QXdnZ0VLCkFvSUJBUURLbW1NWEZzcDZZTlpueTUxRmY5MnhWK2ladVJwTDhlRVE4MFcrSmVuY2xlYlVPdXBhc0R5MDNiTEsKSEh3Smh0TDQ0U05NdkFJMHA0c1lnTXAvcHBZa24rTzNQRzhrMjhXUU1veE5Ock1LQ0M2UTBEMnRUTStVSWxXegpNc3BtVGxuZVlOMytrSkNZSlhOZlVkVnlSZE52UFg1bHRVcFlrb1NjTW41ZXZsbmFBRWtLSlBHSU9zTHZMc1laCjR3V3ZMS3ZXQ2xRZzU4Z1VaNjFXdURrbi8rdTIvelFmQTFyWnVCZm5laDhIcTJxUXFQNHh3VjJ2ZkNHbnQrN0UKZkwvQXVwZUNsLzBZSUd2UXoyYXJwbXJlaktVTDBYZE9pczdQRWxvaDVqZU9XU215Ti9QWmR6ejNNMmZEdWY5MwpGOWZ4ZkFEQno5TEFPMW5Kd0pGcDNKQldTT0NUQWdNQkFBR2pXVEJYTUE0R0ExVWREd0VCL3dRRUF3SUNwREFQCkJnTlZIUk1CQWY4RUJUQURBUUgvTUIwR0ExVWREZ1FXQkJRaHNxbWl2WGtSNFk2WEhzTW15N1IwK2tTbVZqQVYKQmdOVkhSRUVEakFNZ2dwcmRXSmxjbTVsZEdWek1BMEdDU3FHU0liM0RRRUJDd1VBQTRJQkFRQlJvc202cWczQwpneHZRc3hnenNRb0QvcGcveDZERTBjbWU4TmIxSzhiWjFtNGtNYXBIU1k4ekJVQXRiZ3F6MkEwZWZkNTNjejhMCnVpb0dHOEZhTmp3VGFjdG91cDhLLzZneTNBWHMzcUF6RjdYb255bFFuN1UrNTFGWEh2OWZPZU1vN0RjTjQwN2QKNWI0SWp1Umh6TFd2VElNQ3JGTnVvZnRVdGNXYStUL1Z0MGJUbWVtSVBDN3RPTEQxVUt6U3ZMeW4xeC9mZlgyNgpDemJMbVRuaUZ6OGpLNXp4NytjSHU2RW0rY2ZxNVAxOWxKYitOdXl2MDZxK0FMUVVVSlhsNGZHT0VBTkRuTGdpCjY5QXVwMi9vekNqaVRNZFJTVHlaUnR2TTRlcUZEOGd4RFNWajlzTDBRZlN3SGVSUm04L0puOVJMUXZQdG9DZy8KTDc5N2RHQlJWZm12Ci0tLS0tRU5EIENFUlRJRklDQVRFLS0tLS0K"
+              }
+            ],
+            "cluster_id": null,
+            "compute_config": [],
+            "created_at": "2026-02-07T10:52:48Z",
+            "enabled_cluster_log_types": [
+              "api",
+              "audit",
+              "authenticator",
+              "controllerManager",
+              "scheduler"
+            ],
+            "encryption_config": [],
+            "endpoint": "https://DCFE128BB36C71F6A67CEB5332F79C65.gr7.ap-south-1.eks.amazonaws.com",
+            "force_update_version": null,
+            "id": "eks-prod-cluster",
+            "identity": [
+              {
+                "oidc": [
+                  {
+                    "issuer": "https://oidc.eks.ap-south-1.amazonaws.com/id/DCFE128BB36C71F6A67CEB5332F79C65"
+                  }
+                ]
+              }
+            ],
+            "kubernetes_network_config": [
+              {
+                "elastic_load_balancing": [
+                  {
+                    "enabled": false
+                  }
+                ],
+                "ip_family": "ipv4",
+                "service_ipv4_cidr": "172.20.0.0/16",
+                "service_ipv6_cidr": ""
+              }
+            ],
+            "name": "eks-prod-cluster",
+            "outpost_config": [],
+            "platform_version": "eks.13",
+            "remote_network_config": [],
+            "role_arn": "arn:aws:iam::211811255273:role/eks-cluster-role",
+            "status": "ACTIVE",
+            "storage_config": [],
+            "tags": {},
+            "tags_all": {},
+            "timeouts": null,
+            "upgrade_policy": [
+              {
+                "support_type": "STANDARD"
+              }
+            ],
+            "version": "1.34",
+            "vpc_config": [
+              {
+                "cluster_security_group_id": "sg-0b32fb372b2b33784",
+                "endpoint_private_access": false,
+                "endpoint_public_access": true,
+                "public_access_cidrs": [
+                  "0.0.0.0/0"
+                ],
+                "security_group_ids": [],
+                "subnet_ids": [
+                  "subnet-01dd7d1ccb02292b6",
+                  "subnet-0cf4901bc3523e68f"
+                ],
+                "vpc_id": "vpc-0a168c9aedf1723b4"
+              }
+            ],
+            "zonal_shift_config": [
+              {
+                "enabled": false
+              }
+            ]
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "eyJlMmJmYjczMC1lY2FhLTExZTYtOGY4OC0zNDM2M2JjN2M0YzAiOnsiY3JlYXRlIjoxODAwMDAwMDAwMDAwLCJkZWxldGUiOjkwMDAwMDAwMDAwMCwidXBkYXRlIjozNjAwMDAwMDAwMDAwfSwic2NoZW1hX3ZlcnNpb24iOiIxIn0="
+        }
+      ]
+    },
+    {
+      "module": "module.igw",
+      "mode": "managed",
+      "type": "aws_internet_gateway",
+      "name": "this",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "arn": "arn:aws:ec2:ap-south-1:211811255273:internet-gateway/igw-0f916e3101eac207b",
+            "id": "igw-0f916e3101eac207b",
+            "owner_id": "211811255273",
+            "tags": {
+              "Name": "prod-igw"
+            },
+            "tags_all": {
+              "Name": "prod-igw"
+            },
+            "timeouts": null,
+            "vpc_id": "vpc-0a168c9aedf1723b4"
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "eyJlMmJmYjczMC1lY2FhLTExZTYtOGY4OC0zNDM2M2JjN2M0YzAiOnsiY3JlYXRlIjoxMjAwMDAwMDAwMDAwLCJkZWxldGUiOjEyMDAwMDAwMDAwMDAsInVwZGF0ZSI6MTIwMDAwMDAwMDAwMH0sInNjaGVtYV92ZXJzaW9uIjoiMCJ9",
+          "dependencies": [
+            "module.vpc.aws_vpc.this"
+          ]
+        }
+      ]
+    },
+    {
+      "module": "module.subnets",
+      "mode": "managed",
+      "type": "aws_subnet",
+      "name": "this",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "index_key": "private-subnet-a",
+          "schema_version": 1,
+          "attributes": {
+            "arn": "arn:aws:ec2:ap-south-1:211811255273:subnet/subnet-01dd7d1ccb02292b6",
+            "assign_ipv6_address_on_creation": false,
+            "availability_zone": "ap-south-1a",
+            "availability_zone_id": "aps1-az1",
+            "cidr_block": "10.0.11.0/24",
+            "customer_owned_ipv4_pool": "",
+            "enable_dns64": false,
+            "enable_lni_at_device_index": 0,
+            "enable_resource_name_dns_a_record_on_launch": false,
+            "enable_resource_name_dns_aaaa_record_on_launch": false,
+            "id": "subnet-01dd7d1ccb02292b6",
+            "ipv6_cidr_block": "",
+            "ipv6_cidr_block_association_id": "",
+            "ipv6_native": false,
+            "map_customer_owned_ip_on_launch": false,
+            "map_public_ip_on_launch": false,
+            "outpost_arn": "",
+            "owner_id": "211811255273",
+            "private_dns_hostname_type_on_launch": "ip-name",
+            "tags": {
+              "Name": "private-subnet-a"
+            },
+            "tags_all": {
+              "Name": "private-subnet-a"
+            },
+            "timeouts": null,
+            "vpc_id": "vpc-0a168c9aedf1723b4"
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "eyJlMmJmYjczMC1lY2FhLTExZTYtOGY4OC0zNDM2M2JjN2M0YzAiOnsiY3JlYXRlIjo2MDAwMDAwMDAwMDAsImRlbGV0ZSI6MTIwMDAwMDAwMDAwMH0sInNjaGVtYV92ZXJzaW9uIjoiMSJ9",
+          "dependencies": [
+            "module.vpc.aws_vpc.this"
+          ]
+        },
+        {
+          "index_key": "private-subnet-b",
+          "schema_version": 1,
+          "attributes": {
+            "arn": "arn:aws:ec2:ap-south-1:211811255273:subnet/subnet-0cf4901bc3523e68f",
+            "assign_ipv6_address_on_creation": false,
+            "availability_zone": "ap-south-1b",
+            "availability_zone_id": "aps1-az3",
+            "cidr_block": "10.0.12.0/24",
+            "customer_owned_ipv4_pool": "",
+            "enable_dns64": false,
+            "enable_lni_at_device_index": 0,
+            "enable_resource_name_dns_a_record_on_launch": false,
+            "enable_resource_name_dns_aaaa_record_on_launch": false,
+            "id": "subnet-0cf4901bc3523e68f",
+            "ipv6_cidr_block": "",
+            "ipv6_cidr_block_association_id": "",
+            "ipv6_native": false,
+            "map_customer_owned_ip_on_launch": false,
+            "map_public_ip_on_launch": false,
+            "outpost_arn": "",
+            "owner_id": "211811255273",
+            "private_dns_hostname_type_on_launch": "ip-name",
+            "tags": {
+              "Name": "private-subnet-b"
+            },
+            "tags_all": {
+              "Name": "private-subnet-b"
+            },
+            "timeouts": null,
+            "vpc_id": "vpc-0a168c9aedf1723b4"
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "eyJlMmJmYjczMC1lY2FhLTExZTYtOGY4OC0zNDM2M2JjN2M0YzAiOnsiY3JlYXRlIjo2MDAwMDAwMDAwMDAsImRlbGV0ZSI6MTIwMDAwMDAwMDAwMH0sInNjaGVtYV92ZXJzaW9uIjoiMSJ9",
+          "dependencies": [
+            "module.vpc.aws_vpc.this"
+          ]
+        },
+        {
+          "index_key": "public-subnet-a",
+          "schema_version": 1,
+          "attributes": {
+            "arn": "arn:aws:ec2:ap-south-1:211811255273:subnet/subnet-097759192e39c1f8f",
+            "assign_ipv6_address_on_creation": false,
+            "availability_zone": "ap-south-1a",
+            "availability_zone_id": "aps1-az1",
+            "cidr_block": "10.0.1.0/24",
+            "customer_owned_ipv4_pool": "",
+            "enable_dns64": false,
+            "enable_lni_at_device_index": 0,
+            "enable_resource_name_dns_a_record_on_launch": false,
+            "enable_resource_name_dns_aaaa_record_on_launch": false,
+            "id": "subnet-097759192e39c1f8f",
+            "ipv6_cidr_block": "",
+            "ipv6_cidr_block_association_id": "",
+            "ipv6_native": false,
+            "map_customer_owned_ip_on_launch": false,
+            "map_public_ip_on_launch": true,
+            "outpost_arn": "",
+            "owner_id": "211811255273",
+            "private_dns_hostname_type_on_launch": "ip-name",
+            "tags": {
+              "Name": "public-subnet-a"
+            },
+            "tags_all": {
+              "Name": "public-subnet-a"
+            },
+            "timeouts": null,
+            "vpc_id": "vpc-0a168c9aedf1723b4"
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "eyJlMmJmYjczMC1lY2FhLTExZTYtOGY4OC0zNDM2M2JjN2M0YzAiOnsiY3JlYXRlIjo2MDAwMDAwMDAwMDAsImRlbGV0ZSI6MTIwMDAwMDAwMDAwMH0sInNjaGVtYV92ZXJzaW9uIjoiMSJ9",
+          "dependencies": [
+            "module.vpc.aws_vpc.this"
+          ]
+        },
+        {
+          "index_key": "public-subnet-b",
+          "schema_version": 1,
+          "attributes": {
+            "arn": "arn:aws:ec2:ap-south-1:211811255273:subnet/subnet-08e0801dd564ab092",
+            "assign_ipv6_address_on_creation": false,
+            "availability_zone": "ap-south-1b",
+            "availability_zone_id": "aps1-az3",
+            "cidr_block": "10.0.2.0/24",
+            "customer_owned_ipv4_pool": "",
+            "enable_dns64": false,
+            "enable_lni_at_device_index": 0,
+            "enable_resource_name_dns_a_record_on_launch": false,
+            "enable_resource_name_dns_aaaa_record_on_launch": false,
+            "id": "subnet-08e0801dd564ab092",
+            "ipv6_cidr_block": "",
+            "ipv6_cidr_block_association_id": "",
+            "ipv6_native": false,
+            "map_customer_owned_ip_on_launch": false,
+            "map_public_ip_on_launch": true,
+            "outpost_arn": "",
+            "owner_id": "211811255273",
+            "private_dns_hostname_type_on_launch": "ip-name",
+            "tags": {
+              "Name": "public-subnet-b"
+            },
+            "tags_all": {
+              "Name": "public-subnet-b"
+            },
+            "timeouts": null,
+            "vpc_id": "vpc-0a168c9aedf1723b4"
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "eyJlMmJmYjczMC1lY2FhLTExZTYtOGY4OC0zNDM2M2JjN2M0YzAiOnsiY3JlYXRlIjo2MDAwMDAwMDAwMDAsImRlbGV0ZSI6MTIwMDAwMDAwMDAwMH0sInNjaGVtYV92ZXJzaW9uIjoiMSJ9",
+          "dependencies": [
+            "module.vpc.aws_vpc.this"
+          ]
+        }
+      ]
+    },
+    {
+      "module": "module.vpc",
+      "mode": "managed",
+      "type": "aws_vpc",
+      "name": "this",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 1,
+          "attributes": {
+            "arn": "arn:aws:ec2:ap-south-1:211811255273:vpc/vpc-0a168c9aedf1723b4",
+            "assign_generated_ipv6_cidr_block": false,
+            "cidr_block": "10.0.0.0/16",
+            "default_network_acl_id": "acl-0452d9a70c2e94b4b",
+            "default_route_table_id": "rtb-052f4a002c836363d",
+            "default_security_group_id": "sg-0a49f9525d7f319b8",
+            "dhcp_options_id": "dopt-0f40064fd5294f844",
+            "enable_dns_hostnames": false,
+            "enable_dns_support": true,
+            "enable_network_address_usage_metrics": false,
+            "id": "vpc-0a168c9aedf1723b4",
+            "instance_tenancy": "default",
+            "ipv4_ipam_pool_id": null,
+            "ipv4_netmask_length": null,
+            "ipv6_association_id": "",
+            "ipv6_cidr_block": "",
+            "ipv6_cidr_block_network_border_group": "",
+            "ipv6_ipam_pool_id": "",
+            "ipv6_netmask_length": 0,
+            "main_route_table_id": "rtb-052f4a002c836363d",
+            "owner_id": "211811255273",
+            "tags": {
+              "Name": "prod-vpc"
+            },
+            "tags_all": {
+              "Name": "prod-vpc"
+            }
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "eyJzY2hlbWFfdmVyc2lvbiI6IjEifQ=="
+        }
+      ]
+    }
+  ],
+  "check_results": null
+}
