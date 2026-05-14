@@ -1,0 +1,15 @@
+version: 0.2
+
+phases:
+  install:
+    commands:
+      - echo "Install phase started"
+
+  build:
+    commands:
+      - echo "Deploying files to S3 bucket"
+      - aws s3 sync . s3://arpit-static-site-demo-001 --delete --exclude ".git/*"
+
+artifacts:
+  files:
+    - '**/*'
