@@ -1,0 +1,17 @@
+replicaCount: 1
+
+image:
+  repository: spring-service
+  tag: "4.0"
+  pullPolicy: IfNotPresent
+
+service:
+  type: ClusterIP
+  port: 8080
+
+env:
+  DB_URL: jdbc:postgresql://postgres-service.default.svc.cluster.local:5432/appdb
+  PYTHON_SERVICE_URL: http://python-service:8000
+
+resources: {}
+
