@@ -1,0 +1,207 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: fluent-bit
+  namespace: ns-logging
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: fluent-bit-read
+
+rules:
+- apiGroups: [""]
+  resources:
+    - namespaces
+    - pods
+    - nodes
+  verbs:
+    - get
+    - list
+    - watch
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: fluent-bit-read-binding
+
+subjects:
+- kind: ServiceAccount
+  name: fluent-bit
+  namespace: ns-logging
+
+roleRef:
+  kind: ClusterRole
+  name: fluent-bit-read
+  apiGroup: rbac.authorization.k8s.io
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: fluent-bit-config
+  namespace: ns-logging
+
+data:
+  fluent-bit.conf: |
+    [SERVICE]
+        Flush           1
+        Daemon          Off
+        Log_Level       info
+        Parsers_File    parsers.conf
+
+    #################################################
+    # Kubernetes Container Logs
+    #################################################
+
+    [INPUT]
+        Name              tail
+        Path              /var/log/containers/*.log
+        Parser            docker
+        Tag               kube.*
+        Refresh_Interval  5
+        Read_from_Head    true
+        Skip_Long_Lines   On
+
+    #################################################
+    # Spring File Logs
+    #################################################
+
+    [INPUT]
+        Name              tail
+        Path              /springlogs/application.log
+        Tag               spring.file
+        Read_from_Head    true
+        Refresh_Interval  5
+
+    #################################################
+    # Kubernetes Metadata
+    #################################################
+
+    [FILTER]
+        Name                kubernetes
+        Match               kube.*
+        Kube_URL            https://kubernetes.default.svc:443
+        Merge_Log           On
+        Keep_Log            Off
+        K8S-Logging.Parser  On
+        K8S-Logging.Exclude Off
+
+    #################################################
+    # Spring Log Enrichment
+    #################################################
+
+    [FILTER]
+        Name                modify
+        Match               spring.file
+
+        Add                 service spring-service
+        Add                 environment dev
+        Add                 source application-log
+
+    #################################################
+    # Kubernetes Logs -> kubernetes-*
+    #################################################
+
+    [OUTPUT]
+        Name                es
+        Match               kube.*
+
+        Host                elasticsearch
+        Port                9200
+
+        Logstash_Format     On
+        Logstash_Prefix     kubernetes
+
+        Retry_Limit         False
+
+    #################################################
+    # Spring Logs -> spring-logs-*
+    #################################################
+
+    [OUTPUT]
+        Name                es
+        Match               spring.file
+
+        Host                elasticsearch
+        Port                9200
+
+        Logstash_Format     On
+        Logstash_Prefix     spring-logs
+
+        Retry_Limit         False
+
+  parsers.conf: |
+    [PARSER]
+        Name   docker
+        Format json
+
+---
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: fluent-bit
+  namespace: ns-logging
+
+spec:
+  selector:
+    matchLabels:
+      app: fluent-bit
+
+  template:
+    metadata:
+      labels:
+        app: fluent-bit
+
+    spec:
+      serviceAccountName: fluent-bit
+
+      containers:
+      - name: fluent-bit
+
+        image: fluent/fluent-bit:2.2
+
+        volumeMounts:
+
+        - name: varlog
+          mountPath: /var/log
+
+        - name: containers
+          mountPath: /var/lib/docker/containers
+          readOnly: true
+
+        - name: spring-logs
+          mountPath: /springlogs
+          readOnly: true
+
+        - name: config
+          mountPath: /fluent-bit/etc
+
+        resources:
+          requests:
+            memory: "64Mi"
+            cpu: "50m"
+
+          limits:
+            memory: "128Mi"
+            cpu: "100m"
+
+      volumes:
+
+      - name: varlog
+        hostPath:
+          path: /var/log
+
+      - name: containers
+        hostPath:
+          path: /var/lib/docker/containers
+
+      - name: spring-logs
+        hostPath:
+          path: /var/log/apps/spring-service
+
+      - name: config
+        configMap:
+          name: fluent-bit-config
