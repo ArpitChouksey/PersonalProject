@@ -1,7 +1,0 @@
-apiVersion: v2
-name: ingress
-description: Ingress routing for Spring Boot and Python microservices
-type: application
-version: 0.1.0
-appVersion: "1.0"
-
