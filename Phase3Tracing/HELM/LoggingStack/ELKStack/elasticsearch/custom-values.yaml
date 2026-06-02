@@ -1,0 +1,18 @@
+replicas: 1
+
+antiAffinity: "soft"
+
+esConfig:
+  elasticsearch.yml: |
+    discovery.type: single-node
+
+persistence:
+  enabled: false
+
+resources:
+  requests:
+    cpu: "200m"
+    memory: "512Mi"
+  limits:
+    cpu: "500m"
+    memory: "1Gi"

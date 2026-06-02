@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN">
+
+    <Appenders>
+
+        <!-- Console Logs (Current ELK Flow) -->
+        <Console name="Console" target="SYSTEM_OUT">
+            <JsonTemplateLayout />
+        </Console>
+
+        <!-- File Logs (New Custom Path) -->
+        <File
+            name="FileAppender"
+            fileName="/app/logs/application.log">
+
+            <PatternLayout
+                pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level [%t] %c - %msg%n"/>
+        </File>
+
+    </Appenders>
+
+    <Loggers>
+
+        <Root level="info">
+
+            <AppenderRef ref="Console"/>
+
+            <AppenderRef ref="FileAppender"/>
+
+        </Root>
+
+    </Loggers>
+
+</Configuration>
