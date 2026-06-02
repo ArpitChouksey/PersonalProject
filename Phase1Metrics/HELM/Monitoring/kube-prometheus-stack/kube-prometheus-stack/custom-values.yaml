@@ -1,2 +1,17 @@
 prometheus-node-exporter:
   enabled: false
+
+grafana:
+
+  assertNoLeakedSecrets: false
+
+  grafana.ini:
+    smtp:
+      enabled: true
+      host: smtp.gmail.com:587
+      user: arpitchouksey18@gmail.com
+      password: "**** **** ****" #Create Gmail Password 
+      from_address: arpitchouksey18@gmail.com
+      from_name: Grafana
+      skip_verify: true
+
