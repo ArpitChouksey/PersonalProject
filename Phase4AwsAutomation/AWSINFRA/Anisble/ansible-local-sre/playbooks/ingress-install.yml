@@ -1,0 +1,11 @@
+---
+- name: Install Ingress
+  hosts: local
+
+  tasks:
+
+    - name: Install Ingress Helm
+      kubernetes.core.helm:
+        name: sre-ingress
+        chart_ref: "{{ playbook_dir }}/../helm/ingress"
+        release_namespace: monitoring

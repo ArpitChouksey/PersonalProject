@@ -1,0 +1,14 @@
+replicaCount: 1
+
+image:
+  repository: servicenow-webhook
+  tag: "v1"
+  pullPolicy: IfNotPresent
+
+service:
+  type: ClusterIP
+  port: 5000
+
+servicenow:
+  instance: dev399832
+  username: admin

@@ -1,0 +1,11 @@
+---
+- name: Install Elasticsearch
+  hosts: local
+
+  tasks:
+
+    - name: Apply Elasticsearch
+      command: >
+        kubectl apply -f
+        {{ playbook_dir }}/../helm/logging/ELKStack/k8s/elasticsearch.yaml
+

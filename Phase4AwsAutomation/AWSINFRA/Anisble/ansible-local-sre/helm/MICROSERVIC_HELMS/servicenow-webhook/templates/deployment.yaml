@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: servicenow-webhook
+
+spec:
+  replicas: {{ .Values.replicaCount }}
+
+  selector:
+    matchLabels:
+      app: servicenow-webhook
+
+  template:
+    metadata:
+      labels:
+        app: servicenow-webhook
+
+    spec:
+      containers:
+      - name: servicenow-webhook
+
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+
+        env:
+        - name: SN_INSTANCE
+          value: "{{ .Values.servicenow.instance }}"
+
+        - name: SN_USER
+          value: "{{ .Values.servicenow.username }}"
+
+        - name: SN_PASS
+          valueFrom:
+            secretKeyRef:
+              name: servicenow-secret
+              key: password
+
+        ports:
+        - containerPort: 5000

@@ -1,0 +1,29 @@
+---
+- name: Install PostgreSQL
+  hosts: local
+
+  tasks:
+
+    - name: Install PostgreSQL Helm
+      kubernetes.core.helm:
+        name: postgres
+        chart_ref: "{{ playbook_dir }}/../helm/MICROSERVIC_HELMS/postgres-helm"
+        release_namespace: monitoring
+        create_namespace: true
+
+    - name: Wait for PostgreSQL deployment
+      command: >
+        kubectl rollout status deployment/postgres
+        -n monitoring
+        --timeout=300s
+
+    - name: Verify PostgreSQL pod
+      command: >
+        kubectl get pods
+        -n monitoring
+        -l app=postgres
+
+      register: postgres_status
+
+    - debug:
+        var: postgres_status.stdout

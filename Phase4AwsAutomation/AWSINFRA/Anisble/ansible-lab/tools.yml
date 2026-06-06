@@ -1,0 +1,19 @@
+---
+- name: Verify DevOps Tools
+  hosts: local
+
+  tasks:
+
+    - name: Check Helm
+      command: helm version
+      register: helm_output
+
+    - debug:
+        var: helm_output.stdout
+
+    - name: Check Kubectl
+      command: kubectl version --client
+      register: kubectl_output
+
+    - debug:
+        var: kubectl_output.stdout

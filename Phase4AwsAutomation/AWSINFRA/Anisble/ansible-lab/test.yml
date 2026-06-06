@@ -1,0 +1,13 @@
+---
+- name: Test Ansible on Mac
+  hosts: local
+
+  tasks:
+
+    - name: Show hostname
+      command: hostname
+      register: host_output
+
+    - name: Print hostname
+      debug:
+        var: host_output.stdout

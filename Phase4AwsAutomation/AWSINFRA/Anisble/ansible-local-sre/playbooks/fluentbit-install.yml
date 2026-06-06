@@ -1,0 +1,10 @@
+---
+- name: Install FluentBit
+  hosts: local
+
+  tasks:
+
+    - name: Apply FluentBit
+      command: >
+        kubectl apply -f
+        {{ playbook_dir }}/../helm/logging/ELKStack/k8s/fluent-bit.yaml

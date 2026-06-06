@@ -1,0 +1,93 @@
+---
+- name: Destroy Components
+  hosts: local
+
+  tasks:
+
+    #################################################
+    # HELM RELEASES
+    #################################################
+
+    - name: Remove PostgreSQL
+      kubernetes.core.helm:
+        name: postgres
+        release_namespace: monitoring
+        state: absent
+      when:
+        - component == "postgres" or component == "all"
+
+    - name: Remove Spring Service
+      kubernetes.core.helm:
+        name: spring-service
+        release_namespace: monitoring
+        state: absent
+      when:
+        - component == "spring" or component == "all"
+
+    - name: Remove Python Service
+      kubernetes.core.helm:
+        name: python-service
+        release_namespace: monitoring
+        state: absent
+      when:
+        - component == "python" or component == "all"
+
+    - name: Remove Prometheus
+      kubernetes.core.helm:
+        name: prometheus
+        release_namespace: monitoring
+        state: absent
+      when:
+        - component == "prometheus" or component == "all"
+
+    #################################################
+    # ELK
+    #################################################
+
+    - name: Remove Elasticsearch
+      command: >
+        kubectl delete -f
+        {{ playbook_dir }}/../helm/logging/ELKStack/k8s/elasticsearch.yaml
+        --ignore-not-found=true
+      when:
+        - component == "elk" or component == "all"
+
+    - name: Remove Kibana
+      command: >
+        kubectl delete -f
+        {{ playbook_dir }}/../helm/logging/ELKStack/k8s/kibana.yaml
+        --ignore-not-found=true
+      when:
+        - component == "elk" or component == "all"
+
+    - name: Remove FluentBit
+      command: >
+        kubectl delete -f
+        {{ playbook_dir }}/../helm/logging/ELKStack/k8s/fluent-bit.yaml
+        --ignore-not-found=true
+      when:
+        - component == "elk" or component == "all"
+
+    #################################################
+    # JAEGER
+    #################################################
+
+    - name: Remove Jaeger
+      command: >
+        kubectl delete -f
+        {{ playbook_dir }}/../helm/tracing/jaeger.yaml
+        --ignore-not-found=true
+      when:
+        - component == "jaeger" or component == "all"
+
+    #################################################
+    # SERVICE NOW 
+    #################################################
+
+    - name: Remove ServiceNow Webhook
+      kubernetes.core.helm:
+        name: servicenow-webhook
+        release_namespace: monitoring
+        state: absent
+      when:
+        - component == "servicenow" or component == "all"

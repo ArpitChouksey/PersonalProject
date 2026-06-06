@@ -1,0 +1,32 @@
+---
+- name: Install ServiceNow Webhook
+  hosts: local
+
+  tasks:
+
+    - name: Install ServiceNow Webhook Helm
+      kubernetes.core.helm:
+        name: servicenow-webhook
+        chart_ref: "{{ playbook_dir }}/../helm/MICROSERVIC_HELMS/servicenow-webhook"
+        release_namespace: monitoring
+        create_namespace: true
+
+    - name: Wait for ServiceNow Webhook deployment
+      command: >
+        kubectl rollout status
+        deployment/servicenow-webhook
+        -n monitoring
+        --timeout=300s
+      register: rollout_result
+      changed_when: false
+
+    - name: Verify ServiceNow Webhook pod
+      command: >
+        kubectl get pods
+        -n monitoring
+        -l app=servicenow-webhook
+      register: webhook_status
+      changed_when: false
+
+    - debug:
+        var: webhook_status.stdout

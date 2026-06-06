@@ -1,0 +1,13 @@
+---
+- name: Test K8S
+  hosts: local
+
+  tasks:
+
+    - name: Get namespaces
+      kubernetes.core.k8s_info:
+        kind: Namespace
+      register: ns
+
+    - debug:
+        var: ns.resources

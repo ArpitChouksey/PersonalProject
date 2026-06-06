@@ -1,0 +1,19 @@
+---
+- import_playbook: namespaces.yml
+
+- import_playbook: postgres-install.yml
+
+- import_playbook: spring-install.yml
+- import_playbook: python-install.yml
+
+- import_playbook: prometheus-install.yml
+
+- import_playbook: servicenow-install.yml
+
+- import_playbook: elasticsearch-install.yml
+- import_playbook: kibana-install.yml
+- import_playbook: fluentbit-install.yml
+
+- import_playbook: jaeger-install.yml
+
+- import_playbook: ingress-install.yml

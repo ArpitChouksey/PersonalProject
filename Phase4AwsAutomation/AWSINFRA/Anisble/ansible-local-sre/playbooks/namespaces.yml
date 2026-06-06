@@ -1,0 +1,33 @@
+---
+- name: Create SRE Namespaces
+  hosts: local
+
+  tasks:
+
+    - name: monitoring namespace
+      kubernetes.core.k8s:
+        api_version: v1
+        kind: Namespace
+        name: monitoring
+        state: present
+
+    - name: logging namespace
+      kubernetes.core.k8s:
+        api_version: v1
+        kind: Namespace
+        name: ns-logging
+        state: present
+
+    - name: tracing namespace
+      kubernetes.core.k8s:
+        api_version: v1
+        kind: Namespace
+        name: ns-tracing
+        state: present
+
+    - name: application namespace
+      kubernetes.core.k8s:
+        api_version: v1
+        kind: Namespace
+        name: ns-app
+        state: present
