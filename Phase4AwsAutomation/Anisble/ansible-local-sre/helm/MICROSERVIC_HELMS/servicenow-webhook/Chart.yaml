@@ -1,0 +1,6 @@
+apiVersion: v2
+name: servicenow-webhook
+description: ServiceNow AlertManager Webhook
+type: application
+version: 0.1.0
+appVersion: "1.0"

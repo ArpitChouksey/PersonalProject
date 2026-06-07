@@ -1,0 +1,28 @@
+---
+- name: Install Spring Service
+  hosts: local
+
+  tasks:
+
+    - name: Install Spring Helm
+      kubernetes.core.helm:
+        name: spring-service
+        chart_ref: "{{ playbook_dir }}/../helm/MICROSERVIC_HELMS/spring-service"
+        release_namespace: monitoring
+
+    - name: Wait for Spring deployment
+      command: >
+        kubectl rollout status deployment/spring-service
+        -n monitoring
+        --timeout=300s
+
+    - name: Check Spring logs
+      command: >
+        kubectl logs deployment/spring-service
+        -n monitoring
+        --tail=50
+
+      register: spring_logs
+
+    - debug:
+        var: spring_logs.stdout

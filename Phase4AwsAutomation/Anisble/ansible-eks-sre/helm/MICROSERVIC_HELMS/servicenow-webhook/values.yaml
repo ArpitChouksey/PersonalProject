@@ -1,0 +1,15 @@
+replicaCount: 1
+
+image:
+  repository: 211811255273.dkr.ecr.us-east-1.amazonaws.com/sre-project
+  tag: "servicenow-v2"
+  pullPolicy: IfNotPresent
+
+service:
+  type: ClusterIP
+  port: 5000
+
+servicenow:
+  instance: dev399832
+  username: admin
+  password: cV9ybV=Mr1Z/

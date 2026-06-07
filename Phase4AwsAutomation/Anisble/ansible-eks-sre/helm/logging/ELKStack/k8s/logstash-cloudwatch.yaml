@@ -1,0 +1,75 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: logstash-sa
+  namespace: ns-logging
+  annotations:
+    eks.amazonaws.com/role-arn: arn:aws:iam::211811255273:role/FluentBitCloudWatchRole
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: logstash-config
+  namespace: ns-logging
+data:
+  logstash.conf: |
+    input {
+      cloudwatch_logs {
+        log_group => "sre-cloudtrail-logs"
+        log_stream_prefix => "211811255273_CloudTrail_"
+        region => "us-east-1"
+        interval => 10
+        type => "cloudtrail"
+        codec => "json"
+      }
+    }
+
+    output {
+      elasticsearch {
+        hosts => ["http://elasticsearch:9200"]
+        index => "cloudtrail-%{+YYYY.MM.dd}"
+      }
+    }
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: logstash-cloudwatch
+  namespace: ns-logging
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: logstash-cloudwatch
+  template:
+    metadata:
+      labels:
+        app: logstash-cloudwatch
+    spec:
+      serviceAccountName: logstash-sa
+      containers:
+      - name: logstash
+        image: docker.elastic.co/logstash/logstash:7.17.0
+        args: ["--log.level", "debug"] # Adds explicit output tracking
+        env:
+        - name: LS_JAVA_OPTS
+          value: "-Xms512m -Xmx512m"   # Allocates stable heap sizes
+        resources:
+          limits:
+            memory: 1532Mi             # Increased threshold to prevent silent OOM kills
+            cpu: "1000m"
+          requests:
+            memory: 512Mi
+            cpu: "250m"
+        volumeMounts:
+        - name: config-volume
+          mountPath: /usr/share/logstash/pipeline/
+      volumes:
+      - name: config-volume
+        configMap:
+          name: logstash-config
+          items:
+            - key: logstash.conf
+              path: logstash.conf

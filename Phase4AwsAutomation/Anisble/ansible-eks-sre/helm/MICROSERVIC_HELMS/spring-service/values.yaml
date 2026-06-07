@@ -1,0 +1,17 @@
+replicaCount: 1
+
+image:
+  repository: 211811255273.dkr.ecr.us-east-1.amazonaws.com/sre-project
+  tag: "spring-v7"
+  pullPolicy: IfNotPresent
+
+service:
+  type: ClusterIP
+  port: 8080
+
+env:
+  DB_URL: jdbc:postgresql://postgres-service.monitoring.svc.cluster.local:5432/appdb
+  PYTHON_SERVICE_URL: http://python-service:8000
+
+resources: {}
+

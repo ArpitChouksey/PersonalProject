@@ -1,0 +1,68 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: vector-sa
+  namespace: ns-logging
+  annotations:
+    # Uses your existing working IAM Role for CloudWatch access
+    eks.amazonaws.com/role-arn: arn:aws:iam::211811255273:role/FluentBitCloudWatchRole
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: vector-config
+  namespace: ns-logging
+data:
+  vector.yaml: |
+    sources:
+      cloudwatch_logs_in:
+        type: "aws_cloudwatch_logs"
+        region: "us-east-1"
+        group_name: "sre-cloudtrail-logs"
+        stream_prefix: "211811255273_CloudTrail_"
+        interval_secs: 10
+
+    sinks:
+      elasticsearch_out:
+        type: "elasticsearch"
+        inputs: ["cloudwatch_logs_in"]
+        endpoint: "http://elasticsearch:9200"
+        mode: "bulk"
+        bulk:
+          index: "cloudtrail-%Y.%m.%d"
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: vector-cloudwatch
+  namespace: ns-logging
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: vector-cloudwatch
+  template:
+    metadata:
+      labels:
+        app: vector-cloudwatch
+    spec:
+      serviceAccountName: vector-sa
+      containers:
+      - name: vector
+        image: timberio/vector:0.38.0-alpine
+        volumeMounts:
+        - name: config
+          mountPath: /etc/vector/
+        resources:
+          requests:
+            cpu: "100m"
+            memory: "32Mi"
+          limits:
+            cpu: "500m"
+            memory: "128Mi" # Super lightweight!
+      volumes:
+      - name: config
+        configMap:
+          name: vector-config

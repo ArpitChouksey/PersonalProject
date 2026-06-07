@@ -1,0 +1,16 @@
+replicaCount: 1
+
+image:
+  repository: 211811255273.dkr.ecr.us-east-1.amazonaws.com/sre-project
+  tag: "python-v7"
+  pullPolicy: IfNotPresent
+
+service:
+  type: ClusterIP
+  port: 8000
+
+env:
+  DJANGO_DEBUG: "True"
+
+resources: {}
+

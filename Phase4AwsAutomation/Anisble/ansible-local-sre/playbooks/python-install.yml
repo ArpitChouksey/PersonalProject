@@ -1,0 +1,11 @@
+---
+- name: Install Python Service
+  hosts: local
+
+  tasks:
+
+    - name: Install Python Helm
+      kubernetes.core.helm:
+        name: python-service
+        chart_ref: "{{ playbook_dir }}/../helm/MICROSERVIC_HELMS/python-service"
+        release_namespace: monitoring

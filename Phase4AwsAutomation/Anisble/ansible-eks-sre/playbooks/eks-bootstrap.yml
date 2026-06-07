@@ -1,0 +1,19 @@
+---
+- name: Configure EKS
+  hosts: localhost
+  gather_facts: false
+
+  tasks:
+
+    - name: Update kubeconfig
+      shell: |
+        aws eks update-kubeconfig \
+        --region us-east-1 \
+        --name sre-eks
+
+    - name: Verify nodes
+      shell: kubectl get nodes
+      register: nodes
+
+    - debug:
+        var: nodes.stdout

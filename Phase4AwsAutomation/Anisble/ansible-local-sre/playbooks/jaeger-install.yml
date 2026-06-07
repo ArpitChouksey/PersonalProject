@@ -1,0 +1,10 @@
+---
+- name: Install Jaeger
+  hosts: local
+
+  tasks:
+
+    - name: Apply Jaeger
+      command: >
+        kubectl apply -f
+        {{ playbook_dir }}/../helm/tracing/jaeger.yaml
