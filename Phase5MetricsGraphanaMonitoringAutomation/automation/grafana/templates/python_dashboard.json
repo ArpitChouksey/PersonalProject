@@ -1,0 +1,57 @@
+{
+  "dashboard": {
+    "id": null,
+    "title": "SRE-AUTO-PYTHON",
+    "tags": ["sre","python"],
+    "timezone": "browser",
+    "schemaVersion": 41,
+    "version": 0,
+    "panels": [
+      {
+        "id": 1,
+        "title": "Python CPU Usage",
+        "type": "timeseries",
+        "gridPos": { "h": 8, "w": 12, "x": 0, "y": 0 },
+        "targets": [
+          {
+            "expr": "sum(rate(container_cpu_usage_seconds_total{pod=~\"python-service.*\"}[5m]))"
+          }
+        ]
+      },
+      {
+        "id": 2,
+        "title": "Python Memory Usage",
+        "type": "timeseries",
+        "gridPos": { "h": 8, "w": 12, "x": 12, "y": 0 },
+        "targets": [
+          {
+            "expr": "sum(container_memory_usage_bytes{pod=~\"python-service.*\"})"
+          }
+        ]
+      },
+      {
+        "id": 3,
+        "title": "Python Pod Count",
+        "type": "stat",
+        "gridPos": { "h": 6, "w": 12, "x": 0, "y": 8 },
+        "targets": [
+          {
+            "expr": "count(kube_pod_info{pod=~\"python-service.*\"})"
+          }
+        ]
+      },
+      {
+        "id": 4,
+        "title": "Python Restart Count",
+        "type": "stat",
+        "gridPos": { "h": 6, "w": 12, "x": 12, "y": 8 },
+        "targets": [
+          {
+            "expr": "sum(kube_pod_container_status_restarts_total{pod=~\"python-service.*\"})"
+          }
+        ]
+      }
+    ]
+  },
+  "overwrite": true
+}

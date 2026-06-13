@@ -1,0 +1,13 @@
+team: payments
+
+application: mongodb
+
+environment: prod
+
+requested_by: arpit
+
+requested_metrics:
+  - cpu
+  - memory
+  - connections
+  - replication_lag

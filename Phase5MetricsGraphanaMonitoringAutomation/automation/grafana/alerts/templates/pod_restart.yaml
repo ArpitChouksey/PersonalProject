@@ -1,0 +1,6 @@
+groups:
+- name: sre-auto-pod-restart
+  rules:
+  - alert: PodRestartDetected
+    expr: increase(kube_pod_container_status_restarts_total[10m]) > 0
+    for: 1m

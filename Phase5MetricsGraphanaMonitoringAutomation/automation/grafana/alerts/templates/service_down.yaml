@@ -1,0 +1,6 @@
+groups:
+- name: sre-auto-service-down
+  rules:
+  - alert: ServiceDown
+    expr: up == 0
+    for: 1m

@@ -1,0 +1,12 @@
+{
+  "dashboard": {
+    "id": null,
+    "title": "SRE-AUTO-Node-Dashboard",
+    "tags": ["sre", "automation", "node"],
+    "timezone": "browser",
+    "schemaVersion": 41,
+    "version": 0,
+    "panels": []
+  },
+  "overwrite": true
+}

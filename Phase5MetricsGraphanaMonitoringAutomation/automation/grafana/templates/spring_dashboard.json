@@ -1,0 +1,57 @@
+{
+  "dashboard": {
+    "id": null,
+    "title": "SRE-AUTO-SPRING",
+    "tags": ["sre","spring"],
+    "timezone": "browser",
+    "schemaVersion": 41,
+    "version": 0,
+    "panels": [
+      {
+        "id": 1,
+        "title": "Spring CPU Usage",
+        "type": "timeseries",
+        "gridPos": { "h": 8, "w": 12, "x": 0, "y": 0 },
+        "targets": [
+          {
+            "expr": "sum(rate(container_cpu_usage_seconds_total{pod=~\"spring-service.*\"}[5m]))"
+          }
+        ]
+      },
+      {
+        "id": 2,
+        "title": "Spring Memory Usage",
+        "type": "timeseries",
+        "gridPos": { "h": 8, "w": 12, "x": 12, "y": 0 },
+        "targets": [
+          {
+            "expr": "sum(container_memory_usage_bytes{pod=~\"spring-service.*\"})"
+          }
+        ]
+      },
+      {
+        "id": 3,
+        "title": "Spring Pod Count",
+        "type": "stat",
+        "gridPos": { "h": 6, "w": 12, "x": 0, "y": 8 },
+        "targets": [
+          {
+            "expr": "count(kube_pod_info{pod=~\"spring-service.*\"})"
+          }
+        ]
+      },
+      {
+        "id": 4,
+        "title": "Spring Restart Count",
+        "type": "stat",
+        "gridPos": { "h": 6, "w": 12, "x": 12, "y": 8 },
+        "targets": [
+          {
+            "expr": "sum(kube_pod_container_status_restarts_total{pod=~\"spring-service.*\"})"
+          }
+        ]
+      }
+    ]
+  },
+  "overwrite": true
+}

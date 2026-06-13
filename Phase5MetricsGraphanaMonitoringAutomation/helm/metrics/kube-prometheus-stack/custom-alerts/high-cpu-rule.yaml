@@ -1,0 +1,27 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+
+metadata:
+  name: sre-auto-high-cpu
+  namespace: monitoring
+
+  labels:
+    release: monitoring
+
+spec:
+  groups:
+  - name: sre-auto-high-cpu
+
+    rules:
+    - alert: HighCPUUsage
+
+      expr: sum(rate(container_cpu_usage_seconds_total[5m])) > 0.01
+
+      for: 10s
+
+      labels:
+        severity: warning
+
+      annotations:
+        summary: High CPU Usage
+        description: CPU usage exceeded threshold

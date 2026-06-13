@@ -1,0 +1,8 @@
+groups:
+- name: sre-auto-high-memory
+  rules:
+  - alert: HighMemoryUsage
+    expr: sum(container_memory_usage_bytes) > 1000000000
+    for: 2m
+    labels:
+      severity: warning

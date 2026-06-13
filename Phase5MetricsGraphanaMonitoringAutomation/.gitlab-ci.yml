@@ -1,0 +1,113 @@
+spec:
+  inputs:
+    action:
+      default: create
+      options:
+        - create
+        - update
+        - delete
+    dashboard_type:
+      default: node
+      options:
+        - node
+        - spring
+        - python
+        - postgres
+        - aws-ec2
+    team:
+      default: sre
+    environment:
+      default: dev
+      options:
+        - dev
+        - qa
+        - prod
+    instance_id:
+      default: ""
+
+---
+
+stages:
+  - validate
+  - deploy
+
+default:
+  tags:
+    - macos
+
+validate-grafana:
+  stage: validate
+  variables:
+    ACTION: "$[[ inputs.action ]]"
+    DASHBOARD_TYPE: "$[[ inputs.dashboard_type ]]"
+    TEAM: "$[[ inputs.team ]]"
+    ENVIRONMENT: "$[[ inputs.environment ]]"
+    INSTANCE_ID: "$[[ inputs.instance_id ]]"
+  script:
+    - echo "=================================="
+    - echo "VALIDATING INPUTS"
+    - echo "=================================="
+    - echo "Action ${ACTION}"
+    - echo "Dashboard Type ${DASHBOARD_TYPE}"
+    - echo "Team ${TEAM}"
+    - echo "Environment ${ENVIRONMENT}"
+    - echo "Instance ID ${INSTANCE_ID}"
+    - hostname
+    - whoami
+    - which python3
+    - python3 --version
+    - python3 -c "import requests, yaml; print('REQUESTS_OK')"
+
+deploy-dashboard:
+  stage: deploy
+  when: manual
+  variables:
+    ACTION: "$[[ inputs.action ]]"
+    DASHBOARD_TYPE: "$[[ inputs.dashboard_type ]]"
+    TEAM: "$[[ inputs.team ]]"
+    ENVIRONMENT: "$[[ inputs.environment ]]"
+    INSTANCE_ID: "$[[ inputs.instance_id ]]"
+  script:
+    - echo "=================================="
+    - echo "PROCESSING REQUEST"
+    - echo "=================================="
+    - echo "Action=${ACTION}"
+    - echo "Dashboard=${DASHBOARD_TYPE}"
+    - echo "Environment=${ENVIRONMENT}"
+    - echo "GRAFANA_URL=${GRAFANA_URL}"
+    - echo "GRAFANA_USER=${GRAFANA_USER}"
+    - curl -I ${GRAFANA_URL} || true
+    - cd automation/grafana
+    - |
+      if [ "$ACTION" = "delete" ]; then
+
+        python3 scripts/delete_dashboard.py \
+          "$DASHBOARD_TYPE" \
+          "$TEAM" \
+          "$ENVIRONMENT"
+
+      else
+
+        if [ "$DASHBOARD_TYPE" = "aws-ec2" ]; then
+
+          if [ -z "$INSTANCE_ID" ]; then
+            echo "ERROR: instance_id required for aws-ec2 dashboard"
+            exit 1
+          fi
+
+          python3 scripts/create_dashboard.py \
+            "$DASHBOARD_TYPE" \
+            "$TEAM" \
+            "$ENVIRONMENT" \
+            "$INSTANCE_ID"
+
+        else
+
+          python3 scripts/create_dashboard.py \
+            "$DASHBOARD_TYPE" \
+            "$TEAM" \
+            "$ENVIRONMENT"
+
+        fi
+
+      fi

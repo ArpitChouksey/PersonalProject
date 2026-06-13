@@ -1,0 +1,11 @@
+groups:
+- name: sre-auto-high-cpu
+  rules:
+  - alert: HighCPUUsage
+    expr: sum(rate(container_cpu_usage_seconds_total[5m])) > 0.8
+    for: 2m
+    labels:
+      severity: warning
+    annotations:
+      summary: High CPU Usage Detected
+      description: CPU usage is above threshold

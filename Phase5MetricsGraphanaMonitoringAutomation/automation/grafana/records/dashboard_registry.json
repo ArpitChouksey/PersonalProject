@@ -1,0 +1,122 @@
+[
+    {
+        "uid": "073af87f-3c38-497c-b8b2-95ce17c3bbe1",
+        "title": "SRE-AUTO-Node-Dashboard",
+        "type": "node",
+        "created_by": "arpit",
+        "created_at": "2026-06-10T17:41:42.832110",
+        "deleted_by": "arpit",
+        "deleted_at": "2026-06-10T17:43:59.008495",
+        "status": "DELETED"
+    },
+    {
+        "uid": "67754b60-df4f-401e-9d18-5bc8f236d8a8",
+        "title": "SRE-AUTO-Node-Dashboard",
+        "type": "node",
+        "created_by": "arpit",
+        "created_at": "2026-06-10T17:48:57.910301",
+        "deleted_by": null,
+        "deleted_at": null,
+        "status": "ACTIVE"
+    },
+    {
+        "uid": "67f72c1d-94ed-4467-9f3b-c08f036b4182",
+        "title": "SRE-AUTO-Postgres",
+        "type": "postgres",
+        "created_by": "arpit",
+        "created_at": "2026-06-10T17:50:33.440430",
+        "deleted_by": null,
+        "deleted_at": null,
+        "status": "ACTIVE"
+    },
+    {
+        "uid": "2d422aff-4f15-409e-ba52-abeb462ba0a6",
+        "title": "SRE-AUTO-Spring-Service",
+        "type": "spring",
+        "created_by": "arpit",
+        "created_at": "2026-06-10T17:50:36.506371",
+        "deleted_by": null,
+        "deleted_at": null,
+        "status": "ACTIVE"
+    },
+    {
+        "uid": "72ffc646-5fbb-4903-aa8e-3cdc562ef89c",
+        "title": "SRE-AUTO-Spring-Service",
+        "type": "spring",
+        "created_by": "arpit",
+        "created_at": "2026-06-10T17:50:38.152793",
+        "deleted_by": null,
+        "deleted_at": null,
+        "status": "ACTIVE"
+    },
+    {
+        "uid": "90e80682-e5eb-4664-8845-1f8f8b064411",
+        "title": "SRE-AUTO-Spring-Service",
+        "type": "spring",
+        "created_by": "arpit",
+        "created_at": "2026-06-10T17:50:39.776625",
+        "deleted_by": null,
+        "deleted_at": null,
+        "status": "ACTIVE"
+    },
+    {
+        "uid": "8fd2a2f5-1e35-4c93-9e78-c8d9e6fa902c",
+        "title": "SRE-AUTO-SRE-DEV-SPRING",
+        "team": "SRE",
+        "environment": "DEV",
+        "type": "spring",
+        "created_by": "arpit",
+        "created_at": "2026-06-10T17:53:45.726001+00:00",
+        "deleted_by": null,
+        "deleted_at": null,
+        "status": "ACTIVE"
+    },
+    {
+        "uid": "ebe1e422-1d8d-4fcb-8840-e10adf6d1037",
+        "title": "SRE-AUTO-SRE-DEV-NODE",
+        "team": "SRE",
+        "environment": "DEV",
+        "type": "node",
+        "created_by": "arpit",
+        "created_at": "2026-06-10T17:59:00.079127+00:00",
+        "deleted_by": null,
+        "deleted_at": null,
+        "status": "ACTIVE"
+    },
+    {
+        "uid": "9e06ca1a-e63d-4a5a-b8de-e6034a854ea4",
+        "title": "SRE-AUTO-SRE-DEV-POSTGRES",
+        "team": "SRE",
+        "environment": "DEV",
+        "type": "postgres",
+        "created_by": "arpit",
+        "created_at": "2026-06-10T17:59:26.823994+00:00",
+        "deleted_by": null,
+        "deleted_at": null,
+        "status": "ACTIVE"
+    },
+    {
+        "uid": "4e11568c-7f75-4373-8724-a92ae3b5a62e",
+        "title": "SRE-AUTO-SRE-DEV-PYTHON",
+        "team": "SRE",
+        "environment": "DEV",
+        "type": "python",
+        "created_by": "arpit",
+        "created_at": "2026-06-10T18:01:50.436279+00:00",
+        "deleted_by": null,
+        "deleted_at": null,
+        "status": "ACTIVE"
+    },
+    {
+        "uid": "d7ac38dd-445e-4ce5-ad0e-474fb7c2fe8c",
+        "title": "SRE-AUTO-SRE-DEV-AWS-EC2",
+        "team": "SRE",
+        "environment": "DEV",
+        "type": "aws-ec2",
+        "created_by": "arpit",
+        "created_at": "2026-06-11T11:19:41.161702+00:00",
+        "deleted_by": null,
+        "deleted_at": null,
+        "status": "ACTIVE"
+    }
+]
