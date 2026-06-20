@@ -1,0 +1,104 @@
+spec:
+  inputs:
+
+    action:
+      default: create
+      options:
+        - create
+        - delete
+
+    resource_name:
+      default: python-service
+
+    resource_type:
+      default: application
+
+    environment:
+      default: dev
+      options:
+        - dev
+        - qa
+        - prod
+
+    namespace:
+      default: monitoring
+
+---
+
+stages:
+  - validate
+  - deploy
+
+default:
+  tags:
+    - macos
+
+validate-kibana:
+  stage: validate
+
+  variables:
+    ACTION: "$[[ inputs.action ]]"
+    RESOURCE_NAME: "$[[ inputs.resource_name ]]"
+    RESOURCE_TYPE: "$[[ inputs.resource_type ]]"
+    ENVIRONMENT: "$[[ inputs.environment ]]"
+    NAMESPACE: "$[[ inputs.namespace ]]"
+
+  script:
+    - echo "=================================="
+    - echo "VALIDATING INPUTS"
+    - echo "=================================="
+    - echo "Action=${ACTION}"
+    - echo "Resource Name=${RESOURCE_NAME}"
+    - echo "Resource Type=${RESOURCE_TYPE}"
+    - echo "Environment=${ENVIRONMENT}"
+    - echo "Namespace=${NAMESPACE}"
+    - hostname
+    - whoami
+    - which python3
+    - python3 --version
+    - python3 -c "import requests; print('REQUESTS_OK')"
+
+deploy-kibana:
+  stage: deploy
+
+  when: manual
+
+  variables:
+    ACTION: "$[[ inputs.action ]]"
+    RESOURCE_NAME: "$[[ inputs.resource_name ]]"
+    RESOURCE_TYPE: "$[[ inputs.resource_type ]]"
+    ENVIRONMENT: "$[[ inputs.environment ]]"
+    NAMESPACE: "$[[ inputs.namespace ]]"
+
+  script:
+    - echo "=================================="
+    - echo "PROCESSING REQUEST"
+    - echo "=================================="
+    - echo "Action=${ACTION}"
+    - echo "Resource=${RESOURCE_NAME}"
+    - echo "Environment=${ENVIRONMENT}"
+
+    - cd kibana/scripts
+
+    - echo "========== DEBUG =========="
+    - pwd
+    - cat ../records/kibana_registry.json || true
+    - echo "==========================="
+
+    - |
+      if [ "$ACTION" = "delete" ]; then
+
+        export RESOURCE_NAME="${RESOURCE_NAME}"
+
+        python3 delete_workspace.py
+
+      else
+
+        export RESOURCE_NAME="${RESOURCE_NAME}"
+        export RESOURCE_TYPE="${RESOURCE_TYPE}"
+        export ENVIRONMENT="${ENVIRONMENT}"
+        export NAMESPACE="${NAMESPACE}"
+
+        python3 create_workspace.py
+
+      fi
