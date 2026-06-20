@@ -38,7 +38,6 @@ roleRef:
   apiGroup: rbac.authorization.k8s.io
 
 ---
-
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -46,7 +45,6 @@ metadata:
   namespace: ns-logging
 
 data:
-
   fluent-bit.conf: |
     [SERVICE]
         Flush           1
@@ -92,25 +90,6 @@ data:
         K8S-Logging.Exclude Off
 
     #################################################
-    # Add service field automatically
-    #################################################
-
-    [FILTER]
-        Name                modify
-        Match               kube.*
-        Copy                kubernetes.container_name service
-
-    #################################################
-    # Dynamic Index Routing
-    #################################################
-
-    [FILTER]
-        Name                lua
-        Match               kube.*
-        script              /fluent-bit/etc/route.lua
-        call                set_index
-
-    #################################################
     # Spring Log Enrichment
     #################################################
 
@@ -123,11 +102,7 @@ data:
         Add                 source application-log
 
     #################################################
-    # Kubernetes Logs
-    # Creates:
-    # python-service-logs-*
-    # payment-service-logs-*
-    # order-service-logs-*
+    # Kubernetes Logs -> kubernetes-*
     #################################################
 
     [OUTPUT]
@@ -138,12 +113,12 @@ data:
         Port                9200
 
         Logstash_Format     On
-        Logstash_Prefix_Key elastic_index
+        Logstash_Prefix     kubernetes
 
         Retry_Limit         False
 
     #################################################
-    # Spring Logs
+    # Spring Logs -> spring-logs-*
     #################################################
 
     [OUTPUT]
@@ -157,20 +132,6 @@ data:
         Logstash_Prefix     spring-logs
 
         Retry_Limit         False
-
-
-  route.lua: |
-    function set_index(tag, timestamp, record)
-
-        local container =
-            record["kubernetes"]["container_name"]
-
-        record["elastic_index"] =
-            container .. "-logs"
-
-        return 1, timestamp, record
-    end
-
 
   parsers.conf: |
     [PARSER]
