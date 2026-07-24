@@ -1,0 +1,538 @@
+AWSTemplateFormatVersion: '2010-09-09'
+
+Description: >
+  Enterprise CloudFormation Patch Management - SSM Documents Module.
+  Custom cross-platform (Windows + Linux) documents for agent lifecycle,
+  health checks, and the orchestration/rollback runbooks. Standalone -
+  no imports from other stacks, so it can be deployed any time after
+  compute.yaml. Bucket names, topic ARNs, and role ARNs are supplied at
+  invocation time by whichever stack calls these documents (usually
+  maintenance-window.yaml), not baked in here.
+
+Metadata:
+  AWS::CloudFormation::Interface:
+    ParameterGroups:
+      - Label:
+          default: Project Configuration
+        Parameters:
+          - ProjectName
+          - Environment
+
+Parameters:
+
+  ProjectName:
+    Type: String
+    Default: epm
+
+  Environment:
+    Type: String
+    Default: dev
+    AllowedValues:
+      - dev
+      - qa
+      - uat
+      - prod
+
+Resources:
+
+####################################################
+# Pre-check - disk/memory/agent health before patching
+####################################################
+
+  PreCheckDocument:
+    Type: AWS::SSM::Document
+    Properties:
+      DocumentType: Command
+      DocumentFormat: YAML
+      Name: !Sub "${ProjectName}-${Environment}-precheck"
+      Content:
+        schemaVersion: '2.2'
+        description: Verify disk/memory headroom and agent health before patching.
+        mainSteps:
+          - name: precheckLinux
+            action: aws:runShellScript
+            precondition:
+              StringEquals: [platformType, Linux]
+            inputs:
+              runCommand:
+                - "set -e"
+                - "DISK_FREE=$(df --output=avail -m / | tail -1)"
+                - "MEM_FREE=$(free -m | awk '/Mem:/ {print $7}')"
+                - "echo \"Disk free (MB): $DISK_FREE, Mem free (MB): $MEM_FREE\""
+                - "if [ \"$DISK_FREE\" -lt 1024 ]; then echo 'FAIL: insufficient disk space'; exit 1; fi"
+                - "systemctl is-active security-agent || (echo 'FAIL: security-agent not running pre-patch'; exit 1)"
+                - "echo 'PRECHECK PASSED'"
+          - name: precheckWindows
+            action: aws:runPowerShellScript
+            precondition:
+              StringEquals: [platformType, Windows]
+            inputs:
+              runCommand:
+                - "$disk = (Get-PSDrive C).Free / 1MB"
+                - "Write-Output \"Disk free (MB): $disk\""
+                - "if ($disk -lt 1024) { Write-Output 'FAIL: insufficient disk space'; exit 1 }"
+                - "$task = Get-ScheduledTask -TaskName SecurityAgentService -ErrorAction SilentlyContinue"
+                - "if (-not $task -or $task.State -ne 'Running') { Write-Output 'FAIL: security agent not running pre-patch'; exit 1 }"
+                - "Write-Output 'PRECHECK PASSED'"
+
+####################################################
+# Stop agent
+####################################################
+
+  StopAgentDocument:
+    Type: AWS::SSM::Document
+    Properties:
+      DocumentType: Command
+      DocumentFormat: YAML
+      Name: !Sub "${ProjectName}-${Environment}-stop-agent"
+      Content:
+        schemaVersion: '2.2'
+        description: Stop the dummy security agent before patching.
+        mainSteps:
+          - name: stopLinux
+            action: aws:runShellScript
+            precondition: { StringEquals: [platformType, Linux] }
+            inputs:
+              runCommand:
+                - "systemctl stop security-agent"
+                - "echo Agent stopped at $(date -u +%FT%TZ)"
+          - name: stopWindows
+            action: aws:runPowerShellScript
+            precondition: { StringEquals: [platformType, Windows] }
+            inputs:
+              runCommand:
+                - "Stop-ScheduledTask -TaskName SecurityAgentService"
+                - "Write-Output ('Agent stopped at ' + (Get-Date -Format o))"
+
+####################################################
+# Start agent
+####################################################
+
+  StartAgentDocument:
+    Type: AWS::SSM::Document
+    Properties:
+      DocumentType: Command
+      DocumentFormat: YAML
+      Name: !Sub "${ProjectName}-${Environment}-start-agent"
+      Content:
+        schemaVersion: '2.2'
+        description: Restart the dummy security agent after patching.
+        mainSteps:
+          - name: startLinux
+            action: aws:runShellScript
+            precondition: { StringEquals: [platformType, Linux] }
+            inputs:
+              runCommand:
+                - "systemctl start security-agent"
+                - "echo Agent started at $(date -u +%FT%TZ)"
+          - name: startWindows
+            action: aws:runPowerShellScript
+            precondition: { StringEquals: [platformType, Windows] }
+            inputs:
+              runCommand:
+                - "Start-ScheduledTask -TaskName SecurityAgentService"
+                - "Write-Output ('Agent started at ' + (Get-Date -Format o))"
+
+####################################################
+# Verify agent
+####################################################
+
+  VerifyAgentDocument:
+    Type: AWS::SSM::Document
+    Properties:
+      DocumentType: Command
+      DocumentFormat: YAML
+      Name: !Sub "${ProjectName}-${Environment}-verify-agent"
+      Content:
+        schemaVersion: '2.2'
+        description: Confirm the agent is running/healthy after restart. Non-zero exit fails the task.
+        mainSteps:
+          - name: verifyLinux
+            action: aws:runShellScript
+            precondition: { StringEquals: [platformType, Linux] }
+            inputs:
+              runCommand:
+                - "sleep 5"
+                - "STATUS=$(systemctl is-active security-agent || true)"
+                - "echo \"security-agent status: $STATUS\""
+                - "if [ \"$STATUS\" != \"active\" ]; then exit 1; fi"
+          - name: verifyWindows
+            action: aws:runPowerShellScript
+            precondition: { StringEquals: [platformType, Windows] }
+            inputs:
+              runCommand:
+                - "Start-Sleep -Seconds 5"
+                - "$task = Get-ScheduledTask -TaskName SecurityAgentService"
+                - "Write-Output ('security-agent status: ' + $task.State)"
+                - "if ($task.State -ne 'Running') { exit 1 }"
+
+####################################################
+# Install agent - used by State Manager on drift
+####################################################
+
+  InstallAgentDocument:
+    Type: AWS::SSM::Document
+    Properties:
+      DocumentType: Command
+      DocumentFormat: YAML
+      Name: !Sub "${ProjectName}-${Environment}-install-agent"
+      Content:
+        schemaVersion: '2.2'
+        description: (Re)install and start the dummy security agent. Invoked by State Manager on drift.
+        mainSteps:
+          - name: installLinux
+            action: aws:runShellScript
+            precondition: { StringEquals: [platformType, Linux] }
+            inputs:
+              runCommand:
+                - "if systemctl list-unit-files | grep -q security-agent; then echo already installed; else"
+                - "  mkdir -p /opt/security-agent"
+                - "  printf '#!/bin/bash\\nwhile true; do echo heartbeat; sleep 30; done\\n' > /opt/security-agent/agent.sh"
+                - "  chmod +x /opt/security-agent/agent.sh"
+                - "  printf '[Unit]\\nDescription=Dummy Security Agent\\n[Service]\\nExecStart=/opt/security-agent/agent.sh\\nRestart=always\\n[Install]\\nWantedBy=multi-user.target\\n' > /etc/systemd/system/security-agent.service"
+                - "  systemctl daemon-reload"
+                - "  systemctl enable security-agent"
+                - "fi"
+                - "systemctl start security-agent"
+          - name: installWindows
+            action: aws:runPowerShellScript
+            precondition: { StringEquals: [platformType, Windows] }
+            inputs:
+              runCommand:
+                - "if (-not (Get-ScheduledTask -TaskName SecurityAgentService -ErrorAction SilentlyContinue)) { Write-Output 'Re-registering scheduled task' }"
+                - "Start-ScheduledTask -TaskName SecurityAgentService"
+
+####################################################
+# Uninstall agent - controlled decommissioning
+####################################################
+
+  UninstallAgentDocument:
+    Type: AWS::SSM::Document
+    Properties:
+      DocumentType: Command
+      DocumentFormat: YAML
+      Name: !Sub "${ProjectName}-${Environment}-uninstall-agent"
+      Content:
+        schemaVersion: '2.2'
+        description: Cleanly stop and remove the dummy security agent.
+        mainSteps:
+          - name: uninstallLinux
+            action: aws:runShellScript
+            precondition: { StringEquals: [platformType, Linux] }
+            inputs:
+              runCommand:
+                - "systemctl stop security-agent || true"
+                - "systemctl disable security-agent || true"
+                - "rm -f /etc/systemd/system/security-agent.service"
+                - "rm -rf /opt/security-agent"
+                - "systemctl daemon-reload"
+          - name: uninstallWindows
+            action: aws:runPowerShellScript
+            precondition: { StringEquals: [platformType, Windows] }
+            inputs:
+              runCommand:
+                - "Stop-ScheduledTask -TaskName SecurityAgentService -ErrorAction SilentlyContinue"
+                - "Unregister-ScheduledTask -TaskName SecurityAgentService -Confirm:$false -ErrorAction SilentlyContinue"
+
+####################################################
+# Upload report - bucket name supplied at invocation time
+####################################################
+
+  UploadReportDocument:
+    Type: AWS::SSM::Document
+    Properties:
+      DocumentType: Command
+      DocumentFormat: YAML
+      Name: !Sub "${ProjectName}-${Environment}-upload-report"
+      Content:
+        schemaVersion: '2.2'
+        description: >
+          Assemble a structured JSON health/compliance report and upload to S3.
+          ReportBucketName and PatchResult are supplied by the caller at
+          invocation time - this document has no dependency on reporting.yaml.
+        parameters:
+          PatchResult:
+            type: String
+            default: unknown
+          ReportBucketName:
+            type: String
+        mainSteps:
+          - name: reportLinux
+            action: aws:runShellScript
+            precondition: { StringEquals: [platformType, Linux] }
+            inputs:
+              runCommand:
+                - "HOSTNAME=$(hostname)"
+                - "OS=$(cat /etc/os-release | grep PRETTY_NAME | cut -d= -f2 | tr -d '\"')"
+                - "SVC_STATUS=$(systemctl is-active security-agent || true)"
+                - "TS=$(date -u +%FT%TZ)"
+                - >-
+                  cat <<EOF > /tmp/report.json
+                  {"hostname":"$HOSTNAME","os":"$OS","patch_result":"{{ PatchResult }}","service_status":"$SVC_STATUS","timestamp":"$TS"}
+                  EOF
+                - "aws s3 cp /tmp/report.json s3://{{ ReportBucketName }}/reports/linux/$HOSTNAME-$TS.json"
+          - name: reportWindows
+            action: aws:runPowerShellScript
+            precondition: { StringEquals: [platformType, Windows] }
+            inputs:
+              runCommand:
+                - "$hostname = $env:COMPUTERNAME"
+                - "$os = (Get-CimInstance Win32_OperatingSystem).Caption"
+                - "$task = Get-ScheduledTask -TaskName SecurityAgentService -ErrorAction SilentlyContinue"
+                - "$svcStatus = if ($task) { $task.State } else { 'unknown' }"
+                - "$ts = (Get-Date -Format o)"
+                - "$report = @{hostname=$hostname; os=$os; patch_result='{{ PatchResult }}'; service_status=$svcStatus; timestamp=$ts} | ConvertTo-Json"
+                - "$report | Out-File C:\\temp\\report.json"
+                - "Write-S3Object -BucketName '{{ ReportBucketName }}' -File C:\\temp\\report.json -Key \"reports/windows/$hostname-$($ts -replace '[:]','-').json\""
+
+####################################################
+# Orchestration runbook - precheck -> backup -> stop -> patch -> start -> verify -> report/notify
+####################################################
+
+  PatchOrchestrationRunbook:
+    Type: AWS::SSM::Document
+    Properties:
+      DocumentType: Automation
+      DocumentFormat: YAML
+      Name: !Sub "${ProjectName}-${Environment}-patch-orchestration"
+      Content:
+        schemaVersion: '0.3'
+        assumeRole: "{{ AutomationAssumeRole }}"
+        parameters:
+          InstanceId:
+            type: String
+          AutomationAssumeRole:
+            type: String
+          ReportBucketName:
+            type: String
+          NotificationTopicArn:
+            type: String
+          PreCheckDocument:
+            type: String
+            default: !Ref PreCheckDocument
+          StopAgentDocument:
+            type: String
+            default: !Ref StopAgentDocument
+          StartAgentDocument:
+            type: String
+            default: !Ref StartAgentDocument
+          VerifyAgentDocument:
+            type: String
+            default: !Ref VerifyAgentDocument
+          UploadReportDocument:
+            type: String
+            default: !Ref UploadReportDocument
+        mainSteps:
+          - name: PreCheck
+            action: aws:runCommand
+            onFailure: "step:NotifyAborted"
+            inputs:
+              DocumentName: "{{ PreCheckDocument }}"
+              InstanceIds: ["{{ InstanceId }}"]
+
+          - name: CreateBackupImage
+            action: aws:createImage
+            onFailure: "step:NotifyAborted"
+            inputs:
+              InstanceId: "{{ InstanceId }}"
+              ImageName: "prepatch-{{ InstanceId }}-{{global:DATE_TIME}}"
+              ImageDescription: "Pre-patch rollback backup"
+              NoReboot: false
+
+          - name: StopAgent
+            action: aws:runCommand
+            onFailure: "step:NotifyAborted"
+            inputs:
+              DocumentName: "{{ StopAgentDocument }}"
+              InstanceIds: ["{{ InstanceId }}"]
+
+          - name: InstallPatches
+            action: aws:runCommand
+            onFailure: Continue
+            inputs:
+              DocumentName: AWS-RunPatchBaseline
+              InstanceIds: ["{{ InstanceId }}"]
+              Parameters:
+                Operation: Install
+
+          - name: StartAgent
+            action: aws:runCommand
+            onFailure: Continue
+            inputs:
+              DocumentName: "{{ StartAgentDocument }}"
+              InstanceIds: ["{{ InstanceId }}"]
+
+          - name: VerifyAgent
+            action: aws:runCommand
+            onFailure: "step:NotifyRollbackAvailable"
+            inputs:
+              DocumentName: "{{ VerifyAgentDocument }}"
+              InstanceIds: ["{{ InstanceId }}"]
+
+          - name: UploadSuccessReport
+            action: aws:runCommand
+            onFailure: Continue
+            inputs:
+              DocumentName: "{{ UploadReportDocument }}"
+              InstanceIds: ["{{ InstanceId }}"]
+              Parameters:
+                PatchResult: "Success"
+                ReportBucketName: "{{ ReportBucketName }}"
+
+          - name: NotifySuccess
+            action: aws:executeAwsApi
+            isEnd: true
+            inputs:
+              Service: sns
+              Api: Publish
+              TopicArn: "{{ NotificationTopicArn }}"
+              Subject: "Patch succeeded"
+              Message: "Patching completed and agent verified healthy on {{ InstanceId }}."
+
+          - name: NotifyRollbackAvailable
+            action: aws:executeAwsApi
+            isEnd: true
+            inputs:
+              Service: sns
+              Api: Publish
+              TopicArn: "{{ NotificationTopicArn }}"
+              Subject: "PATCH FAILED - rollback backup available"
+              Message: "Instance {{ InstanceId }} failed its post-patch health check. Pre-patch backup AMI: {{ CreateBackupImage.ImageId }}. Run the rollback runbook with this AMI ID to replace the instance."
+
+          - name: NotifyAborted
+            action: aws:executeAwsApi
+            isEnd: true
+            inputs:
+              Service: sns
+              Api: Publish
+              TopicArn: "{{ NotificationTopicArn }}"
+              Subject: "Patch run aborted"
+              Message: "Patching was aborted for {{ InstanceId }} before any patches were applied. No changes were made."
+
+####################################################
+# Rollback runbook - replace failed instance from backup AMI
+####################################################
+
+  RollbackRunbook:
+    Type: AWS::SSM::Document
+    Properties:
+      DocumentType: Automation
+      DocumentFormat: YAML
+      Name: !Sub "${ProjectName}-${Environment}-rollback-replace-instance"
+      Content:
+        schemaVersion: '0.3'
+        assumeRole: "{{ AutomationAssumeRole }}"
+        parameters:
+          FailedInstanceId:
+            type: String
+          BackupAmiId:
+            type: String
+          NotificationTopicArn:
+            type: String
+          AutomationAssumeRole:
+            type: String
+        mainSteps:
+          - name: DescribeFailedInstance
+            action: aws:executeAwsApi
+            inputs:
+              Service: ec2
+              Api: DescribeInstances
+              InstanceIds: ["{{ FailedInstanceId }}"]
+            outputs:
+              - Name: SubnetId
+                Selector: "$.Reservations[0].Instances[0].SubnetId"
+                Type: String
+              - Name: InstanceType
+                Selector: "$.Reservations[0].Instances[0].InstanceType"
+                Type: String
+              - Name: SecurityGroupId
+                Selector: "$.Reservations[0].Instances[0].SecurityGroups[0].GroupId"
+                Type: String
+              - Name: IamProfileArn
+                Selector: "$.Reservations[0].Instances[0].IamInstanceProfile.Arn"
+                Type: String
+
+          - name: StopFailedInstance
+            action: aws:changeInstanceState
+            inputs:
+              InstanceIds: ["{{ FailedInstanceId }}"]
+              DesiredState: stopped
+
+          - name: LaunchReplacementFromBackup
+            action: aws:runInstances
+            inputs:
+              ImageId: "{{ BackupAmiId }}"
+              InstanceType: "{{ DescribeFailedInstance.InstanceType }}"
+              SubnetId: "{{ DescribeFailedInstance.SubnetId }}"
+              SecurityGroupIds: ["{{ DescribeFailedInstance.SecurityGroupId }}"]
+              IamInstanceProfileArn: "{{ DescribeFailedInstance.IamProfileArn }}"
+              MinInstanceCount: 1
+              MaxInstanceCount: 1
+              TagSpecifications:
+                - ResourceType: instance
+                  Tags:
+                    - Key: Name
+                      Value: rollback-replacement
+                    - Key: RolledBackFrom
+                      Value: "{{ FailedInstanceId }}"
+
+          - name: NotifyRollbackComplete
+            action: aws:executeAwsApi
+            isEnd: true
+            inputs:
+              Service: sns
+              Api: Publish
+              TopicArn: "{{ NotificationTopicArn }}"
+              Subject: "Rollback complete"
+              Message: "Replacement instance launched from AMI {{ BackupAmiId }} to replace failed instance {{ FailedInstanceId }}."
+
+####################################################
+# Outputs
+####################################################
+
+Outputs:
+
+  PreCheckDocumentName:
+    Value: !Ref PreCheckDocument
+    Export:
+      Name: !Sub "${ProjectName}-${Environment}-PreCheckDocumentName"
+
+  StopAgentDocumentName:
+    Value: !Ref StopAgentDocument
+    Export:
+      Name: !Sub "${ProjectName}-${Environment}-StopAgentDocumentName"
+
+  StartAgentDocumentName:
+    Value: !Ref StartAgentDocument
+    Export:
+      Name: !Sub "${ProjectName}-${Environment}-StartAgentDocumentName"
+
+  VerifyAgentDocumentName:
+    Value: !Ref VerifyAgentDocument
+    Export:
+      Name: !Sub "${ProjectName}-${Environment}-VerifyAgentDocumentName"
+
+  InstallAgentDocumentName:
+    Value: !Ref InstallAgentDocument
+    Export:
+      Name: !Sub "${ProjectName}-${Environment}-InstallAgentDocumentName"
+
+  UninstallAgentDocumentName:
+    Value: !Ref UninstallAgentDocument
+    Export:
+      Name: !Sub "${ProjectName}-${Environment}-UninstallAgentDocumentName"
+
+  UploadReportDocumentName:
+    Value: !Ref UploadReportDocument
+    Export:
+      Name: !Sub "${ProjectName}-${Environment}-UploadReportDocumentName"
+
+  PatchOrchestrationRunbookName:
+    Value: !Ref PatchOrchestrationRunbook
+    Export:
+      Name: !Sub "${ProjectName}-${Environment}-PatchOrchestrationRunbookName"
+
+  RollbackRunbookName:
+    Value: !Ref RollbackRunbook
+    Export:
+      Name: !Sub "${ProjectName}-${Environment}-RollbackRunbookName"

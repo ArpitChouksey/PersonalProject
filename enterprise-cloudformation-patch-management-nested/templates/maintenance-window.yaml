@@ -1,0 +1,199 @@
+AWSTemplateFormatVersion: '2010-09-09'
+
+Description: >
+  Enterprise CloudFormation Patch Management - Maintenance Window Module.
+  Runs PatchOrchestrationRunbook (from ssm.yaml) once per instance.
+  DEPLOY THIS AFTER ssm.yaml, reporting.yaml, sns.yaml, and compute.yaml -
+  it imports exports from all four. Creates its own IAM roles locally
+  (Maintenance Window service role + Automation role) since iam.yaml
+  doesn't define these yet.
+
+Metadata:
+  AWS::CloudFormation::Interface:
+    ParameterGroups:
+      - Label:
+          default: Project Configuration
+        Parameters:
+          - ProjectName
+          - Environment
+      - Label:
+          default: Schedule
+        Parameters:
+          - MaintenanceWindowCronSchedule
+
+Parameters:
+
+  ProjectName:
+    Type: String
+    Default: epm
+
+  Environment:
+    Type: String
+    Default: dev
+    AllowedValues:
+      - dev
+      - qa
+      - uat
+      - prod
+
+  MaintenanceWindowCronSchedule:
+    Type: String
+    Default: "cron(0 3 ? * SUN *)"
+
+  PatchOrchestrationRunbookName:
+    Type: String
+    Description: From SsmStack.Outputs.PatchOrchestrationRunbookName
+
+  ReportBucketName:
+    Type: String
+    Description: From ReportingStack.Outputs.ReportBucketName
+
+  NotificationTopicArn:
+    Type: String
+    Description: From SnsStack.Outputs.PatchAlertsTopicArn
+
+Resources:
+
+####################################################
+# Maintenance Window service role
+####################################################
+
+  MaintenanceWindowRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: !Sub "${ProjectName}-${Environment}-mw-service-role"
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: ssm.amazonaws.com
+            Action: sts:AssumeRole
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AmazonSSMMaintenanceWindowRole
+
+####################################################
+# Automation role - backup image creation + rollback replace-instance
+####################################################
+
+  AutomationRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: !Sub "${ProjectName}-${Environment}-automation-role"
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: ssm.amazonaws.com
+            Action: sts:AssumeRole
+      Policies:
+        - PolicyName: BackupAndRollback
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Sid: BackupImages
+                Effect: Allow
+                Action:
+                  - ec2:CreateImage
+                  - ec2:CreateTags
+                  - ec2:DescribeImages
+                  - ec2:DescribeInstances
+                  - ec2:DescribeInstanceStatus
+                Resource: "*"
+              - Sid: RollbackReplaceInstance
+                Effect: Allow
+                Action:
+                  - ec2:RunInstances
+                  - ec2:StopInstances
+                  - ec2:TerminateInstances
+                  - iam:PassRole
+                Resource: "*"
+                Condition:
+                  StringEquals:
+                    "iam:PassedToService": ec2.amazonaws.com
+              - Sid: PublishNotifications
+                Effect: Allow
+                Action: sns:Publish
+                Resource: "*"
+
+####################################################
+# Maintenance Window
+####################################################
+
+  PatchMaintenanceWindow:
+    Type: AWS::SSM::MaintenanceWindow
+    Properties:
+      Name: !Sub "${ProjectName}-${Environment}-patch-window"
+      Schedule: !Ref MaintenanceWindowCronSchedule
+      ScheduleTimezone: UTC
+      Duration: 4
+      Cutoff: 1
+      AllowUnassociatedTargets: false
+
+  WindowsTarget:
+    Type: AWS::SSM::MaintenanceWindowTarget
+    Properties:
+      WindowId: !Ref PatchMaintenanceWindow
+      ResourceType: INSTANCE
+      Targets:
+        - Key: "tag:Patch Group"
+          Values:
+            - !Sub "${ProjectName}-${Environment}-windows"
+
+  LinuxTarget:
+    Type: AWS::SSM::MaintenanceWindowTarget
+    Properties:
+      WindowId: !Ref PatchMaintenanceWindow
+      ResourceType: INSTANCE
+      Targets:
+        - Key: "tag:Patch Group"
+          Values:
+            - !Sub "${ProjectName}-${Environment}-linux"
+
+####################################################
+# Orchestration Task - one AUTOMATION task, both target groups
+####################################################
+
+  PatchOrchestrationTask:
+    Type: AWS::SSM::MaintenanceWindowTask
+    Properties:
+      WindowId: !Ref PatchMaintenanceWindow
+      Priority: 1
+      TaskArn: !Ref PatchOrchestrationRunbookName
+      TaskType: AUTOMATION
+      ServiceRoleArn: !GetAtt MaintenanceWindowRole.Arn
+      Targets:
+        - Key: WindowTargetIds
+          Values:
+            - !Ref WindowsTarget
+            - !Ref LinuxTarget
+      MaxConcurrency: "50%"
+      MaxErrors: "0"
+      TaskInvocationParameters:
+        MaintenanceWindowAutomationParameters:
+          DocumentVersion: "$LATEST"
+          Parameters:
+            InstanceId: ["{{ TARGET_ID }}"]
+            AutomationAssumeRole:
+              - !GetAtt AutomationRole.Arn
+            ReportBucketName:
+              - !Ref ReportBucketName
+            NotificationTopicArn:
+              - !Ref NotificationTopicArn
+
+####################################################
+# Outputs
+####################################################
+
+Outputs:
+
+  MaintenanceWindowId:
+    Value: !Ref PatchMaintenanceWindow
+    Export:
+      Name: !Sub "${ProjectName}-${Environment}-MaintenanceWindowId"
+
+  AutomationRoleArn:
+    Value: !GetAtt AutomationRole.Arn
+    Export:
+      Name: !Sub "${ProjectName}-${Environment}-AutomationRoleArn"

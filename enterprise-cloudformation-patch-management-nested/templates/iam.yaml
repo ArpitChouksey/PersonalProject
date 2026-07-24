@@ -1,0 +1,125 @@
+AWSTemplateFormatVersion: '2010-09-09'
+
+Description: >
+  Enterprise CloudFormation Patch Management - IAM Module.
+  Creates IAM Role, Instance Profile and required policies for EC2.
+
+Metadata:
+  AWS::CloudFormation::Interface:
+    ParameterGroups:
+      - Label:
+          default: Project Configuration
+        Parameters:
+          - ProjectName
+          - Environment
+
+Parameters:
+
+  ProjectName:
+    Type: String
+    Default: epm
+
+  Environment:
+    Type: String
+    Default: dev
+    AllowedValues:
+      - dev
+      - qa
+      - uat
+      - prod
+
+Resources:
+
+####################################################
+# EC2 IAM Role
+####################################################
+
+  EC2InstanceRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: !Sub "${ProjectName}-${Environment}-ec2-role"
+
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - ec2.amazonaws.com
+            Action:
+              - sts:AssumeRole
+
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore
+        - arn:aws:iam::aws:policy/CloudWatchAgentServerPolicy
+
+      Tags:
+        - Key: Name
+          Value: !Sub "${ProjectName}-${Environment}-ec2-role"
+        - Key: Project
+          Value: !Ref ProjectName
+        - Key: Environment
+          Value: !Ref Environment
+        - Key: ManagedBy
+          Value: CloudFormation
+
+####################################################
+# Custom S3 Policy
+####################################################
+
+  EC2S3Policy:
+    Type: AWS::IAM::Policy
+    Properties:
+      PolicyName: !Sub "${ProjectName}-${Environment}-s3-policy"
+
+      Roles:
+        - !Ref EC2InstanceRole
+
+      PolicyDocument:
+        Version: "2012-10-17"
+
+        Statement:
+          - Effect: Allow
+
+            Action:
+              - s3:GetObject
+              - s3:PutObject
+              - s3:ListBucket
+
+            Resource: "*"
+
+####################################################
+# Instance Profile
+####################################################
+
+  EC2InstanceProfile:
+    Type: AWS::IAM::InstanceProfile
+    Properties:
+      InstanceProfileName: !Sub "${ProjectName}-${Environment}-instance-profile"
+
+      Roles:
+        - !Ref EC2InstanceRole
+
+####################################################
+# Outputs
+####################################################
+
+Outputs:
+
+  InstanceProfileName:
+    Description: EC2 Instance Profile Name
+    Value: !Ref EC2InstanceProfile
+    Export:
+      Name: !Sub "${ProjectName}-${Environment}-InstanceProfileName"
+
+  IAMRoleName:
+    Description: EC2 IAM Role Name
+    Value: !Ref EC2InstanceRole
+    Export:
+      Name: !Sub "${ProjectName}-${Environment}-IAMRoleName"
+
+  IAMRoleArn:
+    Description: EC2 IAM Role ARN
+    Value: !GetAtt EC2InstanceRole.Arn
+    Export:
+      Name: !Sub "${ProjectName}-${Environment}-IAMRoleArn"

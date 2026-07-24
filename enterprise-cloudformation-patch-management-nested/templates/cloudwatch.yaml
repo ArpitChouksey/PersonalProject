@@ -1,0 +1,178 @@
+AWSTemplateFormatVersion: '2010-09-09'
+
+Description: >
+  Enterprise CloudFormation Patch Management - CloudWatch Module.
+  Log group for SSM Run Command/Automation output, a metric filter that
+  turns logged "FAIL" lines into a real metric, and alarms on that metric
+  plus each instance's standard EC2 status checks. Deploy after compute.yaml
+  and sns.yaml.
+
+Metadata:
+  AWS::CloudFormation::Interface:
+    ParameterGroups:
+      - Label:
+          default: Project Configuration
+        Parameters:
+          - ProjectName
+          - Environment
+
+Parameters:
+
+  ProjectName:
+    Type: String
+    Default: epm
+
+  Environment:
+    Type: String
+    Default: dev
+    AllowedValues:
+      - dev
+      - qa
+      - uat
+      - prod
+
+  NotificationTopicArn:
+    Type: String
+    Description: From SnsStack.Outputs.PatchAlertsTopicArn
+
+  WindowsInstance1Id:
+    Type: String
+    Description: From ComputeStack.Outputs.WindowsInstance1Id
+
+  WindowsInstance2Id:
+    Type: String
+    Description: From ComputeStack.Outputs.WindowsInstance2Id
+
+  LinuxInstance1Id:
+    Type: String
+    Description: From ComputeStack.Outputs.LinuxInstance1Id
+
+  LinuxInstance2Id:
+    Type: String
+    Description: From ComputeStack.Outputs.LinuxInstance2Id
+
+Resources:
+
+####################################################
+# Log Group
+####################################################
+
+  SSMCommandLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Sub "/${ProjectName}/${Environment}/ssm/run-command"
+      RetentionInDays: 90
+
+####################################################
+# Metric Filter - turns "FAIL" log lines into a real metric
+####################################################
+
+  PatchFailureMetricFilter:
+    Type: AWS::Logs::MetricFilter
+    Properties:
+      LogGroupName: !Ref SSMCommandLogGroup
+      FilterPattern: "FAIL"
+      MetricTransformations:
+        - MetricName: PatchStepFailureCount
+          MetricNamespace: !Sub "${ProjectName}-${Environment}/PatchManagement"
+          MetricValue: "1"
+          DefaultValue: 0
+
+####################################################
+# Alarms
+####################################################
+
+  PatchFailureAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: !Sub "${ProjectName}-${Environment}-patch-step-failures"
+      AlarmDescription: One or more patch orchestration steps logged a FAIL
+      Namespace: !Sub "${ProjectName}-${Environment}/PatchManagement"
+      MetricName: PatchStepFailureCount
+      Statistic: Sum
+      Period: 300
+      EvaluationPeriods: 1
+      Threshold: 1
+      ComparisonOperator: GreaterThanOrEqualToThreshold
+      TreatMissingData: notBreaching
+      AlarmActions:
+        - !Ref NotificationTopicArn
+
+  WindowsInstance1StatusCheckAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: !Sub "${ProjectName}-${Environment}-windows1-status-check-failed"
+      Namespace: AWS/EC2
+      MetricName: StatusCheckFailed
+      Dimensions:
+        - Name: InstanceId
+          Value: !Ref WindowsInstance1Id
+      Statistic: Maximum
+      Period: 300
+      EvaluationPeriods: 2
+      Threshold: 1
+      ComparisonOperator: GreaterThanOrEqualToThreshold
+      AlarmActions:
+        - !Ref NotificationTopicArn
+
+  WindowsInstance2StatusCheckAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: !Sub "${ProjectName}-${Environment}-windows2-status-check-failed"
+      Namespace: AWS/EC2
+      MetricName: StatusCheckFailed
+      Dimensions:
+        - Name: InstanceId
+          Value: !Ref WindowsInstance2Id
+      Statistic: Maximum
+      Period: 300
+      EvaluationPeriods: 2
+      Threshold: 1
+      ComparisonOperator: GreaterThanOrEqualToThreshold
+      AlarmActions:
+        - !Ref NotificationTopicArn
+
+  LinuxInstance1StatusCheckAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: !Sub "${ProjectName}-${Environment}-linux1-status-check-failed"
+      Namespace: AWS/EC2
+      MetricName: StatusCheckFailed
+      Dimensions:
+        - Name: InstanceId
+          Value: !Ref LinuxInstance1Id
+      Statistic: Maximum
+      Period: 300
+      EvaluationPeriods: 2
+      Threshold: 1
+      ComparisonOperator: GreaterThanOrEqualToThreshold
+      AlarmActions:
+        - !Ref NotificationTopicArn
+
+  LinuxInstance2StatusCheckAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: !Sub "${ProjectName}-${Environment}-linux2-status-check-failed"
+      Namespace: AWS/EC2
+      MetricName: StatusCheckFailed
+      Dimensions:
+        - Name: InstanceId
+          Value: !Ref LinuxInstance2Id
+      Statistic: Maximum
+      Period: 300
+      EvaluationPeriods: 2
+      Threshold: 1
+      ComparisonOperator: GreaterThanOrEqualToThreshold
+      AlarmActions:
+        - !Ref NotificationTopicArn
+
+####################################################
+# Outputs
+####################################################
+
+Outputs:
+
+  LogGroupName:
+    Value: !Ref SSMCommandLogGroup
+    Export:
+      Name: !Sub "${ProjectName}-${Environment}-LogGroupName"

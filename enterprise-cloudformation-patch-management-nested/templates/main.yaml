@@ -1,0 +1,199 @@
+AWSTemplateFormatVersion: '2010-09-09'
+
+Description: >
+  Enterprise CloudFormation Patch Management - ROOT STACK.
+  This is the only stack you deploy directly. Every resource below is a
+  nested stack (a "module" call, in Terraform terms) - CloudFormation reads
+  the GetAtt references between them and figures out the creation order
+  itself, the same way `terraform apply` resolves its dependency graph.
+  Deleting THIS stack cascades and deletes every nested stack too, in
+  reverse order - the equivalent of `terraform destroy`.
+
+  PREREQUISITE: upload templates/*.yaml (except main.yaml itself) to
+  s3://<ArtifactsBucketName>/templates/ first - TemplateURL fetches from
+  there. See README.md for the exact command.
+
+Parameters:
+
+  ArtifactsBucketName:
+    Type: String
+    Description: S3 bucket holding the uploaded child templates under templates/
+
+  ProjectName:
+    Type: String
+    Default: epm
+
+  Environment:
+    Type: String
+    Default: dev
+    AllowedValues: [dev, qa, uat, prod]
+
+  VPCCidr:
+    Type: String
+    Default: 10.0.0.0/16
+  PublicSubnet1Cidr:
+    Type: String
+    Default: 10.0.1.0/24
+  PublicSubnet2Cidr:
+    Type: String
+    Default: 10.0.2.0/24
+
+  LinuxInstanceType:
+    Type: String
+    Default: t3.micro
+  WindowsInstanceType:
+    Type: String
+    Default: t3.medium
+
+  NotificationEmail:
+    Type: String
+    AllowedPattern: "^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$"
+
+  MaintenanceWindowCronSchedule:
+    Type: String
+    Default: "cron(0 3 ? * SUN *)"
+
+Resources:
+
+  # ---- 1. network - no dependencies ----
+  NetworkStack:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: !Sub "https://${ArtifactsBucketName}.s3.${AWS::Region}.amazonaws.com/templates/network.yaml"
+      Parameters:
+        ProjectName: !Ref ProjectName
+        Environment: !Ref Environment
+        VPCCidr: !Ref VPCCidr
+        PublicSubnet1Cidr: !Ref PublicSubnet1Cidr
+        PublicSubnet2Cidr: !Ref PublicSubnet2Cidr
+
+  # ---- 2. iam - no dependencies ----
+  IamStack:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: !Sub "https://${ArtifactsBucketName}.s3.${AWS::Region}.amazonaws.com/templates/iam.yaml"
+      Parameters:
+        ProjectName: !Ref ProjectName
+        Environment: !Ref Environment
+
+  # ---- 3. compute - depends on network + iam (via GetAtt below) ----
+  ComputeStack:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: !Sub "https://${ArtifactsBucketName}.s3.${AWS::Region}.amazonaws.com/templates/compute.yaml"
+      Parameters:
+        ProjectName: !Ref ProjectName
+        Environment: !Ref Environment
+        LinuxInstanceType: !Ref LinuxInstanceType
+        WindowsInstanceType: !Ref WindowsInstanceType
+        PublicSubnet1Id: !GetAtt NetworkStack.Outputs.PublicSubnet1Id
+        PublicSubnet2Id: !GetAtt NetworkStack.Outputs.PublicSubnet2Id
+        SecurityGroupId: !GetAtt NetworkStack.Outputs.SecurityGroupId
+        InstanceProfileName: !GetAtt IamStack.Outputs.InstanceProfileName
+
+  # ---- 4. ssm - no dependencies ----
+  SsmStack:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: !Sub "https://${ArtifactsBucketName}.s3.${AWS::Region}.amazonaws.com/templates/ssm.yaml"
+      Parameters:
+        ProjectName: !Ref ProjectName
+        Environment: !Ref Environment
+
+  # ---- 5. patch-manager - no dependencies ----
+  PatchManagerStack:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: !Sub "https://${ArtifactsBucketName}.s3.${AWS::Region}.amazonaws.com/templates/patch-manager.yaml"
+      Parameters:
+        ProjectName: !Ref ProjectName
+        Environment: !Ref Environment
+
+  # ---- 6. reporting - no dependencies ----
+  ReportingStack:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: !Sub "https://${ArtifactsBucketName}.s3.${AWS::Region}.amazonaws.com/templates/reporting.yaml"
+      Parameters:
+        ProjectName: !Ref ProjectName
+        Environment: !Ref Environment
+
+  # ---- 7. sns - no dependencies ----
+  SnsStack:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: !Sub "https://${ArtifactsBucketName}.s3.${AWS::Region}.amazonaws.com/templates/sns.yaml"
+      Parameters:
+        ProjectName: !Ref ProjectName
+        Environment: !Ref Environment
+        NotificationEmail: !Ref NotificationEmail
+
+  # ---- 8. inventory - targets by tag, no GetAtt dependency, but wait for compute ----
+  InventoryStack:
+    Type: AWS::CloudFormation::Stack
+    DependsOn: ComputeStack
+    Properties:
+      TemplateURL: !Sub "https://${ArtifactsBucketName}.s3.${AWS::Region}.amazonaws.com/templates/inventory.yaml"
+      Parameters:
+        ProjectName: !Ref ProjectName
+        Environment: !Ref Environment
+
+  # ---- 9. state-manager - depends on ssm ----
+  StateManagerStack:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: !Sub "https://${ArtifactsBucketName}.s3.${AWS::Region}.amazonaws.com/templates/state-manager.yaml"
+      Parameters:
+        ProjectName: !Ref ProjectName
+        Environment: !Ref Environment
+        InstallAgentDocumentName: !GetAtt SsmStack.Outputs.InstallAgentDocumentName
+
+  # ---- 10. cloudwatch - depends on compute + sns ----
+  CloudWatchStack:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: !Sub "https://${ArtifactsBucketName}.s3.${AWS::Region}.amazonaws.com/templates/cloudwatch.yaml"
+      Parameters:
+        ProjectName: !Ref ProjectName
+        Environment: !Ref Environment
+        NotificationTopicArn: !GetAtt SnsStack.Outputs.PatchAlertsTopicArn
+        WindowsInstance1Id: !GetAtt ComputeStack.Outputs.WindowsInstance1Id
+        WindowsInstance2Id: !GetAtt ComputeStack.Outputs.WindowsInstance2Id
+        LinuxInstance1Id: !GetAtt ComputeStack.Outputs.LinuxInstance1Id
+        LinuxInstance2Id: !GetAtt ComputeStack.Outputs.LinuxInstance2Id
+
+  # ---- 11. eventbridge - depends on sns ----
+  EventBridgeStack:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: !Sub "https://${ArtifactsBucketName}.s3.${AWS::Region}.amazonaws.com/templates/eventbridge.yaml"
+      Parameters:
+        ProjectName: !Ref ProjectName
+        Environment: !Ref Environment
+        NotificationTopicArn: !GetAtt SnsStack.Outputs.PatchAlertsTopicArn
+
+  # ---- 12. maintenance-window - depends on ssm + reporting + sns ----
+  MaintenanceWindowStack:
+    Type: AWS::CloudFormation::Stack
+    DependsOn: ComputeStack
+    Properties:
+      TemplateURL: !Sub "https://${ArtifactsBucketName}.s3.${AWS::Region}.amazonaws.com/templates/maintenance-window.yaml"
+      Parameters:
+        ProjectName: !Ref ProjectName
+        Environment: !Ref Environment
+        MaintenanceWindowCronSchedule: !Ref MaintenanceWindowCronSchedule
+        PatchOrchestrationRunbookName: !GetAtt SsmStack.Outputs.PatchOrchestrationRunbookName
+        ReportBucketName: !GetAtt ReportingStack.Outputs.ReportBucketName
+        NotificationTopicArn: !GetAtt SnsStack.Outputs.PatchAlertsTopicArn
+
+Outputs:
+  VpcId:
+    Value: !GetAtt NetworkStack.Outputs.VpcId
+  ReportBucketName:
+    Value: !GetAtt ReportingStack.Outputs.ReportBucketName
+  MaintenanceWindowId:
+    Value: !GetAtt MaintenanceWindowStack.Outputs.MaintenanceWindowId
+  PatchAlertsTopicArn:
+    Value: !GetAtt SnsStack.Outputs.PatchAlertsTopicArn
+  RollbackRunbookName:
+    Value: !GetAtt SsmStack.Outputs.RollbackRunbookName

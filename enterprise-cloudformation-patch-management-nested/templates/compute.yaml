@@ -1,0 +1,262 @@
+AWSTemplateFormatVersion: '2010-09-09'
+
+Description: >
+  Enterprise CloudFormation Patch Management - Compute Module.
+  Creates 2x Windows Server 2022 and 2x Amazon Linux 2023 instances,
+  each running a dummy "security agent" for the patch-management demo.
+  Imports networking + IAM resources from the network and iam stacks.
+
+Metadata:
+  AWS::CloudFormation::Interface:
+    ParameterGroups:
+      - Label:
+          default: Project Configuration
+        Parameters:
+          - ProjectName
+          - Environment
+      - Label:
+          default: Compute Configuration
+        Parameters:
+          - LinuxInstanceType
+          - WindowsInstanceType
+
+Parameters:
+
+  ProjectName:
+    Type: String
+    Default: epm
+
+  Environment:
+    Type: String
+    Default: dev
+    AllowedValues:
+      - dev
+      - qa
+      - uat
+      - prod
+
+  LinuxInstanceType:
+    Type: String
+    Default: t3.micro
+    AllowedValues:
+      - t3.micro
+      - t3.small
+
+  WindowsInstanceType:
+    Type: String
+    Default: t3.medium
+    AllowedValues:
+      - t3.medium
+      - t3.large
+
+  LatestAmiIdLinux:
+    Type: AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>
+    Default: /aws/service/ami-amazon-linux-latest/al2023-ami-kernel-default-x86_64
+
+  LatestAmiIdWindows:
+    Type: AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>
+    Default: /aws/service/ami-windows-latest/Windows_Server-2022-English-Full-Base
+
+  PublicSubnet1Id:
+    Type: String
+    Description: From NetworkStack.Outputs.PublicSubnet1Id
+
+  PublicSubnet2Id:
+    Type: String
+    Description: From NetworkStack.Outputs.PublicSubnet2Id
+
+  SecurityGroupId:
+    Type: String
+    Description: From NetworkStack.Outputs.SecurityGroupId
+
+  InstanceProfileName:
+    Type: String
+    Description: From IamStack.Outputs.InstanceProfileName
+
+Resources:
+
+####################################################
+# Linux Instance 1
+####################################################
+
+  LinuxInstance1:
+    Type: AWS::EC2::Instance
+    Properties:
+      InstanceType: !Ref LinuxInstanceType
+      ImageId: !Ref LatestAmiIdLinux
+      SubnetId: !Ref PublicSubnet1Id
+      SecurityGroupIds:
+        - !Ref SecurityGroupId
+      IamInstanceProfile: !Ref InstanceProfileName
+      Tags:
+        - Key: Name
+          Value: !Sub "${ProjectName}-${Environment}-linux-1"
+        - Key: Project
+          Value: !Ref ProjectName
+        - Key: Environment
+          Value: !Ref Environment
+        - Key: ManagedBy
+          Value: CloudFormation
+        - Key: "Patch Group"
+          Value: !Sub "${ProjectName}-${Environment}-linux"
+      UserData:
+        Fn::Base64: !Sub |
+          #!/bin/bash
+          mkdir -p /opt/security-agent
+          printf '#!/bin/bash\nwhile true; do echo heartbeat; sleep 30; done\n' > /opt/security-agent/agent.sh
+          chmod +x /opt/security-agent/agent.sh
+          cat > /etc/systemd/system/security-agent.service <<'UNIT'
+          [Unit]
+          Description=Dummy Security Agent
+          After=network.target
+          [Service]
+          ExecStart=/opt/security-agent/agent.sh
+          Restart=always
+          [Install]
+          WantedBy=multi-user.target
+          UNIT
+          systemctl daemon-reload
+          systemctl enable security-agent
+          systemctl start security-agent
+
+####################################################
+# Linux Instance 2
+####################################################
+
+  LinuxInstance2:
+    Type: AWS::EC2::Instance
+    Properties:
+      InstanceType: !Ref LinuxInstanceType
+      ImageId: !Ref LatestAmiIdLinux
+      SubnetId: !Ref PublicSubnet2Id
+      SecurityGroupIds:
+        - !Ref SecurityGroupId
+      IamInstanceProfile: !Ref InstanceProfileName
+      Tags:
+        - Key: Name
+          Value: !Sub "${ProjectName}-${Environment}-linux-2"
+        - Key: Project
+          Value: !Ref ProjectName
+        - Key: Environment
+          Value: !Ref Environment
+        - Key: ManagedBy
+          Value: CloudFormation
+        - Key: "Patch Group"
+          Value: !Sub "${ProjectName}-${Environment}-linux"
+      UserData:
+        Fn::Base64: !Sub |
+          #!/bin/bash
+          mkdir -p /opt/security-agent
+          printf '#!/bin/bash\nwhile true; do echo heartbeat; sleep 30; done\n' > /opt/security-agent/agent.sh
+          chmod +x /opt/security-agent/agent.sh
+          cat > /etc/systemd/system/security-agent.service <<'UNIT'
+          [Unit]
+          Description=Dummy Security Agent
+          After=network.target
+          [Service]
+          ExecStart=/opt/security-agent/agent.sh
+          Restart=always
+          [Install]
+          WantedBy=multi-user.target
+          UNIT
+          systemctl daemon-reload
+          systemctl enable security-agent
+          systemctl start security-agent
+
+####################################################
+# Windows Instance 1
+####################################################
+
+  WindowsInstance1:
+    Type: AWS::EC2::Instance
+    Properties:
+      InstanceType: !Ref WindowsInstanceType
+      ImageId: !Ref LatestAmiIdWindows
+      SubnetId: !Ref PublicSubnet1Id
+      SecurityGroupIds:
+        - !Ref SecurityGroupId
+      IamInstanceProfile: !Ref InstanceProfileName
+      Tags:
+        - Key: Name
+          Value: !Sub "${ProjectName}-${Environment}-windows-1"
+        - Key: Project
+          Value: !Ref ProjectName
+        - Key: Environment
+          Value: !Ref Environment
+        - Key: ManagedBy
+          Value: CloudFormation
+        - Key: "Patch Group"
+          Value: !Sub "${ProjectName}-${Environment}-windows"
+      UserData:
+        Fn::Base64: !Sub |
+          <powershell>
+          $action = New-ScheduledTaskAction -Execute "powershell.exe" -Argument "-NoProfile -Command Start-Sleep -Seconds 30"
+          $trigger = New-ScheduledTaskTrigger -AtStartup
+          $principal = New-ScheduledTaskPrincipal -UserId "SYSTEM" -LogonType ServiceAccount -RunLevel Highest
+          Register-ScheduledTask -TaskName "SecurityAgentService" -Action $action -Trigger $trigger -Principal $principal -Force
+          Start-ScheduledTask -TaskName "SecurityAgentService"
+          </powershell>
+
+####################################################
+# Windows Instance 2
+####################################################
+
+  WindowsInstance2:
+    Type: AWS::EC2::Instance
+    Properties:
+      InstanceType: !Ref WindowsInstanceType
+      ImageId: !Ref LatestAmiIdWindows
+      SubnetId: !Ref PublicSubnet2Id
+      SecurityGroupIds:
+        - !Ref SecurityGroupId
+      IamInstanceProfile: !Ref InstanceProfileName
+      Tags:
+        - Key: Name
+          Value: !Sub "${ProjectName}-${Environment}-windows-2"
+        - Key: Project
+          Value: !Ref ProjectName
+        - Key: Environment
+          Value: !Ref Environment
+        - Key: ManagedBy
+          Value: CloudFormation
+        - Key: "Patch Group"
+          Value: !Sub "${ProjectName}-${Environment}-windows"
+      UserData:
+        Fn::Base64: !Sub |
+          <powershell>
+          $action = New-ScheduledTaskAction -Execute "powershell.exe" -Argument "-NoProfile -Command Start-Sleep -Seconds 30"
+          $trigger = New-ScheduledTaskTrigger -AtStartup
+          $principal = New-ScheduledTaskPrincipal -UserId "SYSTEM" -LogonType ServiceAccount -RunLevel Highest
+          Register-ScheduledTask -TaskName "SecurityAgentService" -Action $action -Trigger $trigger -Principal $principal -Force
+          Start-ScheduledTask -TaskName "SecurityAgentService"
+          </powershell>
+
+####################################################
+# Outputs
+####################################################
+
+Outputs:
+
+  LinuxInstance1Id:
+    Description: Linux Instance 1 ID
+    Value: !Ref LinuxInstance1
+    Export:
+      Name: !Sub "${ProjectName}-${Environment}-LinuxInstance1Id"
+
+  LinuxInstance2Id:
+    Description: Linux Instance 2 ID
+    Value: !Ref LinuxInstance2
+    Export:
+      Name: !Sub "${ProjectName}-${Environment}-LinuxInstance2Id"
+
+  WindowsInstance1Id:
+    Description: Windows Instance 1 ID
+    Value: !Ref WindowsInstance1
+    Export:
+      Name: !Sub "${ProjectName}-${Environment}-WindowsInstance1Id"
+
+  WindowsInstance2Id:
+    Description: Windows Instance 2 ID
+    Value: !Ref WindowsInstance2
+    Export:
+      Name: !Sub "${ProjectName}-${Environment}-WindowsInstance2Id"

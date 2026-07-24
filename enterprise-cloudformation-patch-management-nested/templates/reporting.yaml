@@ -1,0 +1,105 @@
+AWSTemplateFormatVersion: '2010-09-09'
+
+Description: >
+  Enterprise CloudFormation Patch Management - Reporting Module.
+  Private, versioned, encrypted S3 bucket for compliance/health reports.
+
+Metadata:
+  AWS::CloudFormation::Interface:
+    ParameterGroups:
+      - Label:
+          default: Project Configuration
+        Parameters:
+          - ProjectName
+          - Environment
+
+Parameters:
+
+  ProjectName:
+    Type: String
+    Default: epm
+
+  Environment:
+    Type: String
+    Default: dev
+    AllowedValues:
+      - dev
+      - qa
+      - uat
+      - prod
+
+Resources:
+
+  ####################################################
+  # Compliance Report Bucket
+  ####################################################
+
+  ComplianceReportBucket:
+    Type: AWS::S3::Bucket
+    DeletionPolicy: Retain
+    UpdateReplacePolicy: Retain
+    Properties:
+      BucketName: !Sub "${ProjectName}-${Environment}-patch-reports-${AWS::AccountId}"
+      BucketEncryption:
+        ServerSideEncryptionConfiguration:
+          - ServerSideEncryptionByDefault:
+              SSEAlgorithm: AES256
+
+      VersioningConfiguration:
+        Status: Enabled
+
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+        BlockPublicPolicy: true
+        IgnorePublicAcls: true
+        RestrictPublicBuckets: true
+
+      LifecycleConfiguration:
+        Rules:
+          - Id: ExpireOldReports
+            Status: Enabled
+            ExpirationInDays: 365
+
+      Tags:
+        - Key: Project
+          Value: !Ref ProjectName
+        - Key: Environment
+          Value: !Ref Environment
+        - Key: ManagedBy
+          Value: CloudFormation
+
+  ####################################################
+  # Bucket Policy
+  ####################################################
+
+  ComplianceReportBucketPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket: !Ref ComplianceReportBucket
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Sid: DenyInsecureTransport
+            Effect: Deny
+            Principal: "*"
+            Action: "s3:*"
+            Resource:
+              - !GetAtt ComplianceReportBucket.Arn
+              - !Sub "${ComplianceReportBucket.Arn}/*"
+            Condition:
+              Bool:
+                aws:SecureTransport: "false"
+
+####################################################
+# Outputs
+####################################################
+
+Outputs:
+
+  ReportBucketName:
+    Description: Compliance Report Bucket Name
+    Value: !Ref ComplianceReportBucket
+
+  ReportBucketArn:
+    Description: Compliance Report Bucket ARN
+    Value: !GetAtt ComplianceReportBucket.Arn
