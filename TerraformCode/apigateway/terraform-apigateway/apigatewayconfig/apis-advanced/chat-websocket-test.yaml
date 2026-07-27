@@ -1,0 +1,65 @@
+# yaml-language-server: $schema=../schema/api-schema.json
+###############################################################
+# Phase 4 Test File — WebSocket API
+#
+# Covers:
+#   TC-301  $connect
+#   TC-302  $disconnect
+#   TC-303  $default
+#   TC-304  Custom route (sendMessage)
+#
+# TC-305 (multiple simultaneous connections) is a client-side
+# load test against the deployed endpoint, not a config change —
+# see GettingStarted.md testing notes.
+###############################################################
+
+enabled: true
+
+metadata:
+  owner: platform-team
+  team: qa
+  application: chat-service
+  project: enterprise-api
+  environment: dev
+  cost_center: IT003
+
+api:
+  name: chat-websocket-test
+  description: Phase 4 QA — WebSocket test scenario
+  version: v1
+  protocol_type: WEBSOCKET
+  route_selection_expression: "$request.body.action"
+
+stage:
+  name: dev
+  auto_deploy: true
+
+logging:
+  enabled: true
+  retention_in_days: 14
+  metrics_enabled: true
+  logging_level: INFO
+
+integrations:
+  - name: chat-lambda
+    type: LAMBDA
+    config:
+      function_arn: arn:aws:lambda:us-west-2:211811255273:function:apigw-qa-chat-handler
+
+routes:
+  - route_key: "$connect"       # TC-301
+    integration: chat-lambda
+
+  - route_key: "$disconnect"    # TC-302
+    integration: chat-lambda
+
+  - route_key: "$default"       # TC-303
+    integration: chat-lambda
+
+  - route_key: sendMessage      # TC-304
+    integration: chat-lambda
+
+tags:
+  Application: Chat
+  Team: Messaging
+  Purpose: Phase4-QA

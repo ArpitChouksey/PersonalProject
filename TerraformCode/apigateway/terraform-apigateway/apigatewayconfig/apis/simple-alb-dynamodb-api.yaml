@@ -1,0 +1,60 @@
+# yaml-language-server: $schema=../schema/api-schema.json
+###############################################################
+# Simple Test 5 -- REST API + ALB (EC2 backend) + DynamoDB
+#
+# ALB is public-facing (no VPC Link) -- reached via a plain HTTP
+# integration, just its DNS name as a URL.
+#
+# DynamoDB is a non-proxy AWS integration -- no Lambda in the
+# path, API Gateway calls PutItem directly using the VTL request
+# template below to shape the incoming JSON body into DynamoDB's
+# expected format.
+###############################################################
+
+enabled: true
+
+api:
+  name: simple-alb-dynamodb-api
+  description: Simple REST API -- one route to ALB/EC2, one to DynamoDB
+  protocol_type: REST
+
+stage:
+  name: dev
+  auto_deploy: true
+
+integrations:
+  - name: alb-backend
+    type: HTTP
+    config:
+      url: http://apigw-simple-test-alb-809087577.us-west-2.elb.amazonaws.com
+
+  - name: dynamodb-backend
+    type: AWS
+    config:
+      uri: "arn:aws:apigateway:us-west-2:dynamodb:action/PutItem"
+      credentials_arn: arn:aws:iam::211811255273:role/apigw-simple-dynamodb
+      request_templates:
+        "application/json": |
+          {
+            "TableName": "apigw-simple-test-table",
+            "Item": {
+              "id": { "S": "$context.requestId" },
+              "data": { "S": "$util.escapeJavaScript($input.body)" }
+            }
+          }
+
+routes:
+  - path: /ec2
+    method: GET
+    integration: alb-backend
+
+  - path: /items
+    method: POST
+    integration: dynamodb-backend
+    responses:
+      - status_code: "200"
+      - status_code: "500"
+        selection_pattern: ".*Error.*"
+
+tags:
+  Purpose: SimpleTest

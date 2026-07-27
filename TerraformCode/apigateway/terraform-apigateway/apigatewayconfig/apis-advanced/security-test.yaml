@@ -1,0 +1,104 @@
+# yaml-language-server: $schema=../schema/api-schema.json
+###############################################################
+# Phase 7 Test File — Security
+#
+# Covers:
+#   TC-601  JWT Authorizer
+#   TC-602  Lambda Authorizer (REQUEST type, on HTTP API)
+#   TC-603  IAM Authorization
+#   TC-604  No Authorization
+#   TC-605  WAF Association
+#   TC-606  Mutual TLS
+#
+# mTLS (TC-606) requires a custom domain — since the two are
+# inseparable, this file also enables `domain` for that one test.
+# See Phase 8 for domain testing (Route53/ACM/base path) without
+# mTLS layered on top.
+###############################################################
+
+enabled: true
+
+metadata:
+  owner: platform-team
+  team: qa
+  application: security-test
+  project: enterprise-api
+  environment: dev
+  cost_center: IT001
+
+api:
+  name: security-test
+  description: Phase 7 QA — authorizers, IAM, WAF, mTLS
+  version: v1
+  protocol_type: HTTP
+
+stage:
+  name: dev
+  auto_deploy: true
+
+domain:                          # required for TC-606 (mTLS)
+  enabled: true
+  name: security-test-api.company.com
+  certificate_arn: arn:aws:acm:us-west-2:111111111111:certificate/qa-security-test
+  endpoint_type: REGIONAL
+  security_policy: TLS_1_2
+  base_path: security-test
+  mtls:                          # TC-606
+    truststore_uri: s3://qa-mtls-truststores/security-test-truststore.pem
+    truststore_version: "1"
+
+security:
+  authorization:
+    default: NONE                # TC-604 baseline — overridden per-route below
+  waf:                            # TC-605
+    enabled: true
+    web_acl_arn: arn:aws:wafv2:us-west-2:211811255273:regional/webacl/apigw-qa-test-waf/12a52cc7-94c7-4a0b-b3a7-dc88eb83f8fe
+
+authorizers:
+  - name: jwt-auth                # TC-601
+    type: JWT
+    identity_sources:
+      - "$request.header.Authorization"
+    jwt_configuration:
+      issuer: https://qa.auth0.com/
+      audience:
+        - security-test-api
+
+  - name: lambda-auth              # TC-602
+    type: REQUEST
+    identity_sources:
+      - "$request.header.Authorization"
+    authorizer_uri: arn:aws:apigateway:us-west-2:lambda:path/2015-03-31/functions/arn:aws:lambda:us-west-2:211811255273:function:apigw-qa-authorizer/invocations
+    authorizer_result_ttl_in_seconds: 300
+
+integrations:
+  - name: security-lambda
+    type: LAMBDA
+    config:
+      function_arn: arn:aws:lambda:us-west-2:211811255273:function:apigw-qa-security-test-echo
+
+routes:
+  - path: /jwt-protected             # TC-601
+    method: GET
+    integration: security-lambda
+    authorization: jwt-auth
+
+  - path: /lambda-protected          # TC-602
+    method: GET
+    integration: security-lambda
+    authorization: lambda-auth
+
+  - path: /iam-protected             # TC-603
+    method: GET
+    integration: security-lambda
+    authorization: AWS_IAM
+
+  - path: /public                   # TC-604
+    method: GET
+    integration: security-lambda
+    authorization: NONE
+
+tags:
+  Application: SecurityTest
+  Team: Platform
+  Purpose: Phase7-QA

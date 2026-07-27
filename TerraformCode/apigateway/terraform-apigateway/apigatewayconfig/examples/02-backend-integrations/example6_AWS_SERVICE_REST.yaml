@@ -1,0 +1,29 @@
+# yaml-language-server: $schema=../../schema/api-schema.json
+#
+# BACKEND INTEGRATION: AWS Service (SQS) on a REST API
+# Same idea as example5, but REST (v1) APIs need a full target
+# `uri` instead of the HTTP API's `integration_subtype` shorthand.
+
+enabled: true
+
+api:
+  name: example-sqs-backend-rest
+  protocol_type: REST
+
+integrations:
+  - name: my-queue
+    type: AWS
+    config:
+      uri: "arn:aws:apigateway:us-west-2:sqs:path/111111111111/my-queue"
+      credentials_arn: arn:aws:iam::111111111111:role/apigw-sqs-send
+      request_templates:
+        "application/json": "Action=SendMessage&MessageBody=$input.body"
+
+routes:
+  - path: /submit
+    method: POST
+    integration: my-queue
+    responses:
+      - status_code: "200"
+      - status_code: "500"
+        selection_pattern: ".*Error.*"

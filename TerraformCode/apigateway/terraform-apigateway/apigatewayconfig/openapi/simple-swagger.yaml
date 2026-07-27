@@ -1,0 +1,26 @@
+swagger: "2.0"
+
+info:
+  title: simple-swagger-api
+  description: Minimal OpenAPI import test -- one path, one Lambda.
+  version: "1.0"
+
+host: apigateway.amazonaws.com
+basePath: /
+schemes:
+  - https
+
+paths:
+
+  /hello:
+
+    get:
+      summary: Say hello
+      responses:
+        "200":
+          description: OK
+      x-amazon-apigateway-integration:
+        type: aws_proxy
+        httpMethod: POST
+        uri: "${lambda_invoke_uri}"
+        passthroughBehavior: when_no_match

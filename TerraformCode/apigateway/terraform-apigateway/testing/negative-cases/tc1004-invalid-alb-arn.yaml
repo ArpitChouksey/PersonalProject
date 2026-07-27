@@ -1,0 +1,15 @@
+# TC-1004 — malformed ALB listener ARN (expect: validator fails)
+enabled: true
+api:
+  name: tc1004-invalid-alb-arn
+  protocol_type: HTTP
+integrations:
+  - name: bad-alb
+    type: ALB
+    config:
+      listener_arn: not-an-arn-at-all
+      vpc_link_id: vpclink-001
+routes:
+  - path: /employees
+    method: GET
+    integration: bad-alb

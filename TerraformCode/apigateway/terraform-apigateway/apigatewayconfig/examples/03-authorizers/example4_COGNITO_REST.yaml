@@ -1,0 +1,31 @@
+# yaml-language-server: $schema=../../schema/api-schema.json
+#
+# AUTHORIZER: Cognito User Pools (REST API only)
+# Use when: "we already use AWS Cognito to manage our users"
+# You need: the Cognito User Pool's ARN
+
+enabled: true
+
+api:
+  name: example-cognito-auth
+  protocol_type: REST
+
+authorizers:
+  - name: cognito-auth
+    type: COGNITO_USER_POOLS
+    provider_arns:
+      - arn:aws:cognito-idp:us-west-2:111111111111:userpool/us-west-2_ExamplePool
+    identity_sources:
+      - "method.request.header.Authorization"
+
+integrations:
+  - name: my-lambda
+    type: LAMBDA
+    config:
+      function_arn: arn:aws:lambda:us-west-2:111111111111:function:my-function
+
+routes:
+  - path: /protected
+    method: GET
+    integration: my-lambda
+    authorization: cognito-auth

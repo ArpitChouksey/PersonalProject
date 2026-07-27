@@ -1,0 +1,8 @@
+# TC-1006 — syntactically broken YAML (expect: validator fails with a YAML parse error)
+enabled: true
+api:
+  name: tc1006-invalid-yaml
+  protocol_type: HTTP
+  this is: [not, valid, yaml,
+integrations:
+  - name: x

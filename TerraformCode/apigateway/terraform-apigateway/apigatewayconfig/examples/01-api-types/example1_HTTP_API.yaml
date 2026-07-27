@@ -1,0 +1,22 @@
+# yaml-language-server: $schema=../schema/api-schema.json
+#
+# Smallest possible working API: one Lambda, one route.
+# Everything else (stage, CORS, logging, domain, security, WAF)
+# is optional and defaults sensibly when left out entirely.
+
+enabled: true
+
+api:
+  name: my-first-api
+  protocol_type: HTTP
+
+integrations:
+  - name: my-lambda
+    type: LAMBDA
+    config:
+      function_arn: arn:aws:lambda:us-west-2:111111111111:function:my-function
+
+routes:
+  - path: /hello
+    method: GET
+    integration: my-lambda

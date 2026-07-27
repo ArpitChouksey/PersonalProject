@@ -1,0 +1,19 @@
+# TC-1008 — no `stage:` block at all.
+# NOTE: this is no longer a failure case. The module defaults
+# stage.name to "$default" and auto_deploy to true when the
+# whole block is omitted (confirmed in stage-http.tf), and the
+# schema/validator were relaxed to match. Kept here as a POSITIVE
+# regression check: this file is EXPECTED to pass validation.
+enabled: true
+api:
+  name: tc1008-missing-stage
+  protocol_type: HTTP
+integrations:
+  - name: x
+    type: LAMBDA
+    config:
+      function_arn: arn:aws:lambda:us-west-2:111111111111:function:x
+routes:
+  - path: /employees
+    method: GET
+    integration: x

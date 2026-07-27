@@ -1,0 +1,38 @@
+# yaml-language-server: $schema=../schema/api-schema.json
+###############################################################
+# Simple Test 3 -- REST API + Lambda + public HTTP passthrough
+###############################################################
+
+enabled: true
+
+api:
+  name: simple-rest-api
+  description: Simple REST API -- one route to Lambda, one to a public API
+  protocol_type: REST
+
+stage:
+  name: dev
+  auto_deploy: true
+
+integrations:
+  - name: hello-lambda
+    type: LAMBDA
+    config:
+      function_arn: arn:aws:lambda:us-west-2:211811255273:function:apigw-simple-hello
+
+  - name: jsonplaceholder
+    type: HTTP
+    config:
+      url: https://jsonplaceholder.typicode.com/posts
+
+routes:
+  - path: /hello
+    method: GET
+    integration: hello-lambda
+
+  - path: /posts
+    method: GET
+    integration: jsonplaceholder
+
+tags:
+  Purpose: SimpleTest

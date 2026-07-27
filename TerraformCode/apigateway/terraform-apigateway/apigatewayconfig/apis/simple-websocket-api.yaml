@@ -1,0 +1,35 @@
+# yaml-language-server: $schema=../schema/api-schema.json
+###############################################################
+# Simple Test 2 -- WebSocket API + Lambda
+###############################################################
+
+enabled: true
+
+api:
+  name: simple-websocket-api
+  description: Simple WebSocket API hitting a Lambda function
+  protocol_type: WEBSOCKET
+  route_selection_expression: "$request.body.action"
+
+stage:
+  name: dev
+  auto_deploy: true
+
+integrations:
+  - name: hello-lambda
+    type: LAMBDA
+    config:
+      function_arn: arn:aws:lambda:us-west-2:211811255273:function:apigw-simple-hello
+
+routes:
+  - route_key: "$connect"
+    integration: hello-lambda
+
+  - route_key: "$disconnect"
+    integration: hello-lambda
+
+  - route_key: "$default"
+    integration: hello-lambda
+
+tags:
+  Purpose: SimpleTest

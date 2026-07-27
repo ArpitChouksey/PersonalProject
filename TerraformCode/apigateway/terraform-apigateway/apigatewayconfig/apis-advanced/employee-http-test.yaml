@@ -1,0 +1,146 @@
+###############################################################
+# Phase 2 Test File — HTTP API
+#
+# Covers:
+#   TC-101  HTTP API + Lambda
+#   TC-102  Multiple routes (GET/POST /employees, PUT/DELETE /employees/{id})
+#   TC-103  Lambda proxy integration (body/query/path/headers)
+#   TC-104  HTTP URL integration (httpbin.org)
+#   TC-105  Multiple integration types (Lambda / HTTP / AWS Service)
+#   TC-106  Stage auto deploy
+#   TC-107  CORS
+###############################################################
+
+enabled: true
+
+metadata:
+  owner: platform-team
+  team: qa
+  application: employee-service
+  project: enterprise-api
+  environment: dev
+  cost_center: IT001
+
+api:
+  name: employee-http-test
+  description: Phase 2 QA — HTTP API test scenario
+  version: v1
+  protocol_type: HTTP
+
+stage:
+  name: dev
+  auto_deploy: true          # TC-106
+
+endpoint:
+  type: REGIONAL
+
+cors:                        # TC-107
+  enabled: true
+  allow_origins:
+    - "*"
+  allow_methods:
+    - GET
+    - POST
+    - PUT
+    - DELETE
+    - OPTIONS
+  allow_headers:
+    - "*"
+  expose_headers: []
+  allow_credentials: false
+  max_age: 3600
+
+logging:
+  enabled: true
+  retention_in_days: 14
+  metrics_enabled: true
+  logging_level: INFO
+  data_trace_enabled: true   # verbose while we're QA-ing
+
+security:
+  authorization:
+    default: NONE
+  api_key_required: false
+  waf:
+    enabled: false
+    web_acl_arn: ""
+
+###############################################################
+# Integrations — TC-105 (three distinct backend types)
+###############################################################
+integrations:
+
+  # TC-101 / TC-102 / TC-103 — replace with your own test Lambda ARN.
+  # A simple echo Lambda (see accompanying echo_lambda.py) makes
+  # TC-103 trivial to verify: it just returns the full event body.
+  - name: employee-lambda
+    type: LAMBDA
+    config:
+      function_arn: arn:aws:lambda:us-west-2:211811255273:function:apigw-qa-employee-echo
+
+  # TC-104 — /anything echoes method, headers, query, and body back
+  # in the JSON response, so it doubles as a second proxy-behavior check.
+  - name: httpbin-proxy
+    type: HTTP
+    config:
+      url: https://httpbin.org/anything
+
+  # TC-105 — native AWS service integration, no Lambda in the path.
+  #
+  # NOTE: this was originally S3-PutObject, but AWS does not
+  # actually support S3 as a quick-create integration_subtype for
+  # HTTP APIs -- the supported list is SQS, EventBridge, AppConfig,
+  # Kinesis, and Step Functions operations only. Direct S3 access
+  # from an HTTP API without a Lambda in front isn't possible; a
+  # REST API's non-proxy AWS integration (raw URI + VTL mapping,
+  # the same pattern employee-rest-test.yaml uses for SQS) is the
+  # only way to reach S3 directly, and only on REST, not HTTP.
+  - name: notify-events
+    type: AWS
+    config:
+      integration_subtype: EventBridge-PutEvents
+      credentials_arn: arn:aws:iam::211811255273:role/apigw-qa-eventbridge-put
+      request_parameters:
+        Source: employee-http-test
+        DetailType: FileUploadRequested
+        Detail: "$request.body"
+
+###############################################################
+# Routes — TC-102 (multiple routes) + TC-105 (routed by integration)
+###############################################################
+routes:
+
+  - path: /employees
+    method: GET
+    integration: employee-lambda
+    authorization: NONE
+
+  - path: /employees
+    method: POST
+    integration: employee-lambda
+    authorization: NONE
+
+  - path: /employees/{id}
+    method: PUT
+    integration: employee-lambda
+    authorization: NONE
+
+  - path: /employees/{id}
+    method: DELETE
+    integration: employee-lambda
+    authorization: NONE
+
+  - path: /reports
+    method: GET
+    integration: httpbin-proxy
+    authorization: NONE
+
+  - path: /files
+    method: POST
+    integration: notify-events
+    authorization: NONE
+
+tags:
+  Application: Employee
+  Team: Platform
+  Purpose: Phase2-QA

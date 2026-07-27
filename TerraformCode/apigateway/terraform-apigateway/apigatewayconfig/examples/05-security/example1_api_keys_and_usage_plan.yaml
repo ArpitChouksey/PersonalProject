@@ -1,0 +1,35 @@
+# yaml-language-server: $schema=../../schema/api-schema.json
+#
+# SECURITY: API Keys + Usage Plan (REST API only)
+# Use when: "external partners call this, give each one a key,
+#            and cap how many calls they can make"
+
+enabled: true
+
+api:
+  name: example-api-keys
+  protocol_type: REST
+
+security:
+  usage_plan:
+    enabled: true
+    name: example-usage-plan
+    quota:
+      limit: 10000
+      period: MONTH
+    throttle:
+      burst_limit: 50
+      rate_limit: 20
+
+integrations:
+  - name: my-lambda
+    type: LAMBDA
+    config:
+      function_arn: arn:aws:lambda:us-west-2:111111111111:function:my-function
+
+routes:
+  - path: /partner-data
+    method: GET
+    integration: my-lambda
+    api_key_required: true    # <-- this is the field that actually
+                               # enforces it, set per-route

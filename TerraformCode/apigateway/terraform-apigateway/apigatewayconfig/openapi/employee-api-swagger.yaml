@@ -1,0 +1,78 @@
+swagger: "2.0"
+
+info:
+  title: employee-swagger-api
+  description: >
+    Sample OpenAPI (Swagger 2.0) definition demonstrating import
+    into API Gateway via `import.enabled` in the corresponding
+    apis/*.yaml file. Replace the Lambda ARN in every
+    x-amazon-apigateway-integration block with a real one before
+    deploying.
+  version: "1.0"
+
+schemes:
+  - https
+
+paths:
+
+  /employees:
+
+    get:
+      summary: List employees
+      responses:
+        "200":
+          description: OK
+      x-amazon-apigateway-integration:
+        type: aws_proxy
+        httpMethod: POST
+        uri: "${lambda_invoke_uri}"
+        passthroughBehavior: when_no_match
+
+    post:
+      summary: Create employee
+      responses:
+        "201":
+          description: Created
+      x-amazon-apigateway-integration:
+        type: aws_proxy
+        httpMethod: POST
+        uri: "${lambda_invoke_uri}"
+        passthroughBehavior: when_no_match
+
+  /employees/{id}:
+
+    get:
+      summary: Get employee by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          type: string
+      responses:
+        "200":
+          description: OK
+        "404":
+          description: Not Found
+      x-amazon-apigateway-integration:
+        type: aws_proxy
+        httpMethod: POST
+        uri: "${lambda_invoke_uri}"
+        passthroughBehavior: when_no_match
+
+    put:
+      summary: Update employee
+      parameters:
+        - name: id
+          in: path
+          required: true
+          type: string
+      responses:
+        "200":
+          description: OK
+        "404":
+          description: Not Found
+      x-amazon-apigateway-integration:
+        type: aws_proxy
+        httpMethod: POST
+        uri: "${lambda_invoke_uri}"
+        passthroughBehavior: when_no_match

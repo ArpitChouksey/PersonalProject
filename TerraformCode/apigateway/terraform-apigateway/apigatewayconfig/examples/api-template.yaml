@@ -1,0 +1,284 @@
+###############################################################################
+# Enterprise API Gateway Platform
+# Generic API Template
+#
+# Copy this file into:
+# apigatewayconfig/apis/<application>-api.yaml
+###############################################################################
+
+###############################################################################
+# Enable / Disable API
+###############################################################################
+
+enabled: true
+
+###############################################################################
+# Metadata
+###############################################################################
+
+metadata:
+
+  owner: platform-team
+
+  team: engineering
+
+  application: employee-service
+
+  project: enterprise-platform
+
+  environment: dev
+
+  cost_center: engineering
+
+###############################################################################
+# API
+###############################################################################
+
+api:
+
+  name: employee-api
+
+  description: Employee Management API
+
+  version: v1
+
+  protocol_type: HTTP
+
+###############################################################################
+# Stage
+###############################################################################
+
+stage:
+
+  name: dev
+
+  auto_deploy: true
+
+###############################################################################
+# Endpoint
+###############################################################################
+
+endpoint:
+
+  type: REGIONAL
+
+###############################################################################
+# CORS
+###############################################################################
+
+cors:
+
+  enabled: true
+
+  allow_origins:
+
+    - "*"
+
+  allow_methods:
+
+    - GET
+
+    - POST
+
+    - PUT
+
+    - DELETE
+
+    - PATCH
+
+    - OPTIONS
+
+  allow_headers:
+
+    - Authorization
+
+    - Content-Type
+
+  expose_headers: []
+
+  allow_credentials: false
+
+  max_age: 3600
+
+###############################################################################
+# Logging
+###############################################################################
+
+logging:
+
+  access_logs: true
+
+  execution_logs: true
+
+  metrics: true
+
+  xray: false
+
+  retention_days: 30
+
+###############################################################################
+# Custom Domain
+###############################################################################
+
+domain:
+
+  enabled: false
+
+  domain_name: ""
+
+  certificate_arn: ""
+
+  hosted_zone_id: ""
+
+###############################################################################
+# VPC Link
+###############################################################################
+
+vpc:
+
+  enabled: false
+
+  vpc_link_id: ""
+
+###############################################################################
+# Security
+###############################################################################
+
+security:
+
+  authorization:
+
+    default: NONE
+
+  api_key_required: false
+
+###############################################################################
+# Authorizers
+###############################################################################
+
+authorizers: []
+
+#
+# Example
+#
+# authorizers:
+#
+#   - name: jwt-auth
+#
+#     type: JWT
+#
+#     config:
+#
+#       issuer: https://example.auth.com
+#
+#       audience:
+#
+#         - api-client
+#
+
+###############################################################################
+# Routes
+###############################################################################
+
+routes:
+
+  - name: GetEmployee
+
+    path: /employee
+
+    method: GET
+
+    integration: employee-backend
+
+    authorization: NONE
+
+###############################################################################
+# Integrations
+###############################################################################
+
+integrations:
+
+  - name: employee-backend
+
+    type: LAMBDA
+
+    config:
+
+      function_arn: arn:aws:lambda:us-east-1:111111111111:function:getEmployee
+
+#
+# Supported Integration Types
+#
+# LAMBDA
+#
+# config:
+#   function_arn:
+#
+# ALB
+#
+# config:
+#   listener_arn:
+#
+# NLB
+#
+# config:
+#   listener_arn:
+#
+# ECS
+#
+# config:
+#   service_url:
+#
+# EKS
+#
+# config:
+#   namespace:
+#   service:
+#   port:
+#
+# EC2
+#
+# config:
+#   private_ip:
+#   port:
+#
+# HTTP
+#
+# config:
+#   url:
+#
+# MOCK
+#
+# config: {}
+#
+# AWS
+#
+# config:
+#   service:
+#   action:
+#   resource_arn:
+#
+
+###############################################################################
+# WAF
+###############################################################################
+
+waf:
+
+  enabled: false
+
+  web_acl_arn: ""
+
+###############################################################################
+# Tags
+###############################################################################
+
+tags:
+
+  Project: Enterprise-API-Gateway
+
+  Environment: dev
+
+  ManagedBy: Terraform
+
+  Owner: Platform-Team

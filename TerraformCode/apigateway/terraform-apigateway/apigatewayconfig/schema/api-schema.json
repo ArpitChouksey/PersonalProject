@@ -1,0 +1,521 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://company.internal/schemas/api-gateway/v1",
+  "title": "Enterprise API Gateway Schema",
+  "type": "object",
+
+  "required": [
+    "enabled",
+    "api"
+  ],
+
+  "properties": {
+
+    "enabled": {
+      "type": "boolean"
+    },
+
+    "metadata": {
+      "type": "object",
+      "properties": {
+        "owner":       { "type": "string" },
+        "team":        { "type": "string" },
+        "application": { "type": "string" },
+        "project":     { "type": "string" },
+        "environment": { "type": "string" },
+        "cost_center": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+
+    "api": {
+      "type": "object",
+      "required": ["name", "protocol_type"],
+      "properties": {
+        "name": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9-]*[a-z0-9]$",
+          "description": "Lowercase, hyphenated. Must be unique across every YAML file in apis/."
+        },
+        "description": { "type": "string" },
+        "version":     { "type": "string" },
+        "protocol_type": {
+          "type": "string",
+          "enum": ["HTTP", "REST", "WEBSOCKET"]
+        },
+        "route_selection_expression": {
+          "type": "string",
+          "description": "WEBSOCKET only."
+        },
+        "binary_media_types": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "minimum_compression_size": {
+          "type": "integer"
+        }
+      },
+      "additionalProperties": false
+    },
+
+    "stage": {
+      "type": "object",
+      "properties": {
+        "name":        { "type": "string", "minLength": 1 },
+        "auto_deploy": { "type": "boolean" },
+        "variables":   { "type": "object" },
+        "cache_cluster_enabled": { "type": "boolean" },
+        "cache_cluster_size":    { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+
+    "endpoint": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["REGIONAL", "EDGE", "PRIVATE"]
+        },
+        "disable_execute_api_endpoint": { "type": "boolean" }
+      },
+      "additionalProperties": false
+    },
+
+    "cors": {
+      "type": "object",
+      "properties": {
+        "enabled":            { "type": "boolean" },
+        "allow_origins":      { "type": "array", "items": { "type": "string" } },
+        "allow_methods":      { "type": "array", "items": { "type": "string" } },
+        "allow_headers":      { "type": "array", "items": { "type": "string" } },
+        "expose_headers":     { "type": "array", "items": { "type": "string" } },
+        "allow_credentials":  { "type": "boolean" },
+        "max_age":            { "type": "integer", "minimum": 0 }
+      },
+      "additionalProperties": false
+    },
+
+    "logging": {
+      "type": "object",
+      "properties": {
+        "enabled":            { "type": "boolean" },
+        "retention_in_days":  { "type": "integer", "minimum": 1 },
+        "metrics_enabled":    { "type": "boolean" },
+        "logging_level": {
+          "type": "string",
+          "enum": ["OFF", "ERROR", "INFO"]
+        },
+        "data_trace_enabled":       { "type": "boolean" },
+        "throttling_rate_limit":    { "type": "number" },
+        "throttling_burst_limit":   { "type": "integer" },
+        "log_group_name":           { "type": "string" },
+        "kms_key_id":                { "type": "string" },
+        "format":                    { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+
+    "domain": {
+      "type": "object",
+      "properties": {
+        "enabled":          { "type": "boolean" },
+        "name":             { "type": "string", "format": "hostname" },
+        "certificate_arn":  { "type": "string", "pattern": "^arn:aws:acm:" },
+        "endpoint_type": {
+          "type": "string",
+          "enum": ["REGIONAL", "EDGE"]
+        },
+        "security_policy": {
+          "type": "string",
+          "enum": ["TLS_1_0", "TLS_1_2"]
+        },
+        "base_path": { "type": "string" },
+        "mtls": {
+          "type": "object",
+          "properties": {
+            "truststore_uri":     { "type": "string", "pattern": "^s3://" },
+            "truststore_version": { "type": "string" }
+          },
+          "additionalProperties": false
+        },
+        "route53": {
+          "type": "object",
+          "properties": {
+            "enabled": { "type": "boolean" },
+            "zone_id": { "type": "string" }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false,
+      "if": { "properties": { "enabled": { "const": true } } },
+      "then": { "required": ["name", "certificate_arn", "base_path"] }
+    },
+
+    "vpc": {
+      "type": "object",
+      "properties": {
+        "enabled":             { "type": "boolean" },
+        "create_vpc_link":     { "type": "boolean" },
+        "subnet_ids":          { "type": "array", "items": { "type": "string", "pattern": "^subnet-" } },
+        "security_group_ids":  { "type": "array", "items": { "type": "string", "pattern": "^sg-" } },
+        "target_arns":         { "type": "array", "items": { "type": "string", "pattern": "^arn:aws:elasticloadbalancing:" } },
+        "vpc_link_id":         { "type": "string" }
+      },
+      "additionalProperties": false,
+      "if": { "properties": { "create_vpc_link": { "const": true } } },
+      "then": { "required": ["subnet_ids", "target_arns"] }
+    },
+
+    "security": {
+      "type": "object",
+      "properties": {
+        "authorization": {
+          "type": "object",
+          "properties": {
+            "default": { "type": "string" }
+          },
+          "additionalProperties": false
+        },
+        "api_key_required": { "type": "boolean" },
+        "api_key": {
+          "type": "object",
+          "properties": {
+            "enabled":     { "type": "boolean" },
+            "name":        { "type": "string" },
+            "description": { "type": "string" },
+            "value":       { "type": "string" }
+          },
+          "additionalProperties": false
+        },
+        "usage_plan": {
+          "type": "object",
+          "properties": {
+            "enabled":     { "type": "boolean" },
+            "name":        { "type": "string" },
+            "description": { "type": "string" },
+            "quota": {
+              "type": "object",
+              "properties": {
+                "limit":  { "type": "integer", "minimum": 1 },
+                "offset": { "type": "integer", "minimum": 0 },
+                "period": { "type": "string", "enum": ["DAY", "WEEK", "MONTH"] }
+              },
+              "additionalProperties": false
+            },
+            "throttle": {
+              "type": "object",
+              "properties": {
+                "burst_limit": { "type": "integer", "minimum": 0 },
+                "rate_limit":  { "type": "number", "minimum": 0 }
+              },
+              "additionalProperties": false
+            }
+          },
+          "additionalProperties": false
+        },
+        "waf": {
+          "type": "object",
+          "properties": {
+            "enabled":     { "type": "boolean" },
+            "web_acl_arn": { "type": "string", "pattern": "^arn:aws:wafv2:" }
+          },
+          "additionalProperties": false,
+          "if": { "properties": { "enabled": { "const": true } } },
+          "then": { "required": ["web_acl_arn"] }
+        }
+      },
+      "additionalProperties": false
+    },
+
+    "authorizers": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["name", "type"],
+        "properties": {
+          "name": { "type": "string" },
+          "type": {
+            "type": "string",
+            "enum": ["TOKEN", "REQUEST", "COGNITO_USER_POOLS", "JWT"]
+          },
+          "identity_sources": { "type": "array", "items": { "type": "string" } },
+          "jwt_configuration": {
+            "type": "object",
+            "properties": {
+              "issuer":   { "type": "string" },
+              "audience": { "type": "array", "items": { "type": "string" } }
+            },
+            "additionalProperties": false
+          },
+          "provider_arns": {
+            "type": "array",
+            "items": { "type": "string", "pattern": "^arn:aws:cognito-idp:" }
+          },
+          "authorizer_uri":                  { "type": "string" },
+          "authorizer_credentials":          { "type": "string" },
+          "authorizer_result_ttl_in_seconds": { "type": "integer", "minimum": 0 },
+          "identity_validation_expression":  { "type": "string" }
+        },
+        "additionalProperties": false,
+
+        "allOf": [
+          {
+            "if": { "properties": { "type": { "const": "TOKEN" } } },
+            "then": { "required": ["authorizer_uri"] }
+          },
+          {
+            "if": { "properties": { "type": { "const": "REQUEST" } } },
+            "then": { "required": ["authorizer_uri"] }
+          },
+          {
+            "if": { "properties": { "type": { "const": "COGNITO_USER_POOLS" } } },
+            "then": { "required": ["provider_arns"] }
+          },
+          {
+            "if": { "properties": { "type": { "const": "JWT" } } },
+            "then": { "required": ["jwt_configuration"] }
+          }
+        ]
+      }
+    },
+
+    "integrations": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["name", "type", "config"],
+        "properties": {
+          "name": { "type": "string" },
+          "type": {
+            "type": "string",
+            "enum": ["LAMBDA", "ALB", "NLB", "HTTP", "AWS"]
+          },
+          "config": { "type": "object" },
+          "description": { "type": "string" },
+          "options": {
+            "type": "object",
+            "properties": {
+              "timeout_milliseconds":   { "type": "integer", "minimum": 50, "maximum": 30000 },
+              "payload_format_version": { "type": "string", "enum": ["1.0", "2.0"] }
+            },
+            "additionalProperties": false
+          }
+        },
+        "additionalProperties": false,
+
+        "allOf": [
+          {
+            "if": { "properties": { "type": { "const": "LAMBDA" } } },
+            "then": {
+              "properties": {
+                "config": {
+                  "required": ["function_arn"],
+                  "properties": {
+                    "function_arn": { "type": "string", "pattern": "^arn:aws:lambda:" }
+                  }
+                }
+              }
+            }
+          },
+          {
+            "if": {
+              "properties": { "type": { "enum": ["ALB", "NLB"] } }
+            },
+            "then": {
+              "properties": {
+                "config": {
+                  "required": ["listener_arn", "vpc_link_id"],
+                  "properties": {
+                    "listener_arn": { "type": "string", "pattern": "^arn:aws:elasticloadbalancing:" },
+                    "vpc_link_id":  { "type": "string", "minLength": 1 }
+                  }
+                }
+              }
+            }
+          },
+          {
+            "if": { "properties": { "type": { "const": "HTTP" } } },
+            "then": {
+              "properties": {
+                "config": {
+                  "required": ["url"],
+                  "properties": {
+                    "url": { "type": "string", "pattern": "^https?://" }
+                  }
+                }
+              }
+            }
+          },
+          {
+            "if": { "properties": { "type": { "const": "AWS" } } },
+            "then": {
+              "properties": {
+                "config": {
+                  "properties": {
+                    "uri":                { "type": "string", "pattern": "^arn:aws:apigateway:" },
+                    "credentials_arn":    { "type": "string", "pattern": "^arn:aws:iam::" },
+                    "integration_subtype": {
+                      "type": "string",
+                      "enum": [
+                        "SQS-SendMessage", "SQS-ReceiveMessage", "SQS-DeleteMessage", "SQS-PurgeQueue",
+                        "EventBridge-PutEvents",
+                        "AppConfig-GetConfiguration",
+                        "Kinesis-PutRecord",
+                        "StepFunctions-StartExecution", "StepFunctions-StartSyncExecution", "StepFunctions-StopExecution"
+                      ],
+                      "description": "AWS's actual supported quick-create subtypes for HTTP/WebSocket APIs. No S3 operations exist in this list -- S3 access without a Lambda in front is only possible on REST APIs via a raw config.uri."
+                    },
+                    "request_templates":  { "type": "object" },
+                    "request_parameters": { "type": "object" }
+                  }
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
+
+    "routes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name":         { "type": "string" },
+          "path":         { "type": "string", "pattern": "^/" },
+          "method": {
+            "type": "string",
+            "enum": ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS", "HEAD", "ANY"]
+          },
+          "route_key":    { "type": "string" },
+          "integration":  { "type": "string" },
+          "authorization": { "type": "string" },
+          "api_key_required": { "type": "boolean" },
+          "operation_name": { "type": "string" },
+          "request_parameters": { "type": "object" },
+          "responses": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["status_code"],
+              "properties": {
+                "status_code":        { "type": "string", "pattern": "^[0-9]{3}$" },
+                "selection_pattern":  { "type": "string" },
+                "response_models":    { "type": "object" },
+                "response_parameters": { "type": "object" },
+                "response_templates": { "type": "object" }
+              }
+            }
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+
+    "tags": {
+      "type": "object",
+      "additionalProperties": { "type": "string" }
+    },
+
+    "import": {
+      "type": "object",
+      "properties": {
+        "enabled":      { "type": "boolean" },
+        "openapi_file": { "type": "string" },
+        "mode": {
+          "type": "string",
+          "enum": ["merge", "overwrite"]
+        },
+        "template_vars": {
+          "type": "object",
+          "description": "Passed to templatefile() against the openapi_file -- lets the swagger file use ${var_name} placeholders instead of hardcoding ARNs.",
+          "additionalProperties": { "type": "string" }
+        },
+        "grant_lambda_invoke": {
+          "description": "Lambda function ARN(s) referenced inside the swagger file. Since Terraform can't parse an opaque swagger body, this is how the module knows which Lambda(s) to grant API Gateway invoke permission on.",
+          "oneOf": [
+            { "type": "string" },
+            { "type": "array", "items": { "type": "string" } }
+          ]
+        }
+      },
+      "additionalProperties": false,
+      "if": { "properties": { "enabled": { "const": true } } },
+      "then": { "required": ["openapi_file"] }
+    }
+
+  },
+
+  "additionalProperties": false,
+
+  "allOf": [
+    {
+      "description": "routes and integrations are only required for the YAML-driven engine -- an API using import.enabled supplies its own via the OpenAPI/Swagger file instead.",
+      "if": {
+        "properties": {
+          "import": { "properties": { "enabled": { "const": true } } }
+        },
+        "required": ["import"]
+      },
+      "then": {},
+      "else": {
+        "required": ["routes", "integrations"]
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "api": { "properties": { "protocol_type": { "const": "WEBSOCKET" } } }
+        }
+      },
+      "then": {
+        "properties": {
+          "routes": {
+            "items": {
+              "required": ["route_key", "integration"]
+            }
+          }
+        }
+      },
+      "else": {
+        "properties": {
+          "routes": {
+            "items": {
+              "required": ["path", "method", "integration"]
+            }
+          }
+        }
+      }
+    },
+    {
+      "description": "AWS-type integration config shape differs by protocol: REST (v1) needs a full 'uri'; HTTP/WEBSOCKET (v2) use the 'integration_subtype' quick-create shorthand instead.",
+      "if": {
+        "properties": {
+          "api": { "properties": { "protocol_type": { "const": "REST" } } }
+        }
+      },
+      "then": {
+        "properties": {
+          "integrations": {
+            "items": {
+              "if": { "properties": { "type": { "const": "AWS" } } },
+              "then": { "properties": { "config": { "required": ["uri"] } } }
+            }
+          }
+        }
+      },
+      "else": {
+        "properties": {
+          "integrations": {
+            "items": {
+              "if": { "properties": { "type": { "const": "AWS" } } },
+              "then": { "properties": { "config": { "required": ["integration_subtype", "credentials_arn"] } } }
+            }
+          }
+        }
+      }
+    }
+  ]
+}

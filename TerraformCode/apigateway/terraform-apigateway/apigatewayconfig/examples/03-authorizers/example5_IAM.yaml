@@ -1,0 +1,25 @@
+# yaml-language-server: $schema=../../schema/api-schema.json
+#
+# AUTHORIZER: AWS IAM (works on HTTP, REST, and WebSocket)
+# Use when: "only other AWS services/accounts we control should
+#            call this -- no end users involved"
+# No authorizer block needed at all -- just set the route's
+# authorization directly to AWS_IAM.
+
+enabled: true
+
+api:
+  name: example-iam-auth
+  protocol_type: HTTP
+
+integrations:
+  - name: my-lambda
+    type: LAMBDA
+    config:
+      function_arn: arn:aws:lambda:us-west-2:111111111111:function:my-function
+
+routes:
+  - path: /internal
+    method: GET
+    integration: my-lambda
+    authorization: AWS_IAM

@@ -1,0 +1,30 @@
+# yaml-language-server: $schema=../../schema/api-schema.json
+#
+# BACKEND INTEGRATION: AWS Service (SQS) -- no Lambda needed
+# Use when: "just drop this straight into a queue"
+# You need: the queue URL + an IAM role API Gateway can assume
+#
+# NOTE: field names differ by protocol!
+#   HTTP/WebSocket API -> integration_subtype (shown here)
+#   REST API           -> uri  (see 02-backend-integrations/example6_AWS_SERVICE_REST.yaml)
+
+enabled: true
+
+api:
+  name: example-sqs-backend
+  protocol_type: HTTP
+
+integrations:
+  - name: my-queue
+    type: AWS
+    config:
+      integration_subtype: SQS-SendMessage
+      credentials_arn: arn:aws:iam::111111111111:role/apigw-sqs-send
+      request_parameters:
+        QueueUrl: https://sqs.us-west-2.amazonaws.com/111111111111/my-queue
+        MessageBody: "$request.body"
+
+routes:
+  - path: /submit
+    method: POST
+    integration: my-queue

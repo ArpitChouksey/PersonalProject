@@ -1,0 +1,22 @@
+# yaml-language-server: $schema=../../schema/api-schema.json
+#
+# BACKEND INTEGRATION: Lambda
+# Use when: "it's a Lambda function"
+# You need: the function's ARN
+
+enabled: true
+
+api:
+  name: example-lambda-backend
+  protocol_type: HTTP
+
+integrations:
+  - name: my-lambda
+    type: LAMBDA
+    config:
+      function_arn: arn:aws:lambda:us-west-2:111111111111:function:my-function
+
+routes:
+  - path: /hello
+    method: GET
+    integration: my-lambda

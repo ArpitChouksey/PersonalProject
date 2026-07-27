@@ -1,0 +1,23 @@
+# yaml-language-server: $schema=../../schema/api-schema.json
+#
+# BACKEND INTEGRATION: Public/Private HTTP URL
+# Use when: "it's another website", "it's an external API",
+#           "proxy this straight through to a URL"
+# You need: just the URL
+
+enabled: true
+
+api:
+  name: example-http-url-backend
+  protocol_type: HTTP
+
+integrations:
+  - name: my-external-api
+    type: HTTP
+    config:
+      url: https://api.example.com
+
+routes:
+  - path: /proxy
+    method: GET
+    integration: my-external-api

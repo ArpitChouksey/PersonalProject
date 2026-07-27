@@ -1,0 +1,33 @@
+# yaml-language-server: $schema=../../schema/api-schema.json
+#
+# AUTHORIZER: JWT (HTTP API only)
+# Use when: "users log in and get a token (Auth0/Cognito/Okta/etc),
+#            check that token on every request"
+
+enabled: true
+
+api:
+  name: example-jwt-auth
+  protocol_type: HTTP
+
+authorizers:
+  - name: jwt-auth
+    type: JWT
+    identity_sources:
+      - "$request.header.Authorization"
+    jwt_configuration:
+      issuer: https://your-domain.auth0.com/
+      audience:
+        - your-api-identifier
+
+integrations:
+  - name: my-lambda
+    type: LAMBDA
+    config:
+      function_arn: arn:aws:lambda:us-west-2:111111111111:function:my-function
+
+routes:
+  - path: /protected
+    method: GET
+    integration: my-lambda
+    authorization: jwt-auth       # must match the authorizer's `name` above

@@ -1,0 +1,26 @@
+# yaml-language-server: $schema=../schema/api-schema.json
+###############################################################
+# Simple Test 4 -- REST API via OpenAPI/Swagger import
+###############################################################
+
+enabled: true
+
+api:
+  name: simple-swagger-api
+  description: Simple REST API created from an OpenAPI/Swagger file
+  protocol_type: REST
+
+import:
+  enabled: true
+  openapi_file: simple-swagger.yaml
+  mode: overwrite
+  template_vars:
+    lambda_invoke_uri: "arn:aws:apigateway:us-west-2:lambda:path/2015-03-31/functions/arn:aws:lambda:us-west-2:211811255273:function:apigw-simple-hello/invocations"
+  grant_lambda_invoke: "arn:aws:lambda:us-west-2:211811255273:function:apigw-simple-hello"
+
+stage:
+  name: dev
+  auto_deploy: true
+
+tags:
+  Purpose: SimpleTest

@@ -1,0 +1,25 @@
+# yaml-language-server: $schema=../schema/api-schema.json
+#
+# Minimal REST API. Nesting is automatic from `path` — no manual
+# resource tree needed even for /orders/{id}.
+
+enabled: true
+
+api:
+  name: my-first-rest-api
+  protocol_type: REST
+
+integrations:
+  - name: my-lambda
+    type: LAMBDA
+    config:
+      function_arn: arn:aws:lambda:us-west-2:111111111111:function:my-function
+
+routes:
+  - path: /orders
+    method: GET
+    integration: my-lambda
+
+  - path: /orders/{id}
+    method: GET
+    integration: my-lambda

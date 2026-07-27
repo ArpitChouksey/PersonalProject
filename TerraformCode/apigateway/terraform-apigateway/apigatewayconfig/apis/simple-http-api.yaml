@@ -1,0 +1,29 @@
+# yaml-language-server: $schema=../schema/api-schema.json
+###############################################################
+# Simple Test 1 -- HTTP API + Lambda
+###############################################################
+
+enabled: true
+
+api:
+  name: simple-http-api
+  description: Simple HTTP API hitting a Lambda function
+  protocol_type: HTTP
+
+stage:
+  name: dev
+  auto_deploy: true
+
+integrations:
+  - name: hello-lambda
+    type: LAMBDA
+    config:
+      function_arn: arn:aws:lambda:us-west-2:211811255273:function:apigw-simple-hello
+
+routes:
+  - path: /hello
+    method: GET
+    integration: hello-lambda
+
+tags:
+  Purpose: SimpleTest

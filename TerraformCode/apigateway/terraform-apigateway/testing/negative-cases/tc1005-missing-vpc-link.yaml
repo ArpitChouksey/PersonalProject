@@ -1,0 +1,14 @@
+# TC-1005 — ALB integration missing required vpc_link_id (expect: validator fails)
+enabled: true
+api:
+  name: tc1005-missing-vpc-link
+  protocol_type: HTTP
+integrations:
+  - name: no-vpc-link
+    type: ALB
+    config:
+      listener_arn: arn:aws:elasticloadbalancing:us-west-2:111111111111:listener/app/x/abc123
+routes:
+  - path: /employees
+    method: GET
+    integration: no-vpc-link

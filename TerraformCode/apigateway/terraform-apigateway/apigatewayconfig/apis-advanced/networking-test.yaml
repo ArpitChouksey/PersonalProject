@@ -1,0 +1,84 @@
+# yaml-language-server: $schema=../schema/api-schema.json
+###############################################################
+# Phase 6 Test File — Networking
+#
+# Covers:
+#   TC-501  Existing VPC Link (reuse vpc_link_id)
+#   TC-502  Create New VPC Link (create_vpc_link: true)
+#   TC-503  Private API (endpoint.type: PRIVATE)
+#   TC-504  Private ALB (through the existing VPC Link)
+#   TC-505  Private NLB (through the newly created VPC Link)
+###############################################################
+
+enabled: true
+
+metadata:
+  owner: platform-team
+  team: qa
+  application: networking-test
+  project: enterprise-api
+  environment: dev
+  cost_center: IT001
+
+api:
+  name: networking-test
+  description: Phase 6 QA — VPC Link + Private API
+  version: v1
+  protocol_type: HTTP
+
+stage:
+  name: dev
+  auto_deploy: true
+
+endpoint:
+  type: PRIVATE          # TC-503
+
+vpc:                      # TC-502 — creates a brand new VPC Link
+  enabled: true
+  create_vpc_link: true
+  subnet_ids:
+    - subnet-0aaeb4b0fcaeca09a
+    - subnet-0baeca02ecdba36e6
+  security_group_ids:
+    - sg-090bffacccb590af3
+                              #   aws ec2 describe-security-groups --filters
+                              #   "Name=group-name,Values=apigw-qa-test-target-sg"
+                              #   --query 'SecurityGroups[0].GroupId' --output text
+  target_arns:
+    - arn:aws:elasticloadbalancing:us-west-2:211811255273:loadbalancer/net/apigw-qa-test-nlb/d6c1053d956aa1b1
+
+security:
+  authorization:
+    default: AWS_IAM       # typical for private/internal APIs
+
+integrations:
+
+  - name: private-alb        # TC-504 — reuses an existing VPC Link (TC-501)
+    type: ALB
+    config:
+      listener_arn: arn:aws:elasticloadbalancing:us-west-2:211811255273:listener/app/apigw-qa-test-alb/282c87dadcda04ce/a81bd3e4ff959d79
+      vpc_link_id: pnqpo6
+
+  - name: private-nlb         # TC-505 — rides the newly created VPC Link (TC-502)
+    type: NLB
+    config:
+      listener_arn: arn:aws:elasticloadbalancing:us-west-2:211811255273:listener/net/apigw-qa-test-nlb/e801ca19bac4219d/81652bf6de79cac7
+      vpc_link_id: vpclink-qa-existing-001   # placeholder — replace with the
+                                              # new VPC Link's ID once created,
+                                              # since it's only known after apply
+
+routes:
+  - path: /internal/orders
+    method: GET
+    integration: private-alb
+    authorization: AWS_IAM
+
+  - path: /internal/inventory
+    method: GET
+    integration: private-nlb
+    authorization: AWS_IAM
+
+tags:
+  Application: NetworkingTest
+  Team: Platform
+  Purpose: Phase6-QA

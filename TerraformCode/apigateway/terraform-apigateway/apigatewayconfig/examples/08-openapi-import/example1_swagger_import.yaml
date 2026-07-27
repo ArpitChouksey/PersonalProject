@@ -1,0 +1,42 @@
+# yaml-language-server: $schema=../../schema/api-schema.json
+#
+# OPENAPI / SWAGGER IMPORT
+# Use when: "we already have an OpenAPI/Swagger spec (from
+#            Postman, Stoplight, a design-first workflow, or a
+#            legacy hand-maintained API) and want to import it
+#            as-is instead of writing routes: one by one."
+#
+# `routes:` and `integrations:` are NOT used here -- the actual
+# Lambda wiring lives inside the swagger file itself, via
+# x-amazon-apigateway-integration blocks on each path/method. See
+# apigatewayconfig/openapi/employee-api-swagger.yaml -- it uses a
+# ${lambda_invoke_uri} placeholder rather than a hardcoded ARN,
+# filled in below via template_vars.
+#
+# grant_lambda_invoke is required for imports that call Lambda --
+# Terraform can't parse the swagger body to find referenced
+# functions on its own, so it has to be told explicitly which
+# Lambda(s) to grant API Gateway invoke permission on.
+#
+# mode: merge   -- adds these paths to an existing API without
+#                  touching anything else already defined on it
+# mode: overwrite -- replaces the API's entire route/resource
+#                  set with exactly what the swagger file defines
+
+enabled: true
+
+api:
+  name: employee-swagger-api
+  protocol_type: REST
+
+import:
+  enabled: true
+  openapi_file: employee-api-swagger.yaml
+  mode: overwrite
+  template_vars:
+    lambda_invoke_uri: "arn:aws:apigateway:us-west-2:lambda:path/2015-03-31/functions/arn:aws:lambda:us-west-2:211811255273:function:apigw-qa-employee-swagger-echo/invocations"
+  grant_lambda_invoke: "arn:aws:lambda:us-west-2:211811255273:function:apigw-qa-employee-swagger-echo"
+
+stage:
+  name: dev
+  auto_deploy: true

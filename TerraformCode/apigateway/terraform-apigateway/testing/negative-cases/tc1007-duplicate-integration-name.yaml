@@ -1,0 +1,18 @@
+# TC-1007 — two integrations with the same name (expect: validator fails)
+enabled: true
+api:
+  name: tc1007-duplicate-integration-name
+  protocol_type: HTTP
+integrations:
+  - name: employee-lambda
+    type: LAMBDA
+    config:
+      function_arn: arn:aws:lambda:us-west-2:111111111111:function:x
+  - name: employee-lambda
+    type: HTTP
+    config:
+      url: https://example.com
+routes:
+  - path: /employees
+    method: GET
+    integration: employee-lambda

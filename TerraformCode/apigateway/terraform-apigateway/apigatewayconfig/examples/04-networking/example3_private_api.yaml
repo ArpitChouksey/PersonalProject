@@ -1,0 +1,29 @@
+# yaml-language-server: $schema=../../schema/api-schema.json
+#
+# NETWORKING: Private API (VPC-only, no public internet access)
+# Use when: "this should never be reachable from outside our VPC"
+
+enabled: true
+
+api:
+  name: example-private-api
+  protocol_type: HTTP
+
+endpoint:
+  type: PRIVATE
+
+security:
+  authorization:
+    default: AWS_IAM   # typical for internal-only APIs
+
+integrations:
+  - name: my-lambda
+    type: LAMBDA
+    config:
+      function_arn: arn:aws:lambda:us-west-2:111111111111:function:my-function
+
+routes:
+  - path: /internal
+    method: GET
+    integration: my-lambda
+    authorization: AWS_IAM

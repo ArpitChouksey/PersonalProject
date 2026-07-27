@@ -1,0 +1,28 @@
+# yaml-language-server: $schema=../../schema/api-schema.json
+#
+# BACKEND INTEGRATION: ALB (Application Load Balancer)
+# Use when: "it's on ECS", "it's on EC2", "it's behind an ALB"
+# You need: the ALB listener's ARN + a VPC Link ID
+#
+# A VPC Link is a one-time-setup network tunnel from API Gateway
+# into your VPC. If one already exists for this ALB, reuse its ID
+# (as below). If not, see 04-networking/example2_new_vpc_link.yaml
+# to create one in the same file.
+
+enabled: true
+
+api:
+  name: example-alb-backend
+  protocol_type: HTTP
+
+integrations:
+  - name: my-alb
+    type: ALB
+    config:
+      listener_arn: arn:aws:elasticloadbalancing:us-west-2:111111111111:listener/app/my-alb/abc123
+      vpc_link_id: vpclink-existing-001
+
+routes:
+  - path: /orders
+    method: GET
+    integration: my-alb

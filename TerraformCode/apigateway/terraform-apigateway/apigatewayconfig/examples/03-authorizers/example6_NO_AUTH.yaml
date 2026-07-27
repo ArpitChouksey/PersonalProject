@@ -1,0 +1,23 @@
+# yaml-language-server: $schema=../../schema/api-schema.json
+#
+# AUTHORIZER: None -- fully public route
+# Use when: "anyone should be able to call this, no login needed"
+# This is also the default if you omit `authorization` entirely.
+
+enabled: true
+
+api:
+  name: example-no-auth
+  protocol_type: HTTP
+
+integrations:
+  - name: my-lambda
+    type: LAMBDA
+    config:
+      function_arn: arn:aws:lambda:us-west-2:111111111111:function:my-function
+
+routes:
+  - path: /public
+    method: GET
+    integration: my-lambda
+    authorization: NONE

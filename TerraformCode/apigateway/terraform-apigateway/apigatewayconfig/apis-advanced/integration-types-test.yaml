@@ -1,0 +1,129 @@
+# yaml-language-server: $schema=../schema/api-schema.json
+###############################################################
+# Phase 5 Test File — Integration Types
+#
+# Covers:
+#   TC-401  Lambda
+#   TC-402  ALB (internal)
+#   TC-403  NLB (internal)
+#   TC-404  ECS        -- same pattern as TC-402 (ALB); only the
+#                          listener_arn differs in practice
+#   TC-405  EKS        -- same pattern as TC-403 (NLB); only the
+#                          listener_arn differs in practice
+#   TC-406  EC2        -- same pattern as TC-402 (ALB); only the
+#                          listener_arn differs in practice
+#   TC-407  Public HTTP endpoint
+#   TC-408  AWS Service — SQS
+#   TC-409  AWS Service — EventBridge
+#   TC-410  AWS Service — Step Functions
+#
+# Assumes a VPC Link already exists (see Phase 6 for
+# create-new-vs-reuse-existing VPC Link testing specifically).
+# Replace vpc_link_id and all ARNs below with real ones.
+###############################################################
+
+enabled: true
+
+metadata:
+  owner: platform-team
+  team: qa
+  application: integration-types
+  project: enterprise-api
+  environment: dev
+  cost_center: IT001
+
+api:
+  name: integration-types-test
+  description: Phase 5 QA — every supported integration type
+  version: v1
+  protocol_type: HTTP
+
+stage:
+  name: dev
+  auto_deploy: true
+
+integrations:
+
+  - name: lambda-backend                    # TC-401
+    type: LAMBDA
+    config:
+      function_arn: arn:aws:lambda:us-west-2:211811255273:function:apigw-qa-integration-test-echo
+
+  - name: alb-backend                       # TC-402 / TC-404 (ECS) / TC-406 (EC2)
+    type: ALB
+    config:
+      listener_arn: arn:aws:elasticloadbalancing:us-west-2:211811255273:listener/app/apigw-qa-test-alb/282c87dadcda04ce/a81bd3e4ff959d79
+      vpc_link_id: pnqpo6
+
+  - name: nlb-backend                       # TC-403 / TC-405 (EKS)
+    type: NLB
+    config:
+      listener_arn: arn:aws:elasticloadbalancing:us-west-2:211811255273:listener/net/apigw-qa-test-nlb/e801ca19bac4219d/81652bf6de79cac7
+      vpc_link_id: pnqpo6
+
+  - name: http-backend                      # TC-407
+    type: HTTP
+    config:
+      url: https://httpbin.org/anything
+
+  - name: sqs-backend                       # TC-408
+    type: AWS
+    config:
+      integration_subtype: SQS-SendMessage
+      credentials_arn: arn:aws:iam::211811255273:role/apigw-qa-sqs-send
+      request_parameters:
+        QueueUrl: https://sqs.us-west-2.amazonaws.com/211811255273/apigw-qa-test-queue
+        MessageBody: "$request.body"
+
+  - name: eventbridge-backend                # TC-409
+    type: AWS
+    config:
+      integration_subtype: EventBridge-PutEvents
+      credentials_arn: arn:aws:iam::211811255273:role/apigw-qa-eventbridge-put
+      request_parameters:
+        Source: qa.integration-test
+        DetailType: TestEvent
+        Detail: "$request.body"
+
+  - name: stepfunctions-backend               # TC-410
+    type: AWS
+    config:
+      integration_subtype: StepFunctions-StartExecution
+      credentials_arn: arn:aws:iam::211811255273:role/apigw-qa-stepfunctions-start
+      request_parameters:
+        StateMachineArn: arn:aws:states:us-west-2:211811255273:stateMachine:apigw-qa-test-machine
+        Input: "$request.body"
+
+routes:
+  - path: /lambda-test
+    method: GET
+    integration: lambda-backend
+
+  - path: /alb-test
+    method: GET
+    integration: alb-backend
+
+  - path: /nlb-test
+    method: GET
+    integration: nlb-backend
+
+  - path: /http-test
+    method: GET
+    integration: http-backend
+
+  - path: /sqs-test
+    method: POST
+    integration: sqs-backend
+
+  - path: /eventbridge-test
+    method: POST
+    integration: eventbridge-backend
+
+  - path: /stepfunctions-test
+    method: POST
+    integration: stepfunctions-backend
+
+tags:
+  Application: IntegrationTypes
+  Team: Platform
+  Purpose: Phase5-QA

@@ -1,0 +1,31 @@
+# yaml-language-server: $schema=../../schema/api-schema.json
+#
+# AUTHORIZER: Custom Lambda Authorizer (HTTP API -- type REQUEST)
+# Use when: "we have our own custom logic to decide who can call this"
+# You need: the authorizer Lambda's invocation ARN
+
+enabled: true
+
+api:
+  name: example-lambda-auth-http
+  protocol_type: HTTP
+
+authorizers:
+  - name: custom-auth
+    type: REQUEST
+    identity_sources:
+      - "$request.header.Authorization"
+    authorizer_uri: arn:aws:apigateway:us-west-2:lambda:path/2015-03-31/functions/arn:aws:lambda:us-west-2:111111111111:function:my-authorizer/invocations
+    authorizer_result_ttl_in_seconds: 300
+
+integrations:
+  - name: my-lambda
+    type: LAMBDA
+    config:
+      function_arn: arn:aws:lambda:us-west-2:111111111111:function:my-function
+
+routes:
+  - path: /protected
+    method: GET
+    integration: my-lambda
+    authorization: custom-auth

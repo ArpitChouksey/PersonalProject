@@ -1,0 +1,28 @@
+# yaml-language-server: $schema=../../schema/api-schema.json
+#
+# SECURITY: WAF (Web Application Firewall)
+# Use when: "protect this API from common web attacks / bots /
+#            rate-based abuse"
+# You need: an existing WAFv2 Web ACL ARN
+
+enabled: true
+
+api:
+  name: example-waf
+  protocol_type: HTTP
+
+security:
+  waf:                       # NOTE: this is the field that's actually
+    enabled: true             # wired to a resource -- not a top-level
+    web_acl_arn: arn:aws:wafv2:us-west-2:111111111111:regional/webacl/my-waf/abc123
+
+integrations:
+  - name: my-lambda
+    type: LAMBDA
+    config:
+      function_arn: arn:aws:lambda:us-west-2:111111111111:function:my-function
+
+routes:
+  - path: /public
+    method: GET
+    integration: my-lambda

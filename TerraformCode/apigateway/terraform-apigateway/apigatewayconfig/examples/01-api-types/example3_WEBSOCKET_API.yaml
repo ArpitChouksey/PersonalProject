@@ -1,0 +1,26 @@
+# yaml-language-server: $schema=../schema/api-schema.json
+#
+# Minimal WebSocket API — the three routes every WebSocket API
+# needs, all pointed at the same Lambda.
+
+enabled: true
+
+api:
+  name: my-first-chat-api
+  protocol_type: WEBSOCKET
+
+integrations:
+  - name: my-lambda
+    type: LAMBDA
+    config:
+      function_arn: arn:aws:lambda:us-west-2:111111111111:function:my-function
+
+routes:
+  - route_key: "$connect"
+    integration: my-lambda
+
+  - route_key: "$disconnect"
+    integration: my-lambda
+
+  - route_key: "$default"
+    integration: my-lambda

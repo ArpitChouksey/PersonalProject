@@ -1,0 +1,14 @@
+# TC-1003 — malformed Lambda ARN (expect: validator fails)
+enabled: true
+api:
+  name: tc1003-invalid-lambda-arn
+  protocol_type: HTTP
+integrations:
+  - name: bad-lambda
+    type: LAMBDA
+    config:
+      function_arn: not-an-arn-at-all
+routes:
+  - path: /employees
+    method: GET
+    integration: bad-lambda

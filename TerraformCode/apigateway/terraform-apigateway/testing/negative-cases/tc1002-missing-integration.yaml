@@ -1,0 +1,14 @@
+# TC-1002 — route references an integration that doesn't exist (expect: validator fails)
+enabled: true
+api:
+  name: tc1002-missing-integration
+  protocol_type: HTTP
+integrations:
+  - name: real-integration
+    type: LAMBDA
+    config:
+      function_arn: arn:aws:lambda:us-west-2:111111111111:function:x
+routes:
+  - path: /employees
+    method: GET
+    integration: does-not-exist

@@ -1,0 +1,57 @@
+# yaml-language-server: $schema=../schema/api-schema.json
+###############################################################
+# Phase 8 Test File — Domain & DNS
+#
+# Covers:
+#   TC-701  Regional Domain
+#   TC-702  Route53 Alias
+#   TC-703  ACM Certificate
+#   TC-704  Base Path Mapping
+###############################################################
+
+enabled: true
+
+metadata:
+  owner: platform-team
+  team: qa
+  application: domain-test
+  project: enterprise-api
+  environment: dev
+  cost_center: IT001
+
+api:
+  name: domain-test
+  description: Phase 8 QA — custom domain, Route53, ACM, base path
+  version: v1
+  protocol_type: HTTP
+
+stage:
+  name: dev
+  auto_deploy: true
+
+domain:
+  enabled: true
+  name: domain-test-api.company.com     # TC-701
+  certificate_arn: arn:aws:acm:us-west-2:111111111111:certificate/qa-domain-test  # TC-703
+  endpoint_type: REGIONAL
+  security_policy: TLS_1_2
+  base_path: domain-test                 # TC-704
+  route53:                               # TC-702
+    enabled: true
+    zone_id: Z0123456789ABCDEFGHIJ
+
+integrations:
+  - name: domain-test-lambda
+    type: LAMBDA
+    config:
+      function_arn: arn:aws:lambda:us-west-2:211811255273:function:apigw-qa-domain-test-echo
+
+routes:
+  - path: /ping
+    method: GET
+    integration: domain-test-lambda
+
+tags:
+  Application: DomainTest
+  Team: Platform
+  Purpose: Phase8-QA

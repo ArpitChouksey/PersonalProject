@@ -1,0 +1,32 @@
+# yaml-language-server: $schema=../../schema/api-schema.json
+#
+# LOGGING: Access logs, execution tracing, metrics, retention
+# Use when: "we need to see what's hitting this API and debug
+#            failures"
+# This is safe to add to any API -- it's fully independent of
+# API type or integration type.
+
+enabled: true
+
+api:
+  name: example-logging
+  protocol_type: HTTP
+
+logging:
+  enabled: true
+  retention_in_days: 30       # how long CloudWatch keeps the logs
+  metrics_enabled: true       # CloudWatch metrics (latency, errors, etc.)
+  logging_level: INFO         # OFF | ERROR | INFO
+  data_trace_enabled: true    # verbose per-request execution trace (turn
+                               # off in production -- can be noisy/costly)
+
+integrations:
+  - name: my-lambda
+    type: LAMBDA
+    config:
+      function_arn: arn:aws:lambda:us-west-2:111111111111:function:my-function
+
+routes:
+  - path: /hello
+    method: GET
+    integration: my-lambda

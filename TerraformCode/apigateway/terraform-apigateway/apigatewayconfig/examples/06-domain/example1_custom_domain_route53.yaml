@@ -1,0 +1,33 @@
+# yaml-language-server: $schema=../../schema/api-schema.json
+#
+# DOMAIN: Custom domain + ACM certificate + Route53 alias + base path
+# Use when: "we want api.company.com instead of the ugly AWS-
+#            generated URL"
+
+enabled: true
+
+api:
+  name: example-custom-domain
+  protocol_type: HTTP
+
+domain:
+  enabled: true
+  name: api.company.com
+  certificate_arn: arn:aws:acm:us-west-2:111111111111:certificate/example-domain
+  endpoint_type: REGIONAL
+  security_policy: TLS_1_2
+  base_path: my-service
+  route53:
+    enabled: true
+    zone_id: Z0123456789ABCDEFGHIJ
+
+integrations:
+  - name: my-lambda
+    type: LAMBDA
+    config:
+      function_arn: arn:aws:lambda:us-west-2:111111111111:function:my-function
+
+routes:
+  - path: /ping
+    method: GET
+    integration: my-lambda

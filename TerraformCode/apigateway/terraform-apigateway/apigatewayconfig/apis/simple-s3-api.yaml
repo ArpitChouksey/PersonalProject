@@ -1,0 +1,43 @@
+# yaml-language-server: $schema=../schema/api-schema.json
+###############################################################
+# Simple Test 6 -- REST API + S3
+#
+# Uses a FIXED object key (test-object.txt) rather than a
+# dynamic /files/{key} path. The REST engine currently supports
+# request_parameters at the METHOD level but not yet at the
+# INTEGRATION level (the mapping needed to forward a path
+# parameter like {key} into the S3 URI) -- so a dynamic key isn't
+# wired through correctly yet. This is a real module gap, not a
+# workaround; happy to add integration-level request_parameters
+# support if you want dynamic keys for a later test.
+###############################################################
+
+enabled: true
+
+api:
+  name: simple-s3-api
+  description: Simple REST API -- PUT writes a fixed object to S3
+  protocol_type: REST
+
+stage:
+  name: dev
+  auto_deploy: true
+
+integrations:
+  - name: s3-backend
+    type: AWS
+    config:
+      uri: "arn:aws:apigateway:us-west-2:s3:path/apigw-simple-uploads-211811255273/test-object.txt"
+      credentials_arn: arn:aws:iam::211811255273:role/apigw-simple-s3
+
+routes:
+  - path: /files
+    method: PUT
+    integration: s3-backend
+    responses:
+      - status_code: "200"
+      - status_code: "500"
+        selection_pattern: ".*Error.*"
+
+tags:
+  Purpose: SimpleTest

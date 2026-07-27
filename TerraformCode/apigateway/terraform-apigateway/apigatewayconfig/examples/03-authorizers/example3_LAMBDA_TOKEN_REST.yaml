@@ -1,0 +1,30 @@
+# yaml-language-server: $schema=../../schema/api-schema.json
+#
+# AUTHORIZER: Custom Lambda Authorizer (REST API -- type TOKEN)
+# Use when: same as example2, but on a REST API (REST also
+# supports type TOKEN specifically, which HTTP APIs do not)
+
+enabled: true
+
+api:
+  name: example-lambda-auth-rest
+  protocol_type: REST
+
+authorizers:
+  - name: custom-auth
+    type: TOKEN
+    identity_sources:
+      - "method.request.header.Authorization"
+    authorizer_uri: arn:aws:apigateway:us-west-2:lambda:path/2015-03-31/functions/arn:aws:lambda:us-west-2:111111111111:function:my-authorizer/invocations
+
+integrations:
+  - name: my-lambda
+    type: LAMBDA
+    config:
+      function_arn: arn:aws:lambda:us-west-2:111111111111:function:my-function
+
+routes:
+  - path: /protected
+    method: GET
+    integration: my-lambda
+    authorization: custom-auth

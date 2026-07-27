@@ -1,0 +1,27 @@
+# yaml-language-server: $schema=../schema/api-schema.json
+#
+# Kubernetes/EKS service reached through an internal NLB.
+# See GettingStarted.md, "Worked Example" section, for the
+# developer-conversation -> YAML walkthrough this file matches.
+
+enabled: true
+
+api:
+  name: order-service
+  protocol_type: HTTP
+
+integrations:
+  - name: order-nlb
+    type: NLB
+    config:
+      listener_arn: arn:aws:elasticloadbalancing:us-west-2:111111111111:listener/net/order-nlb/abc123
+      vpc_link_id: vpclink-order-service-001
+
+routes:
+  - path: /orders
+    method: GET
+    integration: order-nlb
+
+  - path: /orders/{id}
+    method: GET
+    integration: order-nlb

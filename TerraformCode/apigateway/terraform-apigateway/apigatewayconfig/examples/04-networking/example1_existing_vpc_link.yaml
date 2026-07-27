@@ -1,0 +1,23 @@
+# yaml-language-server: $schema=../../schema/api-schema.json
+#
+# NETWORKING: Reuse an EXISTING VPC Link
+# Use when: someone already set up a VPC Link for this load
+# balancer -- you just need its ID.
+
+enabled: true
+
+api:
+  name: example-existing-vpc-link
+  protocol_type: HTTP
+
+integrations:
+  - name: my-alb
+    type: ALB
+    config:
+      listener_arn: arn:aws:elasticloadbalancing:us-west-2:111111111111:listener/app/my-alb/abc123
+      vpc_link_id: vpclink-existing-001    # <-- the existing one
+
+routes:
+  - path: /internal
+    method: GET
+    integration: my-alb

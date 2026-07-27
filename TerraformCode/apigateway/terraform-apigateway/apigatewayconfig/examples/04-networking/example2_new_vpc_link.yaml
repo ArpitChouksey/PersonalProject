@@ -1,0 +1,36 @@
+# yaml-language-server: $schema=../../schema/api-schema.json
+#
+# NETWORKING: Create a NEW VPC Link
+# Use when: no VPC Link exists yet for this backend. The `vpc:`
+# block below creates one; every future API can then reuse its
+# ID via example1's pattern instead of creating another.
+
+enabled: true
+
+api:
+  name: example-new-vpc-link
+  protocol_type: HTTP
+
+vpc:
+  enabled: true
+  create_vpc_link: true
+  subnet_ids:
+    - subnet-0a1b2c3d4e5f60001
+    - subnet-0a1b2c3d4e5f60002
+  security_group_ids:
+    - sg-0a1b2c3d4e5f60001
+  target_arns:
+    - arn:aws:elasticloadbalancing:us-west-2:111111111111:loadbalancer/net/my-nlb/xyz789
+
+integrations:
+  - name: my-nlb
+    type: NLB
+    config:
+      listener_arn: arn:aws:elasticloadbalancing:us-west-2:111111111111:listener/net/my-nlb/xyz789
+      vpc_link_id: vpclink-existing-001   # placeholder -- the real ID is only
+                                          # known after apply; update once created
+
+routes:
+  - path: /internal
+    method: GET
+    integration: my-nlb

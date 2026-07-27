@@ -1,0 +1,161 @@
+# yaml-language-server: $schema=../schema/api-schema.json
+###############################################################
+# Phase 3 Test File — REST API
+#
+# Covers:
+#   TC-201  REST + Lambda
+#   TC-202  Nested resources (/employees, /employees/{id}, /employees/{id}/address)
+#   TC-203  Multiple methods (GET/POST/PUT/DELETE/PATCH)
+#   TC-204  Method responses (200/201/400/404/500)
+#   TC-205  Integration responses (response mapping via AWS-type integration)
+#   TC-206  API Keys (403 without key, 200 with key)
+#   TC-207  Usage Plans (quota)
+###############################################################
+
+enabled: true
+
+metadata:
+  owner: platform-team
+  team: qa
+  application: employee-service
+  project: enterprise-api
+  environment: dev
+  cost_center: IT001
+
+api:
+  name: employee-rest-test
+  description: Phase 3 QA — REST API test scenario
+  version: v1
+  protocol_type: REST
+
+stage:
+  name: prod
+  auto_deploy: true
+
+endpoint:
+  type: REGIONAL
+
+logging:
+  enabled: true
+  retention_in_days: 14
+  metrics_enabled: true
+  logging_level: INFO
+  data_trace_enabled: true
+
+security:                        # TC-206 / TC-207
+  authorization:
+    default: NONE
+  api_key_required: true
+  api_key:
+    enabled: true
+    name: employee-rest-test-key
+    description: QA test API key
+  usage_plan:
+    enabled: true
+    name: employee-rest-test-plan
+    description: QA test usage plan
+    quota:
+      limit: 1000
+      offset: 0
+      period: MONTH
+    throttle:
+      burst_limit: 20
+      rate_limit: 10
+
+integrations:
+
+  # TC-201 — replace with your own test Lambda ARN
+  - name: employee-lambda
+    type: LAMBDA
+    config:
+      function_arn: arn:aws:lambda:us-west-2:211811255273:function:apigw-qa-employee-echo
+
+  # TC-205 — AWS-type (non-proxy) integration produces a real
+  # integration_response, unlike Lambda/ALB/NLB/HTTP proxy types.
+  # Replace credentials_arn with a role that can invoke SQS.
+  - name: employee-queue
+    type: AWS
+    config:
+      uri: "arn:aws:apigateway:us-west-2:sqs:path/211811255273/apigw-qa-test-queue"
+      credentials_arn: arn:aws:iam::211811255273:role/apigw-qa-sqs-send
+      request_templates:
+        "application/json": "Action=SendMessage&MessageBody=$input.body"
+
+###############################################################
+# Routes — TC-202 (nested resources) + TC-203 (multiple methods)
+###############################################################
+routes:
+
+  - path: /employees
+    method: GET
+    integration: employee-lambda
+    authorization: NONE
+    api_key_required: true        # TC-206 — this is the field that actually enforces it;
+                                   # security.api_key_required above is not currently wired
+                                   # to any route by default, so it must be set per-route.
+    responses:                    # TC-204
+      - status_code: "200"
+      - status_code: "500"
+
+  - path: /employees
+    method: POST
+    integration: employee-lambda
+    authorization: NONE
+    responses:
+      - status_code: "201"
+      - status_code: "400"
+
+  - path: /employees/{id}
+    method: GET
+    integration: employee-lambda
+    authorization: NONE
+    responses:
+      - status_code: "200"
+      - status_code: "404"
+
+  - path: /employees/{id}
+    method: PUT
+    integration: employee-lambda
+    authorization: NONE
+    responses:
+      - status_code: "200"
+      - status_code: "400"
+      - status_code: "404"
+
+  - path: /employees/{id}
+    method: PATCH
+    integration: employee-lambda
+    authorization: NONE
+    responses:
+      - status_code: "200"
+      - status_code: "404"
+
+  - path: /employees/{id}
+    method: DELETE
+    integration: employee-lambda
+    authorization: NONE
+    responses:
+      - status_code: "200"
+      - status_code: "404"
+
+  - path: /employees/{id}/address     # TC-202 — third-level nesting
+    method: GET
+    integration: employee-lambda
+    authorization: NONE
+    responses:
+      - status_code: "200"
+      - status_code: "404"
+
+  - path: /employees/{id}/events       # TC-205 — routes to the AWS/SQS integration
+    method: POST
+    integration: employee-queue
+    authorization: NONE
+    responses:
+      - status_code: "200"
+      - status_code: "500"
+        selection_pattern: ".*Error.*"
+
+tags:
+  Application: Employee
+  Team: Platform
+  Purpose: Phase3-QA
