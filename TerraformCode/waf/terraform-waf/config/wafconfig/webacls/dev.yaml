@@ -1,0 +1,125 @@
+# ---------------------------------------------------------------------------
+# Shared WAF security policy for the "dev" environment.
+#
+# This ONE file is loaded by every dev deployment, regardless of region or
+# scope (us-west-2/REGIONAL, us-east-1/CLOUDFRONT, etc.) - the rules below
+# don't change per region, so they're not duplicated per region.
+#
+# What's intentionally NOT here (because it genuinely differs per
+# deployment): scope, resource_arns, log_destination_configs. Those are
+# supplied as plain variables in each deployment's terraform.tfvars instead.
+# See deployment/dev/<region>/terraform.tfvars.
+# ---------------------------------------------------------------------------
+
+name: waf-webacl
+name_prefix: dev
+description: "Dev Web ACL - shared security policy, reused across regions/scopes"
+default_action: allow
+
+tags:
+  Environment: dev
+  ManagedBy: terraform
+  Owner: platform-team
+
+cloudwatch_metrics_enabled: true
+sampled_requests_enabled: true
+
+# ---------------------------------------------------------------------------
+# AWS Managed Rule Groups
+# ---------------------------------------------------------------------------
+managed_rule_groups:
+  - name: AWSCommonRules
+    vendor_name: AWS
+    managed_rule_group: AWSManagedRulesCommonRuleSet
+    priority: 10
+    override_action: count   # staged rollout: monitor before blocking
+    excluded_rules: []
+
+  - name: AWSKnownBadInputs
+    vendor_name: AWS
+    managed_rule_group: AWSManagedRulesKnownBadInputsRuleSet
+    priority: 20
+    override_action: none
+    excluded_rules: []
+
+  - name: AWSSQLiRules
+    vendor_name: AWS
+    managed_rule_group: AWSManagedRulesSQLiRuleSet
+    priority: 30
+    override_action: none
+    excluded_rules: []
+
+  - name: AWSIPReputation
+    vendor_name: AWS
+    managed_rule_group: AWSManagedRulesAmazonIpReputationList
+    priority: 40
+    override_action: none
+    excluded_rules: []
+
+# ---------------------------------------------------------------------------
+# Rate-based rules (brute-force / L7 DDoS protection)
+# ---------------------------------------------------------------------------
+rate_based_rules:
+  - name: GlobalRateLimit
+    priority: 100
+    limit: 2000
+    aggregate_key_type: IP
+    action: block
+
+# ---------------------------------------------------------------------------
+# IP allow / block lists
+# ---------------------------------------------------------------------------
+ip_sets:
+  - name: CorpAllowList
+    priority: 5
+    ip_address_version: IPV4
+    addresses:
+      - "203.0.113.0/24"
+      - "198.51.100.10/32"
+    action: allow
+
+  - name: KnownBadActors
+    priority: 6
+    ip_address_version: IPV4
+    addresses:
+      - "192.0.2.0/24"
+    action: block
+
+# ---------------------------------------------------------------------------
+# Geo-match rules
+# ---------------------------------------------------------------------------
+geo_match_rules: []
+
+# ---------------------------------------------------------------------------
+# Regex-pattern-set-backed rules
+# ---------------------------------------------------------------------------
+regex_pattern_rules:
+  - name: BlockAdminPaths
+    priority: 50
+    action: block
+    regex_strings:
+      - "^/admin"
+      - "^/internal"
+    field_to_match_type: uri_path
+    text_transformation_type: LOWERCASE
+
+# ---------------------------------------------------------------------------
+# Custom single-statement rules
+# ---------------------------------------------------------------------------
+custom_rules:
+  - name: BlockOversizedBody
+    priority: 60
+    action: block
+    statement_type: size_constraint
+    field_to_match_type: body
+    comparison_operator: GT
+    size: 8192
+    text_transformation_type: NONE
+
+# ---------------------------------------------------------------------------
+# Logging (destination ARN is region-specific - supplied via tfvars instead)
+# ---------------------------------------------------------------------------
+enable_logging: true
+redacted_fields:
+  - "single_header:authorization"
+  - "query_string"
