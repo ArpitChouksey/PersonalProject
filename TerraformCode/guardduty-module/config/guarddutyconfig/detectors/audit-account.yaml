@@ -1,0 +1,53 @@
+# ---------------------------------------------------------------------------
+# AUDIT ACCOUNT config - the account that centralizes GuardDuty findings
+# across your whole organization (e.g. all 100 member accounts).
+#
+# Applied with the AUDIT ACCOUNT's own credentials, AFTER
+# org-management.yaml has been applied once from the management account
+# (that step designates THIS account as the delegated admin - it has to
+# happen first, or this account isn't allowed to set its own
+# organization_configuration below).
+#
+# This account gets its own detector (create_detector defaults true) AND
+# is_organization_admin: true, which is what makes every member account's
+# findings flow into THIS account's detector automatically.
+# ---------------------------------------------------------------------------
+
+finding_publishing_frequency: SIX_HOURS
+
+tags:
+  Environment: audit
+  ManagedBy: terraform
+  Owner: security-team
+
+features:
+  - name: S3_DATA_EVENTS
+    status: ENABLED
+  - name: EKS_AUDIT_LOGS
+    status: ENABLED
+
+ip_sets: []
+threat_intel_sets: []
+filters: []
+
+# ---------------------------------------------------------------------------
+# This account IS the delegated admin - the settings below apply
+# organization-wide, not just to this one account.
+# ---------------------------------------------------------------------------
+is_organization_admin: true
+
+# ALL = auto-enable every EXISTING + future org member account (use this to
+#       pull in all 100 accounts you already have, not just new ones).
+# NEW  = only accounts that join the org after this is set.
+# NONE = no auto-enrollment; use member_accounts below to invite explicitly.
+auto_enable_organization_members: ALL
+
+organization_features:
+  - name: S3_DATA_EVENTS
+    auto_enable: ALL
+  - name: EKS_AUDIT_LOGS
+    auto_enable: ALL
+
+# Only needed if auto_enable_organization_members is NONE, or to add
+# accounts from outside the organization (not managed by AWS Organizations).
+member_accounts: []

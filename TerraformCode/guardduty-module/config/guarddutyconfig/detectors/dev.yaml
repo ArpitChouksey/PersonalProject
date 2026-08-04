@@ -1,0 +1,55 @@
+# ---------------------------------------------------------------------------
+# Shared GuardDuty policy for the "dev" environment - same pattern as
+# waf-module's dev.yaml. One detector per account+region, so this is loaded
+# once per region deployment.
+# ---------------------------------------------------------------------------
+
+enable: true
+finding_publishing_frequency: SIX_HOURS
+
+tags:
+  Environment: dev
+  ManagedBy: terraform
+  Owner: platform-team
+
+# ---------------------------------------------------------------------------
+# Enable the optional protection features you want. Leaving one out (or
+# setting status: DISABLED) just means that data source isn't monitored -
+# it doesn't affect the others.
+# ---------------------------------------------------------------------------
+features:
+  - name: S3_DATA_EVENTS
+    status: ENABLED
+  - name: EKS_AUDIT_LOGS
+    status: ENABLED
+  - name: EBS_MALWARE_PROTECTION
+    status: ENABLED
+  - name: RDS_LOGIN_EVENTS
+    status: ENABLED
+  - name: LAMBDA_NETWORK_LOGS
+    status: ENABLED
+
+ip_sets: []
+threat_intel_sets: []
+
+# ---------------------------------------------------------------------------
+# Example: suppress low-severity findings on S3 buckets in dev, since dev
+# buckets generate a lot of expected noise that would matter more in prod.
+# ---------------------------------------------------------------------------
+filters:
+  - name: SuppressLowSeverityS3Dev
+    description: "Archive low-severity S3 findings in dev - expected noise"
+    action: ARCHIVE
+    rank: 1
+    criteria:
+      - field: resource.resourceType
+        equals: ["S3Bucket"]
+      - field: severity
+        less_than: "4"
+
+# ---------------------------------------------------------------------------
+# Findings publishing to S3 (region-specific ARNs - set per deployment via
+# terraform.tfvars instead of here, same reasoning as waf-module's
+# log_destination_configs)
+# ---------------------------------------------------------------------------
+enable_publishing: false

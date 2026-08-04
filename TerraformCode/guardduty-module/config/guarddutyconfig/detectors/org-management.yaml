@@ -1,0 +1,26 @@
+# ---------------------------------------------------------------------------
+# MANAGEMENT ACCOUNT config - a ONE-TIME BOOTSTRAP STEP, not an ongoing
+# role you keep applying. Apply this exactly once (or again only if you
+# ever change which account is the audit/admin account), using the AWS
+# Organizations management account's own credentials.
+#
+# Its only job: tell AWS "this account is now allowed to administer
+# GuardDuty org-wide." AWS requires this specific action to come from the
+# management account - there's no way around that restriction. Everything
+# else (auto-enrollment, features, member accounts) is configured from the
+# audit account itself afterward - see audit-account.yaml.
+#
+# If you don't need centralized multi-account findings at all (see
+# audit-account.yaml's use case), you never need this file - skip it
+# entirely and just use dev.yaml-style single-account configs everywhere.
+# ---------------------------------------------------------------------------
+
+create_detector: false
+
+enable_organization_admin: true
+delegated_admin_account_id: "222233334444"   # replace with your real audit account ID
+
+tags:
+  Environment: management
+  ManagedBy: terraform
+  Owner: security-team
