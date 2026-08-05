@@ -1,0 +1,46 @@
+operating_system: "AMAZON_LINUX_2"
+
+# false (default) = use AWS's own predefined default baseline for this OS,
+# no approval rules needed at all. Flip to true to build a custom baseline
+# from the rules below - nothing else in this repo needs to change.
+create_custom_patch_baseline: false
+patch_baseline_name: "dev-linux-custom-baseline" # only used if create_custom_patch_baseline: true
+
+patch_approval_rules:
+  - approve_after_days: 0
+    compliance_level: "CRITICAL"
+    patch_filters:
+      - key: "CLASSIFICATION"
+        values: ["Security", "Bugfix", "Critical"]
+  - approve_after_days: 0
+    compliance_level: "HIGH"
+    patch_filters:
+      - key: "SEVERITY"
+        values: ["Critical", "Important"]
+patch_approved_patches: []
+patch_rejected_patches: []
+
+patch_group_name: "dev-linux-patch-group"
+
+# "Scan" = compliance report only, no changes made. "Install" = actually
+# patch. Can also be overridden per-OS from terraform.tfvars without editing
+# this file (see patch_operations there).
+patch_operation: "Install"
+
+# "1" = one instance at a time (fully sequential). "50%" = half the fleet in
+# parallel. "100%" = all matched instances at once.
+max_concurrency: "100%"
+# How many failures tolerated before SSM stops launching new invocations.
+max_errors: "10%"
+
+# A single tag value works fine here too - values: ["dev"] is just as valid
+# as the multi-value list below.
+patch_targets:
+  - key: "tag:Environment"
+    values: ["dev", "staging"]
+  - key: "tag:OS"
+    values: ["linux"]
+
+maintenance_window_schedule: "cron(0 2 ? * SUN *)" # Sunday 2am
+maintenance_window_duration: 4
+maintenance_window_cutoff: 1

@@ -1,0 +1,49 @@
+enable_documents: true
+enable_associations: true
+enable_inventory: true
+enable_patch_compliance: true
+
+documents:
+  example_command_doc:
+    name: "custom-example-command"
+    document_type: "Command"
+    document_format: "JSON"
+    content: |
+      {
+        "schemaVersion": "2.2",
+        "description": "Example custom document - replace with real automation",
+        "mainSteps": [
+          {
+            "action": "aws:runShellScript",
+            "name": "example",
+            "inputs": {
+              "runCommand": ["echo hello from custom document"]
+            }
+          }
+        ]
+      }
+
+associations:
+  baseline_config:
+    name: "enforce-baseline-config"
+    document_name: "custom-example-command"
+    schedule_expression: "rate(7 days)"
+    compliance_severity: "MEDIUM"
+    targets:
+      - key: "tag:Environment"
+        values: ["dev", "staging"]
+    write_output_to_s3: true
+
+inventory_targets:
+  - key: "tag:Environment"
+    values: ["dev", "staging"]
+inventory_schedule_expression: "rate(1 day)"
+
+# Per-OS patch settings (operating_system, custom-baseline toggle, approval
+# rules, patch group, targets, maintenance window) now live in separate
+# <os>-custom.yaml files in this same folder - see linux-custom.yaml and
+# windows-custom.yaml. They're auto-discovered by the deployment root, so
+# adding another OS is just dropping in a new <os>-custom.yaml file here.
+
+reports_prefix: "Reports/"
+reporting_lambda_schedule_expression: "rate(1 day)"
