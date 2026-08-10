@@ -1,0 +1,7 @@
+apiVersion: v2
+name: ai-mcp-client
+description: AI MCP Client with RAG and PGVector
+type: application
+
+version: 1.0.0
+appVersion: "1.0.0"

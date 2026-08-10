@@ -1,0 +1,6 @@
+apiVersion: v2
+name: kafka
+description: Kafka broker for Project9-Messaging
+type: application
+version: 1.0.0
+appVersion: "latest"

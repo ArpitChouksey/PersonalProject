@@ -1,2 +1,0 @@
-# PersonalProject
-Personal DevOps Projects

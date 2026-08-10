@@ -1,0 +1,30 @@
+{{- if .Values.initdb.enabled }}
+
+apiVersion: v1
+kind: ConfigMap
+
+metadata:
+  name: postgres-init
+
+data:
+
+  01-create-databases.sql: |
+    SELECT 'CREATE DATABASE project9_app'
+    WHERE NOT EXISTS (
+        SELECT FROM pg_database
+        WHERE datname = 'project9_app'
+    )\gexec
+
+    SELECT 'CREATE DATABASE project9_rag'
+    WHERE NOT EXISTS (
+        SELECT FROM pg_database
+        WHERE datname = 'project9_rag'
+    )\gexec
+
+
+  02-enable-pgvector.sql: |
+    \connect project9_rag
+
+    CREATE EXTENSION IF NOT EXISTS vector;
+
+{{- end }}

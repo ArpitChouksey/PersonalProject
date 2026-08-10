@@ -1,0 +1,79 @@
+replicaCount: 1
+
+image:
+  repository: spring-service
+  tag: "3.0"
+  pullPolicy: IfNotPresent
+
+service:
+  type: ClusterIP
+  port: 8080
+
+# ==========================================================
+# PostgreSQL
+# ==========================================================
+
+database:
+  host: postgres-service
+  port: 5432
+  name: project9_app
+  username: postgres
+
+# Password should NOT be committed here.
+# It will come from Kubernetes Secret.
+
+# ==========================================================
+# Python Service
+# ==========================================================
+
+python:
+  serviceUrl: http://python-service:8000
+
+# ==========================================================
+# Messaging
+# ==========================================================
+
+messaging:
+  provider: kafka
+  source: spring-service
+  destination: user-events
+
+# ==========================================================
+# Kafka
+# ==========================================================
+
+kafka:
+  bootstrapServers: kafka-service:9092
+  consumerGroupId: user-service-group
+  auditConsumerGroupId: audit-group
+
+# ==========================================================
+# Amazon MQ
+# ==========================================================
+
+amazonmq:
+  brokerUrl: ""
+  username: ""
+  password: ""
+  queue: user-events
+
+# ==========================================================
+# OpenTelemetry
+# ==========================================================
+
+otel:
+  serviceName: spring-service
+  endpoint: http://jaeger.ns-tracing.svc.cluster.local:4318
+
+# ==========================================================
+# Resources
+# ==========================================================
+
+resources:
+  requests:
+    cpu: 1
+    memory: 2Gi
+
+  limits:
+    cpu: "2"
+    memory: 4Gi

@@ -1,0 +1,6 @@
+apiVersion: v2
+name: spring-service
+description: Helm chart for Project9 Spring Boot CRUD/MCP service
+type: application
+version: 1.0.0
+appVersion: "2.0"

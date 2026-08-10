@@ -1,0 +1,106 @@
+# ==========================================================
+# Image
+# ==========================================================
+
+image:
+  repository: ai-mcp-client
+  tag: "1.0.0"
+  pullPolicy: IfNotPresent
+
+
+# ==========================================================
+# Application
+# ==========================================================
+
+app:
+  name: ai-mcp-client
+  port: 8081
+
+  cors:
+    allowedOrigin: "http://localhost:5173"
+
+
+# ==========================================================
+# Ollama
+# ==========================================================
+
+ollama:
+  baseUrl: "http://ollama-service:11434"
+
+  chatModel: "llama3.2:latest"
+
+  embeddingModel: "nomic-embed-text"
+
+
+# ==========================================================
+# MCP
+# ==========================================================
+
+mcp:
+  serverUrl: "http://spring-service:8080"
+
+  sseEndpoint: "/sse"
+
+  clientName: "ai-mcp-client"
+
+  clientVersion: "1.0.0"
+
+
+# ==========================================================
+# PostgreSQL / RAG
+# ==========================================================
+
+database:
+  host: "postgres-service"
+  port: 5432
+
+  name: "project9_rag"
+
+  username: "postgres"
+
+  password: "postgres"
+
+
+# ==========================================================
+# RAG
+# ==========================================================
+
+rag:
+
+  projectName: "Project9-Messaging"
+
+  knowledgeLocation: "classpath:/knowledge/*.md"
+
+  chunkSize: 1000
+
+  minChunkSizeChars: 400
+
+  minChunkLengthToEmbed: 10
+
+  maxNumChunks: 5000
+
+  keepSeparator: true
+
+
+# ==========================================================
+# AI
+# ==========================================================
+
+ai:
+
+  systemPrompt: >-
+    You are the Project9-Messaging project assistant.
+    Use retrieved project context as the source of truth.
+    Do not invent project components, configuration, ports,
+    classes, or infrastructure details.
+    If the information is not available in the retrieved
+    project context, clearly say that it is not documented.
+
+
+# ==========================================================
+# Service
+# ==========================================================
+
+service:
+  type: ClusterIP
+  port: 8081

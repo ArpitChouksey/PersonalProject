@@ -1,0 +1,29 @@
+replicaCount: 1
+
+image:
+  repository: apache/kafka
+  tag: latest
+  pullPolicy: IfNotPresent
+
+service:
+  type: ClusterIP
+  port: 9092
+
+kafka:
+  nodeId: 1
+
+  brokerPort: 9092
+  controllerPort: 9093
+
+  clusterId: "MkU3OEVBNTcwNTJENDM2Qk"
+
+  autoCreateTopics: true
+
+resources:
+  requests:
+    cpu: 250m
+    memory: 512Mi
+
+  limits:
+    cpu: "1"
+    memory: 1Gi

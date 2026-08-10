@@ -1,0 +1,164 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #f5f6f8;
+}
+
+.app {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.header {
+    height: 72px;
+    background: #ffffff;
+    border-bottom: 1px solid #e5e7eb;
+    display: flex;
+    align-items: center;
+    padding: 0 32px;
+}
+
+.header h1 {
+    margin: 0;
+    font-size: 20px;
+}
+
+.header p {
+    margin: 4px 0 0;
+    color: #6b7280;
+    font-size: 13px;
+}
+
+.chat-container {
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 24px;
+}
+
+.messages {
+    flex: 1;
+    overflow-y: auto;
+    padding-bottom: 20px;
+}
+
+.welcome {
+    text-align: center;
+    margin-top: 120px;
+}
+
+.welcome h2 {
+    font-size: 28px;
+    margin-bottom: 8px;
+}
+
+.welcome p {
+    color: #6b7280;
+}
+
+.examples {
+    margin-top: 24px;
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+}
+
+.examples button {
+    padding: 10px 16px;
+    border: 1px solid #d1d5db;
+    background: white;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.message-row {
+    display: flex;
+    margin-bottom: 18px;
+}
+
+.message-row.user {
+    justify-content: flex-end;
+}
+
+.message-row.assistant {
+    justify-content: flex-start;
+}
+
+.message {
+    max-width: 75%;
+    padding: 14px 18px;
+    border-radius: 14px;
+}
+
+.user .message {
+    background: #111827;
+    color: white;
+}
+
+.assistant .message {
+    background: white;
+    border: 1px solid #e5e7eb;
+}
+
+.message-role {
+    font-size: 11px;
+    font-weight: bold;
+    margin-bottom: 6px;
+    opacity: 0.7;
+}
+
+.message-content {
+    line-height: 1.5;
+    white-space: pre-wrap;
+}
+
+.typing {
+    color: #6b7280;
+}
+
+.input-container {
+    display: flex;
+    gap: 10px;
+    background: white;
+    border: 1px solid #d1d5db;
+    border-radius: 12px;
+    padding: 8px;
+}
+
+.input-container textarea {
+    flex: 1;
+    resize: none;
+    border: none;
+    outline: none;
+    padding: 12px;
+    font-size: 15px;
+}
+
+.input-container button {
+    border: none;
+    background: #111827;
+    color: white;
+    border-radius: 8px;
+    padding: 0 20px;
+    cursor: pointer;
+}
+
+.input-container button:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+.footer {
+    text-align: center;
+    font-size: 12px;
+    color: #9ca3af;
+    padding: 14px 0 4px;
+}

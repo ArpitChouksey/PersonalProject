@@ -1,0 +1,86 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "ollama.fullname" . }}
+  labels:
+    app: {{ include "ollama.fullname" . }}
+
+spec:
+  replicas: {{ .Values.replicaCount }}
+
+  selector:
+    matchLabels:
+      app: {{ include "ollama.fullname" . }}
+
+  template:
+    metadata:
+      labels:
+        app: {{ include "ollama.fullname" . }}
+
+    spec:
+      containers:
+        - name: ollama
+
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+
+          ports:
+            - name: http
+              containerPort: 11434
+              protocol: TCP
+
+          env:
+            - name: OLLAMA_HOST
+              value: "0.0.0.0:11434"
+
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+
+          command:
+            - /bin/sh
+            - -c
+            - |
+              ollama serve &
+
+              echo "Waiting for Ollama..."
+              until ollama list >/dev/null 2>&1; do
+                sleep 2
+              done
+
+              echo "Pulling chat model..."
+              ollama pull {{ .Values.models.chat }}
+
+              echo "Pulling embedding model..."
+              ollama pull {{ .Values.models.embedding }}
+
+              echo "Models installed successfully."
+
+              wait
+
+          volumeMounts:
+            - name: ollama-data
+              mountPath: /root/.ollama
+
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 11434
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 12
+
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 11434
+            initialDelaySeconds: 60
+            periodSeconds: 20
+            timeoutSeconds: 5
+            failureThreshold: 3
+
+      volumes:
+        - name: ollama-data
+          persistentVolumeClaim:
+            claimName: {{ include "ollama.fullname" . }}

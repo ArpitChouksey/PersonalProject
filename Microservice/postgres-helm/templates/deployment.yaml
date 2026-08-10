@@ -1,0 +1,67 @@
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: postgres
+
+spec:
+
+  replicas: 1
+
+  selector:
+    matchLabels:
+      app: postgres
+
+  template:
+
+    metadata:
+      labels:
+        app: postgres
+
+    spec:
+
+      containers:
+
+        - name: postgres
+
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+
+          ports:
+
+            - name: postgres
+              containerPort: 5432
+
+          envFrom:
+
+            - secretRef:
+                name: postgres-secret
+
+          volumeMounts:
+
+            - name: postgres-data
+              mountPath: /var/lib/postgresql/data
+
+            {{- if .Values.initdb.enabled }}
+
+            - name: postgres-init
+              mountPath: /docker-entrypoint-initdb.d
+
+            {{- end }}
+
+      volumes:
+
+        - name: postgres-data
+
+          persistentVolumeClaim:
+            claimName: postgres-pvc
+
+        {{- if .Values.initdb.enabled }}
+
+        - name: postgres-init
+
+          configMap:
+            name: postgres-init
+
+        {{- end }}

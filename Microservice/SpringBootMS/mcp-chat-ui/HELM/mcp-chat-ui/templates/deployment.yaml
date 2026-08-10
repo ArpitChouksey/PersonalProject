@@ -1,0 +1,60 @@
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: mcp-chat-ui
+
+spec:
+
+  replicas: 1
+
+  selector:
+    matchLabels:
+      app: mcp-chat-ui
+
+  template:
+
+    metadata:
+      labels:
+        app: mcp-chat-ui
+
+    spec:
+
+      containers:
+
+        - name: mcp-chat-ui
+
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+
+          ports:
+
+            - name: http
+              containerPort: {{ .Values.app.port }}
+
+          env:
+
+            - name: AI_BACKEND_HOST
+              value: {{ .Values.backend.host | quote }}
+
+            - name: AI_BACKEND_PORT
+              value: {{ .Values.backend.port | quote }}
+
+          readinessProbe:
+
+            httpGet:
+              path: /
+              port: http
+
+            initialDelaySeconds: 5
+            periodSeconds: 10
+
+          livenessProbe:
+
+            httpGet:
+              path: /
+              port: http
+
+            initialDelaySeconds: 10
+            periodSeconds: 20

@@ -1,0 +1,245 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="https://maven.apache.org/POM/4.0.0
+                             https://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <!-- ========================================================= -->
+    <!-- Parent -->
+    <!-- ========================================================= -->
+
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>3.5.4</version>
+        <relativePath/>
+    </parent>
+
+    <!-- ========================================================= -->
+    <!-- Project -->
+    <!-- ========================================================= -->
+
+    <groupId>com.company</groupId>
+    <artifactId>spring-service</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+
+    <name>spring-service</name>
+    <description>Enterprise Messaging Platform with Spring AI MCP Server</description>
+
+    <!-- ========================================================= -->
+    <!-- Properties -->
+    <!-- ========================================================= -->
+
+    <properties>
+        <java.version>17</java.version>
+        <lombok.version>1.18.38</lombok.version>
+    </properties>
+
+    <!-- ========================================================= -->
+    <!-- Spring AI BOM -->
+    <!-- ========================================================= -->
+
+    <dependencyManagement>
+
+        <dependencies>
+
+            <dependency>
+                <groupId>org.springframework.ai</groupId>
+                <artifactId>spring-ai-bom</artifactId>
+                <version>1.0.1</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+        </dependencies>
+
+    </dependencyManagement>
+
+    <!-- ========================================================= -->
+    <!-- Dependencies -->
+    <!-- ========================================================= -->
+
+    <dependencies>
+
+        <!-- ========================= -->
+        <!-- OLLAMA -->
+        <!-- ========================= -->
+
+	<dependency>
+   	    <groupId>org.springframework.ai</groupId>
+   	    <artifactId>spring-ai-starter-model-ollama</artifactId>
+	</dependency>
+
+        <!-- ========================= -->
+        <!-- MCP Server -->
+        <!-- ========================= -->
+
+        <dependency>
+            <groupId>org.springframework.ai</groupId>
+            <artifactId>spring-ai-starter-mcp-server-webmvc</artifactId>
+        </dependency>
+
+        <!-- ========================= -->
+        <!-- Spring Web -->
+        <!-- ========================= -->
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+
+            <exclusions>
+                <exclusion>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-logging</artifactId>
+                </exclusion>
+            </exclusions>
+
+        </dependency>
+
+        <!-- ========================= -->
+        <!-- Log4j2 -->
+        <!-- ========================= -->
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-log4j2</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-layout-template-json</artifactId>
+        </dependency>
+
+        <!-- ========================= -->
+        <!-- Validation -->
+        <!-- ========================= -->
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-validation</artifactId>
+        </dependency>
+
+        <!-- ========================= -->
+        <!-- Spring Data JPA -->
+        <!-- ========================= -->
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
+        </dependency>
+
+        <!-- ========================= -->
+        <!-- PostgreSQL -->
+        <!-- ========================= -->
+
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+
+        <!-- ========================= -->
+        <!-- Kafka -->
+        <!-- ========================= -->
+
+        <dependency>
+            <groupId>org.springframework.kafka</groupId>
+            <artifactId>spring-kafka</artifactId>
+        </dependency>
+
+        <!-- ========================= -->
+        <!-- Amazon MQ / ActiveMQ -->
+        <!-- ========================= -->
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-activemq</artifactId>
+        </dependency>
+
+        <!-- ========================= -->
+        <!-- Actuator -->
+        <!-- ========================= -->
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
+
+        <!-- ========================= -->
+        <!-- Prometheus -->
+        <!-- ========================= -->
+
+        <dependency>
+            <groupId>io.micrometer</groupId>
+            <artifactId>micrometer-registry-prometheus</artifactId>
+        </dependency>
+
+        <!-- ========================= -->
+        <!-- Lombok -->
+        <!-- ========================= -->
+
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <optional>true</optional>
+        </dependency>
+
+        <!-- ========================= -->
+        <!-- Testing -->
+        <!-- ========================= -->
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+    </dependencies>
+
+    <!-- ========================================================= -->
+    <!-- Build -->
+    <!-- ========================================================= -->
+
+    <build>
+
+        <plugins>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+
+                <configuration>
+
+                    <release>${java.version}</release>
+
+                    <annotationProcessorPaths>
+
+                        <path>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                        </path>
+
+                    </annotationProcessorPaths>
+
+                </configuration>
+
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+            </plugin>
+
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+
+        </plugins>
+
+    </build>
+
+</project>

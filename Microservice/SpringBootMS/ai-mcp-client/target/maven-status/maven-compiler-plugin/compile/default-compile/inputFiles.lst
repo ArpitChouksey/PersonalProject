@@ -1,0 +1,9 @@
+/Users/arpitchouksey/Documents/PersonalProjects/Project9-Messaging/Microservice/SpringBootMS/ai-mcp-client/src/main/java/com/company/ai/AiMcpClientApplication.java
+/Users/arpitchouksey/Documents/PersonalProjects/Project9-Messaging/Microservice/SpringBootMS/ai-mcp-client/src/main/java/com/company/ai/config/CorsConfig.java
+/Users/arpitchouksey/Documents/PersonalProjects/Project9-Messaging/Microservice/SpringBootMS/ai-mcp-client/src/main/java/com/company/ai/config/RagConfig.java
+/Users/arpitchouksey/Documents/PersonalProjects/Project9-Messaging/Microservice/SpringBootMS/ai-mcp-client/src/main/java/com/company/ai/controller/AIChatController.java
+/Users/arpitchouksey/Documents/PersonalProjects/Project9-Messaging/Microservice/SpringBootMS/ai-mcp-client/src/main/java/com/company/ai/controller/McpClientController.java
+/Users/arpitchouksey/Documents/PersonalProjects/Project9-Messaging/Microservice/SpringBootMS/ai-mcp-client/src/main/java/com/company/ai/controller/RagController.java
+/Users/arpitchouksey/Documents/PersonalProjects/Project9-Messaging/Microservice/SpringBootMS/ai-mcp-client/src/main/java/com/company/ai/service/AIChatService.java
+/Users/arpitchouksey/Documents/PersonalProjects/Project9-Messaging/Microservice/SpringBootMS/ai-mcp-client/src/main/java/com/company/ai/service/McpClientService.java
+/Users/arpitchouksey/Documents/PersonalProjects/Project9-Messaging/Microservice/SpringBootMS/ai-mcp-client/src/main/java/com/company/ai/service/ProjectKnowledgeService.java

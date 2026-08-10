@@ -1,0 +1,135 @@
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: ai-mcp-client
+
+spec:
+
+  replicas: 1
+
+  selector:
+    matchLabels:
+      app: ai-mcp-client
+
+  template:
+
+    metadata:
+      labels:
+        app: ai-mcp-client
+
+    spec:
+
+      containers:
+
+        - name: ai-mcp-client
+
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+
+          ports:
+
+            - name: http
+              containerPort: {{ .Values.app.port }}
+
+          env:
+
+            # ==================================================
+            # Application
+            # ==================================================
+
+            - name: APP_NAME
+              value: {{ .Values.app.name | quote }}
+
+            - name: SERVER_PORT
+              value: {{ .Values.app.port | quote }}
+
+            - name: APP_CORS_ALLOWED_ORIGIN
+              value: {{ .Values.app.cors.allowedOrigin | quote }}
+
+
+            # ==================================================
+            # Ollama
+            # ==================================================
+
+            - name: OLLAMA_BASE_URL
+              value: {{ .Values.ollama.baseUrl | quote }}
+
+            - name: OLLAMA_CHAT_MODEL
+              value: {{ .Values.ollama.chatModel | quote }}
+
+            - name: OLLAMA_EMBEDDING_MODEL
+              value: {{ .Values.ollama.embeddingModel | quote }}
+
+
+            # ==================================================
+            # MCP
+            # ==================================================
+
+            - name: MCP_SERVER_URL
+              value: {{ .Values.mcp.serverUrl | quote }}
+
+            - name: MCP_SSE_ENDPOINT
+              value: {{ .Values.mcp.sseEndpoint | quote }}
+
+            - name: MCP_CLIENT_NAME
+              value: {{ .Values.mcp.clientName | quote }}
+
+            - name: MCP_CLIENT_VERSION
+              value: {{ .Values.mcp.clientVersion | quote }}
+
+
+            # ==================================================
+            # PostgreSQL
+            # ==================================================
+
+            - name: DB_URL
+              value: >-
+                jdbc:postgresql://{{ .Values.database.host }}:{{ .Values.database.port }}/{{ .Values.database.name }}
+
+            - name: DB_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: ai-mcp-client-secret
+                  key: DB_USERNAME
+
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: ai-mcp-client-secret
+                  key: DB_PASSWORD
+
+
+            # ==================================================
+            # RAG
+            # ==================================================
+
+            - name: RAG_PROJECT_NAME
+              value: {{ .Values.rag.projectName | quote }}
+
+            - name: RAG_KNOWLEDGE_LOCATION
+              value: {{ .Values.rag.knowledgeLocation | quote }}
+
+            - name: RAG_CHUNK_SIZE
+              value: {{ .Values.rag.chunkSize | quote }}
+
+            - name: RAG_MIN_CHUNK_SIZE_CHARS
+              value: {{ .Values.rag.minChunkSizeChars | quote }}
+
+            - name: RAG_MIN_CHUNK_LENGTH_TO_EMBED
+              value: {{ .Values.rag.minChunkLengthToEmbed | quote }}
+
+            - name: RAG_MAX_NUM_CHUNKS
+              value: {{ .Values.rag.maxNumChunks | quote }}
+
+            - name: RAG_KEEP_SEPARATOR
+              value: {{ .Values.rag.keepSeparator | quote }}
+
+
+            # ==================================================
+            # AI
+            # ==================================================
+
+            - name: AI_SYSTEM_PROMPT
+              value: {{ .Values.ai.systemPrompt | quote }}
