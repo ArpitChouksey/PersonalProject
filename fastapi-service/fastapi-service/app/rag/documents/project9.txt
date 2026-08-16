@@ -1,0 +1,22 @@
+Project9 Messaging Platform
+
+Project9 Messaging is an enterprise messaging platform.
+
+The platform contains a Java Spring Boot service and a Python FastAPI service.
+
+The FastAPI service provides REST APIs and acts as the AI integration layer.
+
+The Python service exposes a Model Context Protocol server through Streamable HTTP.
+
+The MCP server currently provides two tools:
+
+1. getSystemInfo
+2. calculate
+
+The calculate tool supports add, subtract, multiply and divide operations.
+
+The AI layer uses Ollama with the llama3.2 model.
+
+The RAG layer uses the nomic-embed-text model to generate embeddings.
+
+RAG retrieves relevant project documentation and provides the retrieved context to the LLM before generating the final answer.

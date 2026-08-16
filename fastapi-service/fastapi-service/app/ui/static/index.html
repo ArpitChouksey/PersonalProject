@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Project9 AI Assistant</title>
+
+    <link
+        rel="stylesheet"
+        href="/ui/static/style.css"
+    >
+</head>
+
+<body>
+
+<div class="app">
+
+    <!-- Header -->
+
+    <header class="header">
+
+        <div>
+            <h1>Project9 AI Assistant</h1>
+
+            <p>
+                FastAPI + Ollama + MCP + RAG
+            </p>
+        </div>
+
+        <div class="status">
+            <span class="status-dot"></span>
+            <span id="statusText">Checking...</span>
+        </div>
+
+    </header>
+
+
+    <!-- Chat -->
+
+    <main class="chat-container">
+
+        <div
+            id="messages"
+            class="messages"
+        >
+
+            <div class="message assistant">
+
+                <div class="message-label">
+                    AI Assistant
+                </div>
+
+                <div class="message-content">
+                    Hello! Ask me something about
+                    Project9 Messaging.
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- Input -->
+
+        <div class="input-area">
+
+            <textarea
+                id="messageInput"
+                placeholder="Ask something..."
+                rows="2"
+            ></textarea>
+
+            <button
+                id="sendButton"
+                onclick="sendMessage()"
+            >
+                Send
+            </button>
+
+        </div>
+
+
+        <!-- Examples -->
+
+        <div class="examples">
+
+            <button onclick="useExample(
+                'What is Project9 Messaging?'
+            )">
+                Project overview
+            </button>
+
+            <button onclick="useExample(
+                'How does MCP work in this project?'
+            )">
+                Explain MCP
+            </button>
+
+            <button onclick="useExample(
+                'Use the calculate MCP tool to add 100 and 250.'
+            )">
+                Test MCP tool
+            </button>
+
+            <button onclick="useExample(
+                'How does the RAG system work?'
+            )">
+                Test RAG
+            </button>
+
+        </div>
+
+    </main>
+
+</div>
+
+
+<script src="/ui/static/app.js"></script>
+
+</body>
+
+</html>
