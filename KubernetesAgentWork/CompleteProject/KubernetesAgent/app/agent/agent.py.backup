@@ -1,0 +1,275 @@
+import inspect
+import json
+import re
+
+from app.agent.llm import ask_llm
+from app.agent.tool_loader import load_tools
+
+
+def get_tool_schema(tool):
+    signature = inspect.signature(tool)
+
+    parameters = {}
+    required = []
+
+    for name, parameter in signature.parameters.items():
+        annotation = parameter.annotation
+
+        if annotation is inspect.Parameter.empty:
+            parameter_type = "string"
+        elif annotation is int:
+            parameter_type = "integer"
+        elif annotation is bool:
+            parameter_type = "boolean"
+        else:
+            parameter_type = "string"
+
+        parameters[name] = {
+            "type": parameter_type
+        }
+
+        if parameter.default is inspect.Parameter.empty:
+            required.append(name)
+
+    return {
+        "name": tool.tool_name,
+        "description": tool.tool_description,
+        "parameters": parameters,
+        "required": required
+    }
+
+
+def build_tool_catalog(tools):
+    catalog = []
+
+    for tool in tools:
+        catalog.append(
+            get_tool_schema(tool)
+        )
+
+    return catalog
+
+
+def find_tool(tools, name):
+    for tool in tools:
+        if tool.tool_name == name:
+            return tool
+
+    return None
+
+
+def extract_json(text):
+    """
+    Extract the first valid JSON object from an LLM response.
+
+    Handles responses such as:
+
+    1. Pure JSON
+    2. Markdown ```json blocks
+    3. Explanation followed by JSON
+    """
+
+    text = text.strip()
+
+    # Case 1: Entire response is already valid JSON
+    try:
+        return json.loads(text)
+    except json.JSONDecodeError:
+        pass
+
+    # Case 2: JSON inside markdown code block
+    code_block_match = re.search(
+        r"```(?:json)?\s*(\{.*?\})\s*```",
+        text,
+        re.DOTALL
+    )
+
+    if code_block_match:
+        json_text = code_block_match.group(1)
+
+        try:
+            return json.loads(json_text)
+        except json.JSONDecodeError:
+            pass
+
+    # Case 3: Find JSON object inside normal text
+    start = text.find("{")
+
+    while start != -1:
+        depth = 0
+        in_string = False
+        escape = False
+
+        for index in range(start, len(text)):
+            char = text[index]
+
+            if escape:
+                escape = False
+                continue
+
+            if char == "\\" and in_string:
+                escape = True
+                continue
+
+            if char == '"':
+                in_string = not in_string
+                continue
+
+            if in_string:
+                continue
+
+            if char == "{":
+                depth += 1
+
+            elif char == "}":
+                depth -= 1
+
+                if depth == 0:
+                    candidate = text[start:index + 1]
+
+                    try:
+                        return json.loads(candidate)
+                    except json.JSONDecodeError:
+                        break
+
+        start = text.find("{", start + 1)
+
+    return None
+
+
+def run_agent(user_message: str):
+
+    tools = load_tools()
+
+    tool_catalog = build_tool_catalog(tools)
+
+    selection_prompt = f"""
+You are a Kubernetes infrastructure Agent.
+
+Available tools:
+
+{json.dumps(tool_catalog, indent=2)}
+
+User request:
+
+{user_message}
+
+Choose the most appropriate tool.
+
+Return ONLY valid JSON.
+
+Format:
+
+{{
+  "tool": "tool_name",
+  "arguments": {{
+    "argument_name": "value"
+  }}
+}}
+
+Rules:
+
+1. Use only tools from the available tools list.
+2. Use the exact argument names.
+3. Do not invent arguments.
+4. If an optional namespace is not provided, use "default".
+5. If the user asks to list something, choose the corresponding list tool.
+6. Return JSON only.
+"""
+
+    llm_response = ask_llm(
+        selection_prompt
+    )
+
+    # Extract JSON safely from LLM response
+    tool_request = extract_json(
+        llm_response
+    )
+
+    if tool_request is None:
+        return {
+            "status": "error",
+            "stage": "tool_selection",
+            "message": "LLM returned invalid JSON.",
+            "raw_response": llm_response
+        }
+
+    # Validate JSON structure
+    if not isinstance(tool_request, dict):
+        return {
+            "status": "error",
+            "stage": "tool_selection",
+            "message": "LLM response must be a JSON object.",
+            "raw_response": llm_response
+        }
+
+    tool_name = tool_request.get(
+        "tool"
+    )
+
+    arguments = tool_request.get(
+        "arguments",
+        {}
+    )
+
+    # Validate tool name
+    if not tool_name:
+        return {
+            "status": "error",
+            "stage": "tool_selection",
+            "message": "LLM did not provide a tool name.",
+            "raw_response": llm_response
+        }
+
+    # Validate arguments
+    if not isinstance(arguments, dict):
+        return {
+            "status": "error",
+            "stage": "tool_selection",
+            "message": "Tool arguments must be a JSON object.",
+            "raw_response": llm_response
+        }
+
+    selected_tool = find_tool(
+        tools,
+        tool_name
+    )
+
+    if selected_tool is None:
+        return {
+            "status": "error",
+            "stage": "tool_selection",
+            "message": f"Tool '{tool_name}' was not found."
+        }
+
+    # Execute selected Kubernetes tool
+    try:
+
+        result = selected_tool(
+            **arguments
+        )
+
+    except TypeError as exc:
+
+        return {
+            "status": "error",
+            "stage": "tool_execution",
+            "message": str(exc),
+            "tool": tool_name
+        }
+
+    except Exception as exc:
+
+        return {
+            "status": "error",
+            "stage": "tool_execution",
+            "message": str(exc),
+            "tool": tool_name
+        }
+
+    return {
+        "status": "success",
+        "tool": tool_name,
+        "arguments": arguments,
+        "result": result
+    }
