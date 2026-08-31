@@ -1,0 +1,5 @@
+.venv/
+.env
+__pycache__/
+*.pyc
+AWS_BEARER_TOKEN_BEDROCK=<YOUR_NEW_TOKEN>

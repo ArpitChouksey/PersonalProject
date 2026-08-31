@@ -1,0 +1,20 @@
+[project]
+name = "docker-agent"
+version = "0.1.0"
+description = "Docker Agent with Custom MCP"
+requires-python = ">=3.10"
+dependencies = [
+    "mcp==2.1.1",
+]
+
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = [
+    "app*",
+    "api*",
+    "custom_mcp*",
+]
