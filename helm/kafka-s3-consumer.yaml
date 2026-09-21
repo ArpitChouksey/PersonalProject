@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kafka-s3-consumer
+  namespace: kafka
+spec:
+  replicas: 1
+
+  selector:
+    matchLabels:
+      app: kafka-s3-consumer
+
+  template:
+    metadata:
+      labels:
+        app: kafka-s3-consumer
+
+    spec:
+      serviceAccountName: kafka-s3-consumer
+
+      containers:
+        - name: kafka-s3-consumer
+          image: 211811255273.dkr.ecr.us-east-1.amazonaws.com/private-eks-platform:kafka-s3-consumer-1.0
+          imagePullPolicy: IfNotPresent
+
+          env:
+            - name: KAFKA_BOOTSTRAP_SERVERS
+              value: "kafka:9092"
+
+            - name: KAFKA_TOPIC
+              value: "orders"
+
+            - name: KAFKA_GROUP_ID
+              value: "orders-s3-consumer"
+
+            - name: S3_BUCKET
+              value: "private-eks-platform-raw-logs-211811255273"
+
+            - name: S3_PREFIX
+              value: "raw/kafka/orders"
+
+          resources:
+            requests:
+              cpu: 100m
+              memory: 128Mi
+
+            limits:
+              cpu: 500m
+              memory: 512Mi

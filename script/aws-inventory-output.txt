@@ -1,0 +1,1172 @@
+============================================================
+ PRIVATE EKS PLATFORM - AWS INVENTORY
+============================================================
+Region : us-east-1
+VPC    : vpc-03afaff7b0e91ddeb
+Cluster: private-eks-platform
+============================================================
+
+==================== AWS ACCOUNT ====================
+{
+    "UserId": "AIDATCUHPIPUZDYJFJLQL",
+    "Account": "211811255273",
+    "Arn": "arn:aws:iam::211811255273:user/adminuser"
+}
+
+==================== VPC ====================
+[
+    {
+        "VpcId": "vpc-03afaff7b0e91ddeb",
+        "CIDR": "10.0.0.0/16",
+        "State": "available",
+        "DhcpOptionsId": "dopt-0d9c4cc8ced249637",
+        "Tags": [
+            {
+                "Key": "Name",
+                "Value": "private-eks-platform-vpc"
+            }
+        ]
+    }
+]
+
+==================== SUBNETS ====================
+[
+    {
+        "SubnetId": "subnet-0499af6dfe69e2d91",
+        "AZ": "us-east-1a",
+        "CIDR": "10.0.11.0/24",
+        "AvailableIPs": 231,
+        "MapPublicIP": false,
+        "State": "available",
+        "Tags": [
+            {
+                "Key": "Name",
+                "Value": "private-subnet-a"
+            }
+        ]
+    },
+    {
+        "SubnetId": "subnet-05b7e049707b45dca",
+        "AZ": "us-east-1a",
+        "CIDR": "10.0.1.0/24",
+        "AvailableIPs": 251,
+        "MapPublicIP": false,
+        "State": "available",
+        "Tags": [
+            {
+                "Key": "Name",
+                "Value": "public-subnet-a"
+            }
+        ]
+    },
+    {
+        "SubnetId": "subnet-0c84582a2fef2f4b0",
+        "AZ": "us-east-1b",
+        "CIDR": "10.0.2.0/24",
+        "AvailableIPs": 251,
+        "MapPublicIP": false,
+        "State": "available",
+        "Tags": [
+            {
+                "Key": "Name",
+                "Value": "public-subnet-b"
+            }
+        ]
+    },
+    {
+        "SubnetId": "subnet-087358f187f6b4209",
+        "AZ": "us-east-1b",
+        "CIDR": "10.0.12.0/24",
+        "AvailableIPs": 230,
+        "MapPublicIP": false,
+        "State": "available",
+        "Tags": [
+            {
+                "Key": "Name",
+                "Value": "private-subnet-b"
+            }
+        ]
+    }
+]
+
+==================== INTERNET GATEWAY ====================
+[
+    {
+        "InternetGatewayId": "igw-08a4eeed4bb03848e",
+        "State": "available",
+        "Tags": [
+            {
+                "Key": "Name",
+                "Value": "igw-private-eks-platform"
+            }
+        ]
+    }
+]
+
+==================== ROUTE TABLES ====================
+[
+    {
+        "RouteTableId": "rtb-04f18fca07dc5d71d",
+        "Routes": [
+            {
+                "DestinationCidrBlock": "10.0.0.0/16",
+                "GatewayId": "local",
+                "Origin": "CreateRouteTable",
+                "State": "active"
+            }
+        ],
+        "Associations": [
+            {
+                "Main": true,
+                "RouteTableAssociationId": "rtbassoc-0dbf743ea47b3bae8",
+                "RouteTableId": "rtb-04f18fca07dc5d71d",
+                "AssociationState": {
+                    "State": "associated"
+                }
+            }
+        ],
+        "Tags": []
+    },
+    {
+        "RouteTableId": "rtb-05676b35d0c9dcff3",
+        "Routes": [
+            {
+                "DestinationCidrBlock": "10.0.0.0/16",
+                "GatewayId": "local",
+                "Origin": "CreateRouteTable",
+                "State": "active"
+            },
+            {
+                "DestinationPrefixListId": "pl-63a5400a",
+                "GatewayId": "vpce-09ac182b6ae8cb7d6",
+                "Origin": "CreateRoute",
+                "State": "active"
+            }
+        ],
+        "Associations": [
+            {
+                "Main": false,
+                "RouteTableAssociationId": "rtbassoc-063ac89e67fe886e4",
+                "RouteTableId": "rtb-05676b35d0c9dcff3",
+                "SubnetId": "subnet-0499af6dfe69e2d91",
+                "AssociationState": {
+                    "State": "associated"
+                }
+            },
+            {
+                "Main": false,
+                "RouteTableAssociationId": "rtbassoc-0300b779f4f0925f0",
+                "RouteTableId": "rtb-05676b35d0c9dcff3",
+                "SubnetId": "subnet-087358f187f6b4209",
+                "AssociationState": {
+                    "State": "associated"
+                }
+            }
+        ],
+        "Tags": [
+            {
+                "Key": "Name",
+                "Value": "private-rt"
+            }
+        ]
+    },
+    {
+        "RouteTableId": "rtb-08399531f85cb78e4",
+        "Routes": [
+            {
+                "DestinationCidrBlock": "10.0.0.0/16",
+                "GatewayId": "local",
+                "Origin": "CreateRouteTable",
+                "State": "active"
+            },
+            {
+                "DestinationCidrBlock": "0.0.0.0/0",
+                "GatewayId": "igw-08a4eeed4bb03848e",
+                "Origin": "CreateRoute",
+                "State": "active"
+            }
+        ],
+        "Associations": [
+            {
+                "Main": false,
+                "RouteTableAssociationId": "rtbassoc-0dd83cf0222857520",
+                "RouteTableId": "rtb-08399531f85cb78e4",
+                "SubnetId": "subnet-05b7e049707b45dca",
+                "AssociationState": {
+                    "State": "associated"
+                }
+            },
+            {
+                "Main": false,
+                "RouteTableAssociationId": "rtbassoc-0950da2ae5bdb947d",
+                "RouteTableId": "rtb-08399531f85cb78e4",
+                "SubnetId": "subnet-0c84582a2fef2f4b0",
+                "AssociationState": {
+                    "State": "associated"
+                }
+            }
+        ],
+        "Tags": [
+            {
+                "Key": "Name",
+                "Value": "public-rt"
+            }
+        ]
+    }
+]
+
+==================== VPC ENDPOINTS ====================
+[
+    {
+        "EndpointId": "vpce-09ac182b6ae8cb7d6",
+        "Service": "com.amazonaws.us-east-1.s3",
+        "Type": "Gateway",
+        "State": "available",
+        "PrivateDNS": false,
+        "Subnets": [],
+        "RouteTables": [
+            "rtb-05676b35d0c9dcff3"
+        ],
+        "NetworkInterfaces": [],
+        "Groups": []
+    },
+    {
+        "EndpointId": "vpce-08cc8efbf6bc0ec0e",
+        "Service": "com.amazonaws.us-east-1.ecr.api",
+        "Type": "Interface",
+        "State": "available",
+        "PrivateDNS": true,
+        "Subnets": [
+            "subnet-0499af6dfe69e2d91",
+            "subnet-087358f187f6b4209"
+        ],
+        "RouteTables": [],
+        "NetworkInterfaces": [
+            "eni-0a5f1da6b44d51253",
+            "eni-047c40bbc6ff4f467"
+        ],
+        "Groups": [
+            {
+                "GroupId": "sg-0410cf1b7728865e0",
+                "GroupName": "eks-vpc-endpoints-sg"
+            },
+            {
+                "GroupId": "sg-0b3225c285520c779",
+                "GroupName": "default"
+            }
+        ]
+    },
+    {
+        "EndpointId": "vpce-033e83de373ebdbee",
+        "Service": "com.amazonaws.us-east-1.ecr.dkr",
+        "Type": "Interface",
+        "State": "available",
+        "PrivateDNS": true,
+        "Subnets": [
+            "subnet-0499af6dfe69e2d91",
+            "subnet-087358f187f6b4209"
+        ],
+        "RouteTables": [],
+        "NetworkInterfaces": [
+            "eni-0854dc44d78225418",
+            "eni-00119e999e11bef95"
+        ],
+        "Groups": [
+            {
+                "GroupId": "sg-0b3225c285520c779",
+                "GroupName": "default"
+            }
+        ]
+    },
+    {
+        "EndpointId": "vpce-087447514b840f811",
+        "Service": "com.amazonaws.us-east-1.ec2",
+        "Type": "Interface",
+        "State": "available",
+        "PrivateDNS": true,
+        "Subnets": [
+            "subnet-0499af6dfe69e2d91",
+            "subnet-087358f187f6b4209"
+        ],
+        "RouteTables": [],
+        "NetworkInterfaces": [
+            "eni-07b27c38dcccc5570",
+            "eni-066444ce902806b76"
+        ],
+        "Groups": [
+            {
+                "GroupId": "sg-0410cf1b7728865e0",
+                "GroupName": "eks-vpc-endpoints-sg"
+            },
+            {
+                "GroupId": "sg-0b3225c285520c779",
+                "GroupName": "default"
+            }
+        ]
+    },
+    {
+        "EndpointId": "vpce-01b0c5dc1a7e0267c",
+        "Service": "com.amazonaws.us-east-1.eks",
+        "Type": "Interface",
+        "State": "available",
+        "PrivateDNS": true,
+        "Subnets": [
+            "subnet-0499af6dfe69e2d91",
+            "subnet-087358f187f6b4209"
+        ],
+        "RouteTables": [],
+        "NetworkInterfaces": [
+            "eni-09a7014fa69be34ef",
+            "eni-06524fd37af964cdb"
+        ],
+        "Groups": [
+            {
+                "GroupId": "sg-0410cf1b7728865e0",
+                "GroupName": "eks-vpc-endpoints-sg"
+            },
+            {
+                "GroupId": "sg-0b3225c285520c779",
+                "GroupName": "default"
+            }
+        ]
+    },
+    {
+        "EndpointId": "vpce-05e2d14a46b448b5d",
+        "Service": "com.amazonaws.us-east-1.ssm",
+        "Type": "Interface",
+        "State": "available",
+        "PrivateDNS": true,
+        "Subnets": [
+            "subnet-0499af6dfe69e2d91",
+            "subnet-087358f187f6b4209"
+        ],
+        "RouteTables": [],
+        "NetworkInterfaces": [
+            "eni-0ce673e8df0883aaf",
+            "eni-0a2a00ad4e4af246b"
+        ],
+        "Groups": [
+            {
+                "GroupId": "sg-0410cf1b7728865e0",
+                "GroupName": "eks-vpc-endpoints-sg"
+            },
+            {
+                "GroupId": "sg-0b3225c285520c779",
+                "GroupName": "default"
+            }
+        ]
+    },
+    {
+        "EndpointId": "vpce-098834295df1495bb",
+        "Service": "com.amazonaws.us-east-1.ssmmessages",
+        "Type": "Interface",
+        "State": "available",
+        "PrivateDNS": true,
+        "Subnets": [
+            "subnet-0499af6dfe69e2d91",
+            "subnet-087358f187f6b4209"
+        ],
+        "RouteTables": [],
+        "NetworkInterfaces": [
+            "eni-09f57c7840d93f2e9",
+            "eni-0fade551ef76018be"
+        ],
+        "Groups": [
+            {
+                "GroupId": "sg-0410cf1b7728865e0",
+                "GroupName": "eks-vpc-endpoints-sg"
+            },
+            {
+                "GroupId": "sg-0b3225c285520c779",
+                "GroupName": "default"
+            }
+        ]
+    },
+    {
+        "EndpointId": "vpce-0646f88d30a113c4b",
+        "Service": "com.amazonaws.us-east-1.eks-auth",
+        "Type": "Interface",
+        "State": "available",
+        "PrivateDNS": true,
+        "Subnets": [
+            "subnet-0499af6dfe69e2d91",
+            "subnet-087358f187f6b4209"
+        ],
+        "RouteTables": [],
+        "NetworkInterfaces": [
+            "eni-0db8b775e2f994dae",
+            "eni-0991e8cedb3bfafe3"
+        ],
+        "Groups": [
+            {
+                "GroupId": "sg-0b3225c285520c779",
+                "GroupName": "default"
+            }
+        ]
+    }
+]
+
+==================== ENDPOINT ENIs ====================
+[
+    {
+        "ENI": "eni-0a2a00ad4e4af246b",
+        "PrivateIP": "10.0.12.169",
+        "Subnet": "subnet-087358f187f6b4209",
+        "AZ": "us-east-1b",
+        "Description": "VPC Endpoint Interface vpce-05e2d14a46b448b5d",
+        "Groups": [
+            {
+                "GroupId": "sg-0410cf1b7728865e0",
+                "GroupName": "eks-vpc-endpoints-sg"
+            },
+            {
+                "GroupId": "sg-0b3225c285520c779",
+                "GroupName": "default"
+            }
+        ]
+    },
+    {
+        "ENI": "eni-0a5f1da6b44d51253",
+        "PrivateIP": "10.0.12.45",
+        "Subnet": "subnet-087358f187f6b4209",
+        "AZ": "us-east-1b",
+        "Description": "VPC Endpoint Interface vpce-08cc8efbf6bc0ec0e",
+        "Groups": [
+            {
+                "GroupId": "sg-0410cf1b7728865e0",
+                "GroupName": "eks-vpc-endpoints-sg"
+            },
+            {
+                "GroupId": "sg-0b3225c285520c779",
+                "GroupName": "default"
+            }
+        ]
+    },
+    {
+        "ENI": "eni-06524fd37af964cdb",
+        "PrivateIP": "10.0.12.254",
+        "Subnet": "subnet-087358f187f6b4209",
+        "AZ": "us-east-1b",
+        "Description": "VPC Endpoint Interface vpce-01b0c5dc1a7e0267c",
+        "Groups": [
+            {
+                "GroupId": "sg-0410cf1b7728865e0",
+                "GroupName": "eks-vpc-endpoints-sg"
+            },
+            {
+                "GroupId": "sg-0b3225c285520c779",
+                "GroupName": "default"
+            }
+        ]
+    },
+    {
+        "ENI": "eni-066444ce902806b76",
+        "PrivateIP": "10.0.12.67",
+        "Subnet": "subnet-087358f187f6b4209",
+        "AZ": "us-east-1b",
+        "Description": "VPC Endpoint Interface vpce-087447514b840f811",
+        "Groups": [
+            {
+                "GroupId": "sg-0410cf1b7728865e0",
+                "GroupName": "eks-vpc-endpoints-sg"
+            },
+            {
+                "GroupId": "sg-0b3225c285520c779",
+                "GroupName": "default"
+            }
+        ]
+    },
+    {
+        "ENI": "eni-0991e8cedb3bfafe3",
+        "PrivateIP": "10.0.12.96",
+        "Subnet": "subnet-087358f187f6b4209",
+        "AZ": "us-east-1b",
+        "Description": "VPC Endpoint Interface vpce-0646f88d30a113c4b",
+        "Groups": [
+            {
+                "GroupId": "sg-0b3225c285520c779",
+                "GroupName": "default"
+            }
+        ]
+    },
+    {
+        "ENI": "eni-0854dc44d78225418",
+        "PrivateIP": "10.0.12.162",
+        "Subnet": "subnet-087358f187f6b4209",
+        "AZ": "us-east-1b",
+        "Description": "VPC Endpoint Interface vpce-033e83de373ebdbee",
+        "Groups": [
+            {
+                "GroupId": "sg-0b3225c285520c779",
+                "GroupName": "default"
+            }
+        ]
+    },
+    {
+        "ENI": "eni-0fade551ef76018be",
+        "PrivateIP": "10.0.12.84",
+        "Subnet": "subnet-087358f187f6b4209",
+        "AZ": "us-east-1b",
+        "Description": "VPC Endpoint Interface vpce-098834295df1495bb",
+        "Groups": [
+            {
+                "GroupId": "sg-0410cf1b7728865e0",
+                "GroupName": "eks-vpc-endpoints-sg"
+            },
+            {
+                "GroupId": "sg-0b3225c285520c779",
+                "GroupName": "default"
+            }
+        ]
+    },
+    {
+        "ENI": "eni-07b27c38dcccc5570",
+        "PrivateIP": "10.0.11.152",
+        "Subnet": "subnet-0499af6dfe69e2d91",
+        "AZ": "us-east-1a",
+        "Description": "VPC Endpoint Interface vpce-087447514b840f811",
+        "Groups": [
+            {
+                "GroupId": "sg-0410cf1b7728865e0",
+                "GroupName": "eks-vpc-endpoints-sg"
+            },
+            {
+                "GroupId": "sg-0b3225c285520c779",
+                "GroupName": "default"
+            }
+        ]
+    },
+    {
+        "ENI": "eni-09f57c7840d93f2e9",
+        "PrivateIP": "10.0.11.51",
+        "Subnet": "subnet-0499af6dfe69e2d91",
+        "AZ": "us-east-1a",
+        "Description": "VPC Endpoint Interface vpce-098834295df1495bb",
+        "Groups": [
+            {
+                "GroupId": "sg-0410cf1b7728865e0",
+                "GroupName": "eks-vpc-endpoints-sg"
+            },
+            {
+                "GroupId": "sg-0b3225c285520c779",
+                "GroupName": "default"
+            }
+        ]
+    },
+    {
+        "ENI": "eni-0db8b775e2f994dae",
+        "PrivateIP": "10.0.11.181",
+        "Subnet": "subnet-0499af6dfe69e2d91",
+        "AZ": "us-east-1a",
+        "Description": "VPC Endpoint Interface vpce-0646f88d30a113c4b",
+        "Groups": [
+            {
+                "GroupId": "sg-0b3225c285520c779",
+                "GroupName": "default"
+            }
+        ]
+    },
+    {
+        "ENI": "eni-0ce673e8df0883aaf",
+        "PrivateIP": "10.0.11.27",
+        "Subnet": "subnet-0499af6dfe69e2d91",
+        "AZ": "us-east-1a",
+        "Description": "VPC Endpoint Interface vpce-05e2d14a46b448b5d",
+        "Groups": [
+            {
+                "GroupId": "sg-0410cf1b7728865e0",
+                "GroupName": "eks-vpc-endpoints-sg"
+            },
+            {
+                "GroupId": "sg-0b3225c285520c779",
+                "GroupName": "default"
+            }
+        ]
+    },
+    {
+        "ENI": "eni-00119e999e11bef95",
+        "PrivateIP": "10.0.11.173",
+        "Subnet": "subnet-0499af6dfe69e2d91",
+        "AZ": "us-east-1a",
+        "Description": "VPC Endpoint Interface vpce-033e83de373ebdbee",
+        "Groups": [
+            {
+                "GroupId": "sg-0b3225c285520c779",
+                "GroupName": "default"
+            }
+        ]
+    },
+    {
+        "ENI": "eni-09a7014fa69be34ef",
+        "PrivateIP": "10.0.11.116",
+        "Subnet": "subnet-0499af6dfe69e2d91",
+        "AZ": "us-east-1a",
+        "Description": "VPC Endpoint Interface vpce-01b0c5dc1a7e0267c",
+        "Groups": [
+            {
+                "GroupId": "sg-0410cf1b7728865e0",
+                "GroupName": "eks-vpc-endpoints-sg"
+            },
+            {
+                "GroupId": "sg-0b3225c285520c779",
+                "GroupName": "default"
+            }
+        ]
+    },
+    {
+        "ENI": "eni-047c40bbc6ff4f467",
+        "PrivateIP": "10.0.11.70",
+        "Subnet": "subnet-0499af6dfe69e2d91",
+        "AZ": "us-east-1a",
+        "Description": "VPC Endpoint Interface vpce-08cc8efbf6bc0ec0e",
+        "Groups": [
+            {
+                "GroupId": "sg-0410cf1b7728865e0",
+                "GroupName": "eks-vpc-endpoints-sg"
+            },
+            {
+                "GroupId": "sg-0b3225c285520c779",
+                "GroupName": "default"
+            }
+        ]
+    }
+]
+
+==================== SECURITY GROUPS ====================
+[
+    {
+        "GroupId": "sg-0f51ee0dd7d512d69",
+        "Name": "eks-cluster-sg-private-eks-platform-1970863549",
+        "Description": "EKS created security group applied to ENI that is attached to EKS Control Plane master nodes, as well as any managed workloads.",
+        "Inbound": [
+            {
+                "IpProtocol": "-1",
+                "UserIdGroupPairs": [
+                    {
+                        "Description": "Allows EFA traffic, which is not matched by CIDR rules.",
+                        "UserId": "211811255273",
+                        "GroupId": "sg-0f51ee0dd7d512d69"
+                    }
+                ],
+                "IpRanges": [],
+                "Ipv6Ranges": [],
+                "PrefixListIds": []
+            }
+        ],
+        "Outbound": [
+            {
+                "IpProtocol": "-1",
+                "UserIdGroupPairs": [
+                    {
+                        "Description": "Allows EFA traffic, which is not matched by CIDR rules.",
+                        "UserId": "211811255273",
+                        "GroupId": "sg-0f51ee0dd7d512d69"
+                    }
+                ],
+                "IpRanges": [
+                    {
+                        "CidrIp": "0.0.0.0/0"
+                    }
+                ],
+                "Ipv6Ranges": [],
+                "PrefixListIds": []
+            }
+        ],
+        "Tags": [
+            {
+                "Key": "kubernetes.io/cluster/private-eks-platform",
+                "Value": "owned"
+            },
+            {
+                "Key": "Name",
+                "Value": "eks-cluster-sg-private-eks-platform-1970863549"
+            },
+            {
+                "Key": "aws:eks:cluster-name",
+                "Value": "private-eks-platform"
+            }
+        ]
+    },
+    {
+        "GroupId": "sg-0410cf1b7728865e0",
+        "Name": "eks-vpc-endpoints-sg",
+        "Description": "allow https for eks",
+        "Inbound": [
+            {
+                "IpProtocol": "tcp",
+                "FromPort": 443,
+                "ToPort": 443,
+                "UserIdGroupPairs": [],
+                "IpRanges": [
+                    {
+                        "CidrIp": "10.0.0.0/16"
+                    }
+                ],
+                "Ipv6Ranges": [],
+                "PrefixListIds": []
+            }
+        ],
+        "Outbound": [
+            {
+                "IpProtocol": "-1",
+                "UserIdGroupPairs": [],
+                "IpRanges": [
+                    {
+                        "CidrIp": "0.0.0.0/0"
+                    }
+                ],
+                "Ipv6Ranges": [],
+                "PrefixListIds": []
+            }
+        ],
+        "Tags": null
+    },
+    {
+        "GroupId": "sg-0b3225c285520c779",
+        "Name": "default",
+        "Description": "default VPC security group",
+        "Inbound": [
+            {
+                "IpProtocol": "-1",
+                "UserIdGroupPairs": [
+                    {
+                        "UserId": "211811255273",
+                        "GroupId": "sg-0b3225c285520c779"
+                    }
+                ],
+                "IpRanges": [],
+                "Ipv6Ranges": [],
+                "PrefixListIds": []
+            },
+            {
+                "IpProtocol": "tcp",
+                "FromPort": 443,
+                "ToPort": 443,
+                "UserIdGroupPairs": [
+                    {
+                        "UserId": "211811255273",
+                        "GroupId": "sg-0f51ee0dd7d512d69"
+                    }
+                ],
+                "IpRanges": [],
+                "Ipv6Ranges": [],
+                "PrefixListIds": []
+            }
+        ],
+        "Outbound": [
+            {
+                "IpProtocol": "-1",
+                "UserIdGroupPairs": [],
+                "IpRanges": [
+                    {
+                        "CidrIp": "0.0.0.0/0"
+                    }
+                ],
+                "Ipv6Ranges": [],
+                "PrefixListIds": []
+            }
+        ],
+        "Tags": null
+    }
+]
+
+==================== VPC DNS ====================
+{
+    "EnableDnsSupport": {
+        "Value": true
+    },
+    "VpcId": "vpc-03afaff7b0e91ddeb"
+}
+{
+    "EnableDnsHostnames": {
+        "Value": true
+    },
+    "VpcId": "vpc-03afaff7b0e91ddeb"
+}
+
+==================== DHCP OPTIONS ====================
+{
+    "DhcpOptions": [
+        {
+            "OwnerId": "211811255273",
+            "Tags": [],
+            "DhcpOptionsId": "dopt-0d9c4cc8ced249637",
+            "DhcpConfigurations": [
+                {
+                    "Key": "domain-name",
+                    "Values": [
+                        {
+                            "Value": "ec2.internal"
+                        }
+                    ]
+                },
+                {
+                    "Key": "domain-name-servers",
+                    "Values": [
+                        {
+                            "Value": "AmazonProvidedDNS"
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}
+
+==================== VPC FLOW LOGS ====================
+[
+    {
+        "FlowLogId": "fl-02d4549491e806183",
+        "ResourceId": "vpc-03afaff7b0e91ddeb",
+        "TrafficType": "ALL",
+        "LogDestination": null,
+        "LogDestinationType": "cloud-watch-logs",
+        "Status": "ACTIVE"
+    }
+]
+
+==================== EKS CLUSTER ====================
+{
+    "Name": "private-eks-platform",
+    "Status": "ACTIVE",
+    "Version": "1.36",
+    "ARN": "arn:aws:eks:us-east-1:211811255273:cluster/private-eks-platform",
+    "RoleArn": "arn:aws:iam::211811255273:role/eks-private-cluster-role",
+    "Endpoint": "https://BE387533C0BDDD61AA28720122BD435C.gr7.us-east-1.eks.amazonaws.com",
+    "EndpointPublic": false,
+    "EndpointPrivate": true,
+    "ClusterSecurityGroup": "sg-0f51ee0dd7d512d69",
+    "SecurityGroups": [],
+    "Subnets": [
+        "subnet-0499af6dfe69e2d91",
+        "subnet-087358f187f6b4209"
+    ],
+    "VPC": "vpc-03afaff7b0e91ddeb",
+    "AuthMode": "API",
+    "PlatformVersion": "eks.13"
+}
+
+==================== EKS NODE GROUPS ====================
+
+---------- NODE GROUP: private-ng-03 ----------
+{
+    "Name": "private-ng-03",
+    "Status": "ACTIVE",
+    "Version": "1.36",
+    "ReleaseVersion": "1.36.4-20260917",
+    "NodeRole": "arn:aws:iam::211811255273:role/eks-private-node-role",
+    "Subnets": [
+        "subnet-0499af6dfe69e2d91",
+        "subnet-087358f187f6b4209"
+    ],
+    "InstanceTypes": [
+        "t3.medium"
+    ],
+    "CapacityType": "ON_DEMAND",
+    "AMIType": "AL2023_x86_64_STANDARD",
+    "ScalingConfig": {
+        "minSize": 2,
+        "maxSize": 2,
+        "desiredSize": 2
+    },
+    "DiskSize": 20,
+    "RemoteAccess": null,
+    "Health": {
+        "issues": []
+    }
+}
+
+==================== EKS ADDONS ====================
+{
+    "addons": [
+        "coredns",
+        "eks-pod-identity-agent",
+        "kube-proxy",
+        "metrics-server",
+        "vpc-cni"
+    ]
+}
+
+---------- ADDON: coredns ----------
+{
+    "Name": "coredns",
+    "Status": "ACTIVE",
+    "Version": "v1.14.3-eksbuild.23",
+    "ServiceAccount": null
+}
+
+---------- ADDON: eks-pod-identity-agent ----------
+{
+    "Name": "eks-pod-identity-agent",
+    "Status": "ACTIVE",
+    "Version": "v1.3.10-eksbuild.3",
+    "ServiceAccount": null
+}
+
+---------- ADDON: kube-proxy ----------
+{
+    "Name": "kube-proxy",
+    "Status": "ACTIVE",
+    "Version": "v1.36.0-eksbuild.25",
+    "ServiceAccount": null
+}
+
+---------- ADDON: metrics-server ----------
+{
+    "Name": "metrics-server",
+    "Status": "ACTIVE",
+    "Version": "v0.9.0-eksbuild.11",
+    "ServiceAccount": null
+}
+
+---------- ADDON: vpc-cni ----------
+{
+    "Name": "vpc-cni",
+    "Status": "ACTIVE",
+    "Version": "v1.22.4-eksbuild.3",
+    "ServiceAccount": null
+}
+
+==================== POD IDENTITY ====================
+{
+    "associations": [
+        {
+            "clusterName": "private-eks-platform",
+            "namespace": "secret-test",
+            "serviceAccount": "secret-reader",
+            "associationArn": "arn:aws:eks:us-east-1:211811255273:podidentityassociation/private-eks-platform/a-k3jnrjy3l4srcbhgp",
+            "associationId": "a-k3jnrjy3l4srcbhgp"
+        }
+    ]
+}
+
+==================== IAM ROLES ====================
+
+---- EKS Cluster Role ----
+{
+    "RoleName": "eks-private-cluster-role",
+    "ARN": "arn:aws:iam::211811255273:role/eks-private-cluster-role",
+    "TrustPolicy": {
+        "Version": "2012-10-17",
+        "Statement": [
+            {
+                "Effect": "Allow",
+                "Principal": {
+                    "Service": "eks.amazonaws.com"
+                },
+                "Action": "sts:AssumeRole"
+            }
+        ]
+    }
+}
+
+---- EKS Node Role ----
+{
+    "RoleName": "eks-private-node-role",
+    "ARN": "arn:aws:iam::211811255273:role/eks-private-node-role",
+    "TrustPolicy": {
+        "Version": "2012-10-17",
+        "Statement": [
+            {
+                "Effect": "Allow",
+                "Principal": {
+                    "Service": "ec2.amazonaws.com"
+                },
+                "Action": "sts:AssumeRole"
+            }
+        ]
+    }
+}
+
+---- Secret Reader Role ----
+{
+    "RoleName": "eks-secret-reader-role",
+    "ARN": "arn:aws:iam::211811255273:role/eks-secret-reader-role",
+    "TrustPolicy": {
+        "Version": "2012-10-17",
+        "Statement": [
+            {
+                "Effect": "Allow",
+                "Principal": {
+                    "Service": "pods.eks.amazonaws.com"
+                },
+                "Action": [
+                    "sts:AssumeRole",
+                    "sts:TagSession"
+                ]
+            }
+        ]
+    }
+}
+
+==================== IAM POLICIES ====================
+
+---------- ROLE: eks-private-cluster-role ----------
+Managed Policies:
+[
+    {
+        "Name": "AmazonEKSClusterPolicy",
+        "ARN": "arn:aws:iam::aws:policy/AmazonEKSClusterPolicy"
+    }
+]
+
+Inline Policies:
+{
+    "PolicyNames": []
+}
+
+---------- ROLE: eks-private-node-role ----------
+Managed Policies:
+[
+    {
+        "Name": "AmazonSSMManagedInstanceCore",
+        "ARN": "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
+    },
+    {
+        "Name": "AmazonEKS_CNI_Policy",
+        "ARN": "arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy"
+    },
+    {
+        "Name": "AmazonEKSWorkerNodePolicy",
+        "ARN": "arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy"
+    },
+    {
+        "Name": "AmazonEC2ContainerRegistryPullOnly",
+        "ARN": "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryPullOnly"
+    }
+]
+
+Inline Policies:
+{
+    "PolicyNames": []
+}
+
+---------- ROLE: eks-secret-reader-role ----------
+Managed Policies:
+[]
+
+Inline Policies:
+{
+    "PolicyNames": [
+        "eks-secret-reader-policy"
+    ]
+}
+
+==================== KMS ====================
+[]
+
+==================== SECRETS MANAGER ====================
+{
+    "Name": "private-eks-platform/app/test",
+    "ARN": "arn:aws:secretsmanager:us-east-1:211811255273:secret:private-eks-platform/app/test-VH26bP",
+    "Description": "Test application secret for private EKS platform",
+    "KMSKeyId": "arn:aws:kms:us-east-1:211811255273:key/d118c33a-ae0f-4ef6-8f48-09373cbad92e",
+    "RotationEnabled": null,
+    "CreatedDate": "2026-09-19T16:46:19.258000+05:30",
+    "LastChangedDate": "2026-09-19T16:48:24.800000+05:30"
+}
+
+==================== ECR REPOSITORIES ====================
+[
+    {
+        "RepositoryName": "private-eks-platform",
+        "URI": "211811255273.dkr.ecr.us-east-1.amazonaws.com/private-eks-platform",
+        "ARN": "arn:aws:ecr:us-east-1:211811255273:repository/private-eks-platform",
+        "Encryption": {
+            "encryptionType": "AES256"
+        },
+        "ScanOnPush": false
+    },
+    {
+        "RepositoryName": "external-secrets",
+        "URI": "211811255273.dkr.ecr.us-east-1.amazonaws.com/external-secrets",
+        "ARN": "arn:aws:ecr:us-east-1:211811255273:repository/external-secrets",
+        "Encryption": {
+            "encryptionType": "AES256"
+        },
+        "ScanOnPush": false
+    }
+]
+
+==================== ECR IMAGES ====================
+
+---------- REPOSITORY: private-eks-platform ----------
+[
+    {
+        "Tags": null,
+        "Digest": "sha256:ba79e3f693fcd6b83504c021c173bc42ea57f6339f5f9f29e3362a854df7e9b2",
+        "Pushed": "2026-09-19T15:37:55.151000+05:30",
+        "Size": 1152,
+        "MediaType": "application/vnd.oci.image.manifest.v1+json"
+    },
+    {
+        "Tags": null,
+        "Digest": "sha256:c5377423ba104d5ef75c7d7c6ce25295bc2613ff8ec94ab4e69eec35ae2f8df4",
+        "Pushed": "2026-09-19T15:37:54.467000+05:30",
+        "Size": 26322875,
+        "MediaType": "application/vnd.oci.image.manifest.v1+json"
+    },
+    {
+        "Tags": [
+            "nginx-test"
+        ],
+        "Digest": "sha256:03cceb152c777cf8f2ec2e7ccac7893ab9e2fb7262e7aa3caabc765bd33ad92c",
+        "Pushed": "2026-09-19T15:27:00.280000+05:30",
+        "Size": 26248063,
+        "MediaType": "application/vnd.oci.image.manifest.v1+json"
+    },
+    {
+        "Tags": [
+            "nginx-amd64"
+        ],
+        "Digest": "sha256:010040522a52763dcabdee24fa21da3e5a8ba019f0fef16bf894493453dc0688",
+        "Pushed": "2026-09-19T15:37:55.808000+05:30",
+        "Size": 26322875,
+        "MediaType": "application/vnd.oci.image.index.v1+json"
+    }
+]
+
+---------- REPOSITORY: external-secrets ----------
+[
+    {
+        "Tags": null,
+        "Digest": "sha256:459a5e26f50b608c2e5fc6f1ff068dfe84307df0cc10794e4ae0a02ae11b3bc2",
+        "Pushed": "2026-09-19T17:12:18.668000+05:30",
+        "Size": 92308988,
+        "MediaType": "application/vnd.oci.image.manifest.v1+json"
+    },
+    {
+        "Tags": null,
+        "Digest": "sha256:4390d02b44ae7adacc63f332ecade717ecc2a704ff22957925c657ceb1896529",
+        "Pushed": "2026-09-19T17:12:22.284000+05:30",
+        "Size": 98405015,
+        "MediaType": "application/vnd.oci.image.manifest.v1+json"
+    },
+    {
+        "Tags": null,
+        "Digest": "sha256:a73a67dc0ad81a8883d67ac86aa6e45aa7afcc49b24d53dc72eb83afc624fb02",
+        "Pushed": "2026-09-19T17:12:24.120000+05:30",
+        "Size": 99676294,
+        "MediaType": "application/vnd.oci.image.manifest.v1+json"
+    },
+    {
+        "Tags": null,
+        "Digest": "sha256:66fb710878cbf3eba4a927e35c5d75e29a202c9bab238aad64bfb23b786b962b",
+        "Pushed": "2026-09-19T17:12:25.957000+05:30",
+        "Size": 99676294,
+        "MediaType": "application/vnd.oci.image.index.v1+json"
+    },
+    {
+        "Tags": [
+            "v2.11.0"
+        ],
+        "Digest": "sha256:ac7af4de424eacbad4b9526932b4e35f135ce3dfbb7587aa9f6a144e7696cce4",
+        "Pushed": "2026-09-19T17:12:20.535000+05:30",
+        "Size": 93149791,
+        "MediaType": "application/vnd.oci.image.manifest.v1+json"
+    }
+]
+
+============================================================
+ INVENTORY COMPLETE
+============================================================
