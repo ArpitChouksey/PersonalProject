@@ -1,0 +1,75 @@
+{
+    "SecurityGroups": [
+        {
+            "GroupId": "sg-062494a7155330560",
+            "IpPermissionsEgress": [
+                {
+                    "IpProtocol": "-1",
+                    "UserIdGroupPairs": [],
+                    "IpRanges": [
+                        {
+                            "CidrIp": "0.0.0.0/0"
+                        }
+                    ],
+                    "Ipv6Ranges": [],
+                    "PrefixListIds": []
+                }
+            ],
+            "VpcId": "vpc-02da8402f60ac9b55",
+            "SecurityGroupArn": "arn:aws:ec2:us-east-1:211811255273:security-group/sg-062494a7155330560",
+            "OwnerId": "211811255273",
+            "GroupName": "launch-wizard-1",
+            "Description": "launch-wizard-1 created 2026-07-29T06:39:12.975Z",
+            "IpPermissions": [
+                {
+                    "IpProtocol": "tcp",
+                    "FromPort": 3389,
+                    "ToPort": 3389,
+                    "UserIdGroupPairs": [],
+                    "IpRanges": [
+                        {
+                            "CidrIp": "0.0.0.0/0"
+                        }
+                    ],
+                    "Ipv6Ranges": [],
+                    "PrefixListIds": []
+                }
+            ]
+        },
+        {
+            "GroupId": "sg-036517fe89e853c00",
+            "IpPermissionsEgress": [
+                {
+                    "IpProtocol": "-1",
+                    "UserIdGroupPairs": [],
+                    "IpRanges": [
+                        {
+                            "CidrIp": "0.0.0.0/0"
+                        }
+                    ],
+                    "Ipv6Ranges": [],
+                    "PrefixListIds": []
+                }
+            ],
+            "VpcId": "vpc-02da8402f60ac9b55",
+            "SecurityGroupArn": "arn:aws:ec2:us-east-1:211811255273:security-group/sg-036517fe89e853c00",
+            "OwnerId": "211811255273",
+            "GroupName": "default",
+            "Description": "default VPC security group",
+            "IpPermissions": [
+                {
+                    "IpProtocol": "-1",
+                    "UserIdGroupPairs": [
+                        {
+                            "UserId": "211811255273",
+                            "GroupId": "sg-036517fe89e853c00"
+                        }
+                    ],
+                    "IpRanges": [],
+                    "Ipv6Ranges": [],
+                    "PrefixListIds": []
+                }
+            ]
+        }
+    ]
+}

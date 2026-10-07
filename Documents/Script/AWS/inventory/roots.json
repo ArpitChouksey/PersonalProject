@@ -1,0 +1,15 @@
+{
+    "Roots": [
+        {
+            "Id": "r-pyfi",
+            "Arn": "arn:aws:organizations::211811255273:root/o-tiz1ddrmwn/r-pyfi",
+            "Name": "Root",
+            "PolicyTypes": [
+                {
+                    "Type": "SERVICE_CONTROL_POLICY",
+                    "Status": "ENABLED"
+                }
+            ]
+        }
+    ]
+}

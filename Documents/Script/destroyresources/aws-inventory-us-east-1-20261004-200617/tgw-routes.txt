@@ -1,0 +1,2 @@
+
+aws: [ERROR]: An error occurred (InvalidRouteTableID.NotFound) when calling the SearchTransitGatewayRoutes operation: Transit Gateway Route Table tgw-rtb-0c93c9241c859bc3b was deleted or does not exist.

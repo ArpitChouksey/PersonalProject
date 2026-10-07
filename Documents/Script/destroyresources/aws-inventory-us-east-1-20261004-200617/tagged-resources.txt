@@ -1,0 +1,282 @@
+{
+    "ResourceTagMappingList": [
+        {
+            "ResourceARN": "arn:aws:kms:us-east-1:211811255273:key/mrk-61f9ac6fe7a947a3a7f68be50d1291ae",
+            "Tags": [
+                {
+                    "Key": "CreatedBy",
+                    "Value": "IAM Identity Center"
+                }
+            ]
+        },
+        {
+            "ResourceARN": "arn:aws:logs:us-east-1:211811255273:log-group:aws-controltower/CloudTrailLogs-s0d-5g5",
+            "Tags": [
+                {
+                    "Key": "aws:cloudformation:stack-name",
+                    "Value": "AWSControlTowerBP-BASELINE-CLOUDTRAIL-MASTER"
+                },
+                {
+                    "Key": "aws:cloudformation:stack-id",
+                    "Value": "arn:aws:cloudformation:us-east-1:211811255273:stack/AWSControlTowerBP-BASELINE-CLOUDTRAIL-MASTER/a67f8b70-be4a-11f1-aefc-0e97a2fa656f"
+                },
+                {
+                    "Key": "aws:cloudformation:logical-id",
+                    "Value": "TrailLogGroup"
+                }
+            ]
+        },
+        {
+            "ResourceARN": "arn:aws:sqlworkbench:us-east-1:211811255273:connection/56dcdedb-f956-423f-9d4a-eb52a792894c",
+            "Tags": [
+                {
+                    "Key": "sqlworkbench-resource-owner",
+                    "Value": "211811255273"
+                }
+            ]
+        },
+        {
+            "ResourceARN": "arn:aws:ssm:us-east-1:211811255273:session/adminuser-nrps5z8klobrid8ilk3eitnc2a",
+            "Tags": [
+                {
+                    "Key": "aws:ssmmessages:session-id",
+                    "Value": "AIDATCUHPIPUZDYJFJLQL"
+                },
+                {
+                    "Key": "aws:ssmmessages:target-id",
+                    "Value": "i-0d64597098a252ec6"
+                }
+            ]
+        },
+        {
+            "ResourceARN": "arn:aws:iam::211811255273:oidc-provider/oidc.eks.us-east-1.amazonaws.com/id/D1B8C0406DB92F678D7CA24144A9E55B",
+            "Tags": [
+                {
+                    "Key": "alpha.eksctl.io/cluster-name",
+                    "Value": "sre-eks"
+                },
+                {
+                    "Key": "alpha.eksctl.io/eksctl-version",
+                    "Value": "0.227.0-dev+9c634ace6.2026-05-29T14:39:32Z"
+                }
+            ]
+        },
+        {
+            "ResourceARN": "arn:aws:sqlworkbench:us-east-1:211811255273:connection/24ac16c3-35c6-4106-8f3f-d63cd3850b1d",
+            "Tags": [
+                {
+                    "Key": "sqlworkbench-resource-owner",
+                    "Value": "211811255273"
+                }
+            ]
+        },
+        {
+            "ResourceARN": "arn:aws:sqlworkbench:us-east-1:211811255273:connection/47cafb4f-a1bf-417e-b964-045b19f085e3",
+            "Tags": [
+                {
+                    "Key": "sqlworkbench-resource-owner",
+                    "Value": "211811255273"
+                }
+            ]
+        },
+        {
+            "ResourceARN": "arn:aws:servicecatalog:us-east-1:211811255273:stack/Enroll-Account-025775692925/pp-vzsq333aqbyxe",
+            "Tags": [
+                {
+                    "Key": "aws:servicecatalog:productArn",
+                    "Value": "arn:aws:catalog:us-east-1:211811255273:product/prod-vrvwxmuac6o6e"
+                },
+                {
+                    "Key": "aws:servicecatalog:provisioningPrincipalArn",
+                    "Value": "arn:aws:iam::211811255273:user/adminuser"
+                },
+                {
+                    "Key": "aws:servicecatalog:provisioningArtifactIdentifier",
+                    "Value": "pa-m26ttqdcswk2s"
+                },
+                {
+                    "Key": "aws:servicecatalog:portfolioArn",
+                    "Value": "arn:aws:catalog:us-east-1:211811255273:portfolio/port-4xjiy4yf4323i"
+                },
+                {
+                    "Key": "aws:servicecatalog:provisionedProductArn",
+                    "Value": "arn:aws:servicecatalog:us-east-1:211811255273:stack/Enroll-Account-025775692925/pp-vzsq333aqbyxe"
+                }
+            ]
+        },
+        {
+            "ResourceARN": "arn:aws:events:us-east-1:211811255273:rule/AutoScalingManagedRule",
+            "Tags": []
+        },
+        {
+            "ResourceARN": "arn:aws:servicecatalog:us-east-1:211811255273:stack/Enroll-Account-360734036001/pp-uqr2hrwdavsf6",
+            "Tags": [
+                {
+                    "Key": "aws:servicecatalog:productArn",
+                    "Value": "arn:aws:catalog:us-east-1:211811255273:product/prod-vrvwxmuac6o6e"
+                },
+                {
+                    "Key": "aws:servicecatalog:provisioningPrincipalArn",
+                    "Value": "arn:aws:iam::211811255273:user/adminuser"
+                },
+                {
+                    "Key": "aws:servicecatalog:provisioningArtifactIdentifier",
+                    "Value": "pa-ti2a7vggfibt2"
+                },
+                {
+                    "Key": "aws:servicecatalog:portfolioArn",
+                    "Value": "arn:aws:catalog:us-east-1:211811255273:portfolio/port-4xjiy4yf4323i"
+                },
+                {
+                    "Key": "aws:servicecatalog:provisionedProductArn",
+                    "Value": "arn:aws:servicecatalog:us-east-1:211811255273:stack/Enroll-Account-360734036001/pp-uqr2hrwdavsf6"
+                }
+            ]
+        },
+        {
+            "ResourceARN": "arn:aws:secretsmanager:us-east-1:211811255273:secret:sqlworkbench!746c8fc8-e4d2-4a1b-b74c-fac8598b6b7e-UaA9Av",
+            "Tags": [
+                {
+                    "Key": "aws:secretsmanager:owningService",
+                    "Value": "sqlworkbench"
+                },
+                {
+                    "Key": "sqlworkbench-resource-owner",
+                    "Value": "211811255273"
+                }
+            ]
+        },
+        {
+            "ResourceARN": "arn:aws:secretsmanager:us-east-1:211811255273:secret:sqlworkbench!ef284aa6-d9d7-469b-9be5-a896659c0896-zfgWgB",
+            "Tags": [
+                {
+                    "Key": "aws:secretsmanager:owningService",
+                    "Value": "sqlworkbench"
+                },
+                {
+                    "Key": "sqlworkbench-resource-owner",
+                    "Value": "211811255273"
+                }
+            ]
+        },
+        {
+            "ResourceARN": "arn:aws:servicecatalog:us-east-1:211811255273:stack/Enroll-Account-070977799818/pp-3uoo5ynafnoxi",
+            "Tags": [
+                {
+                    "Key": "aws:servicecatalog:productArn",
+                    "Value": "arn:aws:catalog:us-east-1:211811255273:product/prod-vrvwxmuac6o6e"
+                },
+                {
+                    "Key": "aws:servicecatalog:provisioningPrincipalArn",
+                    "Value": "arn:aws:iam::211811255273:user/adminuser"
+                },
+                {
+                    "Key": "aws:servicecatalog:provisioningArtifactIdentifier",
+                    "Value": "pa-ti2a7vggfibt2"
+                },
+                {
+                    "Key": "aws:servicecatalog:portfolioArn",
+                    "Value": "arn:aws:catalog:us-east-1:211811255273:portfolio/port-4xjiy4yf4323i"
+                },
+                {
+                    "Key": "aws:servicecatalog:provisionedProductArn",
+                    "Value": "arn:aws:servicecatalog:us-east-1:211811255273:stack/Enroll-Account-070977799818/pp-3uoo5ynafnoxi"
+                }
+            ]
+        },
+        {
+            "ResourceARN": "arn:aws:cloudformation:us-east-1:211811255273:stack/AWSControlTowerBP-BASELINE-CLOUDTRAIL-MASTER/a67f8b70-be4a-11f1-aefc-0e97a2fa656f",
+            "Tags": []
+        },
+        {
+            "ResourceARN": "arn:aws:ssm:us-east-1:211811255273:session/root-78b3jinkt4tdf6pv7u63s8czvy",
+            "Tags": [
+                {
+                    "Key": "aws:ssmmessages:session-id",
+                    "Value": "211811255273"
+                },
+                {
+                    "Key": "aws:ssmmessages:target-id",
+                    "Value": "i-0d64597098a252ec6"
+                }
+            ]
+        },
+        {
+            "ResourceARN": "arn:aws:servicecatalog:us-east-1:211811255273:stack/Enroll-Account-325909447008/pp-mofnezrqjk7ko",
+            "Tags": [
+                {
+                    "Key": "aws:servicecatalog:productArn",
+                    "Value": "arn:aws:catalog:us-east-1:211811255273:product/prod-vrvwxmuac6o6e"
+                },
+                {
+                    "Key": "aws:servicecatalog:provisioningPrincipalArn",
+                    "Value": "arn:aws:iam::211811255273:user/adminuser"
+                },
+                {
+                    "Key": "aws:servicecatalog:provisioningArtifactIdentifier",
+                    "Value": "pa-m26ttqdcswk2s"
+                },
+                {
+                    "Key": "aws:servicecatalog:portfolioArn",
+                    "Value": "arn:aws:catalog:us-east-1:211811255273:portfolio/port-4xjiy4yf4323i"
+                },
+                {
+                    "Key": "aws:servicecatalog:provisionedProductArn",
+                    "Value": "arn:aws:servicecatalog:us-east-1:211811255273:stack/Enroll-Account-325909447008/pp-mofnezrqjk7ko"
+                }
+            ]
+        },
+        {
+            "ResourceARN": "arn:aws:ssm:us-east-1:211811255273:session/adminuser-rkhn5s9xreys328k6rgestpjj4",
+            "Tags": [
+                {
+                    "Key": "aws:ssmmessages:session-id",
+                    "Value": "AIDATCUHPIPUZDYJFJLQL"
+                },
+                {
+                    "Key": "aws:ssmmessages:target-id",
+                    "Value": "i-02450cffd71c65bfa"
+                }
+            ]
+        },
+        {
+            "ResourceARN": "arn:aws:secretsmanager:us-east-1:211811255273:secret:sqlworkbench!93e45855-ffae-4e56-8ff4-c8034e372809-UxtePY",
+            "Tags": [
+                {
+                    "Key": "aws:secretsmanager:owningService",
+                    "Value": "sqlworkbench"
+                },
+                {
+                    "Key": "sqlworkbench-resource-owner",
+                    "Value": "211811255273"
+                }
+            ]
+        },
+        {
+            "ResourceARN": "arn:aws:ssm:us-east-1:211811255273:session/adminuser-5cgfparqa77g5scbuzg2a5p5ji",
+            "Tags": [
+                {
+                    "Key": "aws:ssmmessages:session-id",
+                    "Value": "AIDATCUHPIPUZDYJFJLQL"
+                },
+                {
+                    "Key": "aws:ssmmessages:target-id",
+                    "Value": "i-02450cffd71c65bfa"
+                }
+            ]
+        },
+        {
+            "ResourceARN": "arn:aws:secretsmanager:us-east-1:211811255273:secret:sqlworkbench!bbec2fb7-b5c4-457e-9ac0-bb5d9c5291ea-cQxHlu",
+            "Tags": [
+                {
+                    "Key": "aws:secretsmanager:owningService",
+                    "Value": "sqlworkbench"
+                },
+                {
+                    "Key": "sqlworkbench-resource-owner",
+                    "Value": "211811255273"
+                }
+            ]
+        }
+    ]
+}

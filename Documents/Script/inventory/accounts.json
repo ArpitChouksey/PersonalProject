@@ -1,0 +1,95 @@
+{
+    "Accounts": [
+        {
+            "Id": "152500409784",
+            "Arn": "arn:aws:organizations::211811255273:account/o-tiz1ddrmwn/152500409784",
+            "Email": "arpitchouksey18+security@gmail.com",
+            "Name": "Security",
+            "Status": "ACTIVE",
+            "State": "ACTIVE",
+            "Paths": [
+                "o-tiz1ddrmwn/r-pyfi/ou-pyfi-5gj2yd7l/152500409784/"
+            ],
+            "JoinedMethod": "CREATED",
+            "JoinedTimestamp": "2026-10-02T14:03:27.126000+05:30"
+        },
+        {
+            "Id": "325909447008",
+            "Arn": "arn:aws:organizations::211811255273:account/o-tiz1ddrmwn/325909447008",
+            "Email": "arpitchouksey18+nonproduction@gmail.com",
+            "Name": "NonProduction",
+            "Status": "ACTIVE",
+            "State": "ACTIVE",
+            "Paths": [
+                "o-tiz1ddrmwn/r-pyfi/ou-pyfi-tfwoi4hn/325909447008/"
+            ],
+            "JoinedMethod": "CREATED",
+            "JoinedTimestamp": "2026-10-02T14:11:24.969000+05:30"
+        },
+        {
+            "Id": "211811255273",
+            "Arn": "arn:aws:organizations::211811255273:account/o-tiz1ddrmwn/211811255273",
+            "Email": "arpitchouksey18@gmail.com",
+            "Name": "arpit chouksey",
+            "Status": "ACTIVE",
+            "State": "ACTIVE",
+            "Paths": [
+                "o-tiz1ddrmwn/r-pyfi/211811255273/"
+            ],
+            "JoinedMethod": "INVITED",
+            "JoinedTimestamp": "2026-05-01T15:11:51.290000+05:30"
+        },
+        {
+            "Id": "025775692925",
+            "Arn": "arn:aws:organizations::211811255273:account/o-tiz1ddrmwn/025775692925",
+            "Email": "arpitchouksey18+production@gmail.com",
+            "Name": "Production",
+            "Status": "ACTIVE",
+            "State": "ACTIVE",
+            "Paths": [
+                "o-tiz1ddrmwn/r-pyfi/ou-pyfi-tfwoi4hn/025775692925/"
+            ],
+            "JoinedMethod": "CREATED",
+            "JoinedTimestamp": "2026-10-02T14:10:57.877000+05:30"
+        },
+        {
+            "Id": "070977799818",
+            "Arn": "arn:aws:organizations::211811255273:account/o-tiz1ddrmwn/070977799818",
+            "Email": "arpitchouksey18+sharedservices@gmail.com",
+            "Name": "SharedServices",
+            "Status": "ACTIVE",
+            "State": "ACTIVE",
+            "Paths": [
+                "o-tiz1ddrmwn/r-pyfi/ou-pyfi-bid35js9/070977799818/"
+            ],
+            "JoinedMethod": "CREATED",
+            "JoinedTimestamp": "2026-10-02T14:10:26.644000+05:30"
+        },
+        {
+            "Id": "360734036001",
+            "Arn": "arn:aws:organizations::211811255273:account/o-tiz1ddrmwn/360734036001",
+            "Email": "arpitchouksey18+network@gmail.com",
+            "Name": "Network",
+            "Status": "ACTIVE",
+            "State": "ACTIVE",
+            "Paths": [
+                "o-tiz1ddrmwn/r-pyfi/ou-pyfi-bid35js9/360734036001/"
+            ],
+            "JoinedMethod": "CREATED",
+            "JoinedTimestamp": "2026-10-02T14:10:01.289000+05:30"
+        },
+        {
+            "Id": "038269111064",
+            "Arn": "arn:aws:organizations::211811255273:account/o-tiz1ddrmwn/038269111064",
+            "Email": "arpitchouksey18+logarchive@gmail.com",
+            "Name": "LogArchive",
+            "Status": "ACTIVE",
+            "State": "ACTIVE",
+            "Paths": [
+                "o-tiz1ddrmwn/r-pyfi/ou-pyfi-5gj2yd7l/038269111064/"
+            ],
+            "JoinedMethod": "CREATED",
+            "JoinedTimestamp": "2026-10-02T14:09:28.611000+05:30"
+        }
+    ]
+}

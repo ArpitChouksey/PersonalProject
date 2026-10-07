@@ -1,0 +1,76 @@
+{
+    "Policies": [
+        {
+            "Id": "p-24bms0am",
+            "Arn": "arn:aws:organizations::211811255273:policy/o-tiz1ddrmwn/service_control_policy/p-24bms0am",
+            "Name": "DenyLeavingOrganization",
+            "Description": "Prevent member accounts from leaving the AWS Organization.",
+            "Type": "SERVICE_CONTROL_POLICY",
+            "AwsManaged": false
+        },
+        {
+            "Id": "p-4k6jm4ma",
+            "Arn": "arn:aws:organizations::211811255273:policy/o-tiz1ddrmwn/service_control_policy/p-4k6jm4ma",
+            "Name": "aws-guardrails-byNWKa",
+            "Description": "This policy and the contents implement controls, managed by AWS Control Tower. Do not modify, delete, or detach this policy from any target, or attach it to any target, with the AWS Organizations console or APIs. To modify these controls, you must utilize AWS Control Tower.",
+            "Type": "SERVICE_CONTROL_POLICY",
+            "AwsManaged": false
+        },
+        {
+            "Id": "p-6tdzppm6",
+            "Arn": "arn:aws:organizations::211811255273:policy/o-tiz1ddrmwn/service_control_policy/p-6tdzppm6",
+            "Name": "DenyCloudTrailDisableOrDelete",
+            "Description": "Prevent member accounts from disabling or deleting CloudTrail logging.",
+            "Type": "SERVICE_CONTROL_POLICY",
+            "AwsManaged": false
+        },
+        {
+            "Id": "p-7vnmvpci",
+            "Arn": "arn:aws:organizations::211811255273:policy/o-tiz1ddrmwn/service_control_policy/p-7vnmvpci",
+            "Name": "aws-guardrails-nSGobK",
+            "Description": "This policy and the contents implement controls, managed by AWS Control Tower. Do not modify, delete, or detach this policy from any target, or attach it to any target, with the AWS Organizations console or APIs. To modify these controls, you must utilize AWS Control Tower.",
+            "Type": "SERVICE_CONTROL_POLICY",
+            "AwsManaged": false
+        },
+        {
+            "Id": "p-FullAWSAccess",
+            "Arn": "arn:aws:organizations::aws:policy/service_control_policy/p-FullAWSAccess",
+            "Name": "FullAWSAccess",
+            "Description": "Allows access to every operation",
+            "Type": "SERVICE_CONTROL_POLICY",
+            "AwsManaged": true
+        },
+        {
+            "Id": "p-borvk8zy",
+            "Arn": "arn:aws:organizations::211811255273:policy/o-tiz1ddrmwn/service_control_policy/p-borvk8zy",
+            "Name": "aws-guardrails-mFhftp",
+            "Description": "This policy and the contents implement controls, managed by AWS Control Tower. Do not modify, delete, or detach this policy from any target, or attach it to any target, with the AWS Organizations console or APIs. To modify these controls, you must utilize AWS Control Tower.",
+            "Type": "SERVICE_CONTROL_POLICY",
+            "AwsManaged": false
+        },
+        {
+            "Id": "p-dpwxccxu",
+            "Arn": "arn:aws:organizations::211811255273:policy/o-tiz1ddrmwn/service_control_policy/p-dpwxccxu",
+            "Name": "aws-guardrails-tqKrPJ",
+            "Description": "This policy and the contents implement controls, managed by AWS Control Tower. Do not modify, delete, or detach this policy from any target, or attach it to any target, with the AWS Organizations console or APIs. To modify these controls, you must utilize AWS Control Tower.",
+            "Type": "SERVICE_CONTROL_POLICY",
+            "AwsManaged": false
+        },
+        {
+            "Id": "p-hilxv3bi",
+            "Arn": "arn:aws:organizations::211811255273:policy/o-tiz1ddrmwn/service_control_policy/p-hilxv3bi",
+            "Name": "aws-guardrails-fqAiVH",
+            "Description": "This policy and the contents implement controls, managed by AWS Control Tower. Do not modify, delete, or detach this policy from any target, or attach it to any target, with the AWS Organizations console or APIs. To modify these controls, you must utilize AWS Control Tower.",
+            "Type": "SERVICE_CONTROL_POLICY",
+            "AwsManaged": false
+        },
+        {
+            "Id": "p-ohiw26wb",
+            "Arn": "arn:aws:organizations::211811255273:policy/o-tiz1ddrmwn/service_control_policy/p-ohiw26wb",
+            "Name": "aws-guardrails-SqvWAR",
+            "Description": "This policy and the contents implement controls, managed by AWS Control Tower. Do not modify, delete, or detach this policy from any target, or attach it to any target, with the AWS Organizations console or APIs. To modify these controls, you must utilize AWS Control Tower.",
+            "Type": "SERVICE_CONTROL_POLICY",
+            "AwsManaged": false
+        }
+    ]
+}

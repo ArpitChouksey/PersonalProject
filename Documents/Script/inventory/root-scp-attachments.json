@@ -1,0 +1,20 @@
+{
+    "Policies": [
+        {
+            "Id": "p-24bms0am",
+            "Arn": "arn:aws:organizations::211811255273:policy/o-tiz1ddrmwn/service_control_policy/p-24bms0am",
+            "Name": "DenyLeavingOrganization",
+            "Description": "Prevent member accounts from leaving the AWS Organization.",
+            "Type": "SERVICE_CONTROL_POLICY",
+            "AwsManaged": false
+        },
+        {
+            "Id": "p-FullAWSAccess",
+            "Arn": "arn:aws:organizations::aws:policy/service_control_policy/p-FullAWSAccess",
+            "Name": "FullAWSAccess",
+            "Description": "Allows access to every operation",
+            "Type": "SERVICE_CONTROL_POLICY",
+            "AwsManaged": true
+        }
+    ]
+}

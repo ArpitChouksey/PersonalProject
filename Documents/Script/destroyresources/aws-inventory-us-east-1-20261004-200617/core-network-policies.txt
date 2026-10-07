@@ -1,0 +1,5 @@
+
+aws: [ERROR]: An error occurred (ResourceNotFoundException) when calling the ListCoreNetworkPolicyVersions operation: Resource not found.
+
+Additional error details:
+ResourceId: core-network-0f8cd58a4424858dc

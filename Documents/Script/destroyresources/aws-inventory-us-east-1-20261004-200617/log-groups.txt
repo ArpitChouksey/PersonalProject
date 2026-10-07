@@ -1,0 +1,16 @@
+{
+    "logGroups": [
+        {
+            "logGroupName": "aws-controltower/CloudTrailLogs-s0d-5g5",
+            "creationTime": 1790936332000,
+            "retentionInDays": 14,
+            "metricFilterCount": 0,
+            "arn": "arn:aws:logs:us-east-1:211811255273:log-group:aws-controltower/CloudTrailLogs-s0d-5g5:*",
+            "storedBytes": 25596917,
+            "logGroupClass": "STANDARD",
+            "logGroupArn": "arn:aws:logs:us-east-1:211811255273:log-group:aws-controltower/CloudTrailLogs-s0d-5g5",
+            "deletionProtectionEnabled": false,
+            "bearerTokenAuthenticationEnabled": false
+        }
+    ]
+}

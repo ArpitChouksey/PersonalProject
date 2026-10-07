@@ -1,0 +1,15 @@
+
+aws: [ERROR]: An error occurred (ParamValidation): argument operation: Found invalid choice 'describe-ipam-pool-cidrs'
+
+Maybe you meant:
+
+  * describe-ipam-pools
+  * describe-ipam-policies
+  * describe-ipam-pool-allocations
+
+usage: aws [options] <command> <subcommand> [<subcommand> ...] [parameters]
+To see help text, you can run:
+
+  aws help
+  aws <command> help
+  aws <command> <subcommand> help

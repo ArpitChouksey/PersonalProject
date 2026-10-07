@@ -1,0 +1,11 @@
+{
+    "Instances": [
+        {
+            "InstanceArn": "arn:aws:sso:::instance/ssoins-72234eb3f2c72697",
+            "IdentityStoreId": "d-90666107c9",
+            "OwnerAccountId": "211811255273",
+            "CreatedDate": "2026-10-02T17:27:15.827000+05:30",
+            "Status": "ACTIVE"
+        }
+    ]
+}

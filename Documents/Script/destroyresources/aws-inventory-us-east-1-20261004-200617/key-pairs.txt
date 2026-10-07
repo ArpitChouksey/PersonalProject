@@ -1,0 +1,36 @@
+{
+    "KeyPairs": [
+        {
+            "KeyPairId": "key-09209f0d11b221403",
+            "KeyType": "rsa",
+            "Tags": [],
+            "CreateTime": "2026-06-04T10:25:20.630000+00:00",
+            "KeyName": "sre-key",
+            "KeyFingerprint": "8e:89:1c:75:00:1a:e7:3a:a2:22:29:6a:2c:4e:a2:4c:9d:b5:0d:b1"
+        },
+        {
+            "KeyPairId": "key-05b823ac24c1a819d",
+            "KeyType": "rsa",
+            "Tags": [],
+            "CreateTime": "2026-07-14T18:35:37.839000+00:00",
+            "KeyName": "clientvpn-key",
+            "KeyFingerprint": "3b:fb:f9:b4:64:43:72:9b:26:f8:cb:1f:ef:9d:20:8d:d2:d0:16:fb"
+        },
+        {
+            "KeyPairId": "key-05c140e983ef78895",
+            "KeyType": "rsa",
+            "Tags": [],
+            "CreateTime": "2023-12-31T06:11:07.823000+00:00",
+            "KeyName": "aws_test",
+            "KeyFingerprint": "1f:a2:4b:86:f9:6b:37:c3:9e:d8:f0:75:ad:23:0d:59:9b:91:6d:74"
+        },
+        {
+            "KeyPairId": "key-00643c9bff7766489",
+            "KeyType": "rsa",
+            "Tags": [],
+            "CreateTime": "2026-06-11T10:26:40.672000+00:00",
+            "KeyName": "sre-test",
+            "KeyFingerprint": "40:16:12:d0:45:fe:01:b3:8d:a5:b1:81:3a:71:dc:53:61:44:f5:66"
+        }
+    ]
+}

@@ -1,0 +1,26 @@
+{
+    "Users": [
+        {
+            "IdentityStoreId": "d-90666107c9",
+            "UserId": "c4984438-f091-7016-fe99-a2baff4185ba",
+            "UserName": "arpit",
+            "Name": {
+                "FamilyName": "Chouksey",
+                "GivenName": "Arpit"
+            },
+            "DisplayName": "Arpit Chouksey",
+            "Emails": [
+                {
+                    "Value": "arpitchouksey18@gmail.com",
+                    "Type": "work",
+                    "Primary": true
+                }
+            ],
+            "UserStatus": "ENABLED",
+            "CreatedAt": "2026-10-02T17:34:01.706000+05:30",
+            "CreatedBy": "AIDATCUHPIPUZDYJFJLQL",
+            "UpdatedAt": "2026-10-02T17:39:55.407000+05:30",
+            "UpdatedBy": "AROAVYJW5GCC3CWSBUYDB:i-05df703b8202f9232"
+        }
+    ]
+}

@@ -1,0 +1,15 @@
+
+aws: [ERROR]: An error occurred (ParamValidation): argument operation: Found invalid choice 'get-transit-gateway-connect-peer'
+
+Maybe you meant:
+
+  * associate-transit-gateway-connect-peer
+  * get-transit-gateway-connect-peer-associations
+  * disassociate-transit-gateway-connect-peer
+
+usage: aws [options] <command> <subcommand> [<subcommand> ...] [parameters]
+To see help text, you can run:
+
+  aws help
+  aws <command> help
+  aws <command> <subcommand> help

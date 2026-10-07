@@ -1,0 +1,221 @@
+==============================================================
+ MANAGEMENT ACCOUNT GLOBAL FINAL AUDIT
+==============================================================
+
+=== IDENTITY ===
+--------------------------------------------------------------
+|                      GetCallerIdentity                     |
++---------------+--------------------------------------------+
+|    Account    |                    Arn                     |
++---------------+--------------------------------------------+
+|  211811255273 |  arn:aws:iam::211811255273:user/adminuser  |
++---------------+--------------------------------------------+
+
+=== ORGANIZATION ===
+---------------------------------------------------
+|              DescribeOrganization               |
++------------+----------------+-------------------+
+| FeatureSet |      Id        |  MasterAccountId  |
++------------+----------------+-------------------+
+|  ALL       |  o-tiz1ddrmwn  |  211811255273     |
++------------+----------------+-------------------+
+
+=== ACCOUNTS ===
+----------------------------------------------
+|                ListAccounts                |
++---------------+------------------+---------+
+|      Id       |      Name        |  State  |
++---------------+------------------+---------+
+|  152500409784 |  Security        |  ACTIVE |
+|  325909447008 |  NonProduction   |  ACTIVE |
+|  211811255273 |  arpit chouksey  |  ACTIVE |
+|  025775692925 |  Production      |  ACTIVE |
+|  070977799818 |  SharedServices  |  ACTIVE |
+|  360734036001 |  Network         |  ACTIVE |
+|  038269111064 |  LogArchive      |  ACTIVE |
++---------------+------------------+---------+
+
+=== CONTROL TOWER ===
+-----------------------------------------------------------------
+|                    GetLandingZoneOperation                    |
++-------+-----------------------------+--------------+----------+
+| Error |            Start            |   Status     |  Type    |
++-------+-----------------------------+--------------+----------+
+|  None |  2026-10-04T20:16:27+00:00  |  IN_PROGRESS |  DELETE  |
++-------+-----------------------------+--------------+----------+
+
+=== IDENTITY CENTER ===
+---------------------------------------------------------------------
+|                           ListInstances                           |
++----------------+--------------------------------------------------+
+|  ARN           |  arn:aws:sso:::instance/ssoins-72234eb3f2c72697  |
+|  IdentityStore |  d-90666107c9                                    |
+|  Owner         |  211811255273                                    |
+|  Status        |  ACTIVE                                          |
++----------------+--------------------------------------------------+
+
+==============================================================
+ GLOBAL IAM
+==============================================================
+
+--- IAM USERS ---
+--------------------------------------------
+|                 ListUsers                |
++----------------------------+-------------+
+|           Created          |    Name     |
++----------------------------+-------------+
+|  2026-08-31T12:43:21+00:00 |  adminuser  |
++----------------------------+-------------+
+
+--- IAM ROLES ---
+---------------------------------------------------------------------------------------------
+|                                         ListRoles                                         |
++----------------------------+--------------------------------------------------------------+
+|           Created          |                            Name                              |
++----------------------------+--------------------------------------------------------------+
+|  2026-09-20T08:10:18+00:00 |  AmazonEKS_EBS_CSI_DriverRole                                |
+|  2026-09-20T12:25:14+00:00 |  AmazonRedshift-CommandsAccessRole-20260920T175514           |
+|  2026-07-22T17:38:11+00:00 |  apigateway-cloudwatch-logs                                  |
+|  2026-05-15T09:09:18+00:00 |  AWSCodePipelineServiceRole-ap-south-1-s3-static-site-build  |
+|  2026-10-02T09:43:11+00:00 |  AWSControlTowerAdmin                                        |
+|  2026-10-02T09:43:11+00:00 |  AWSControlTowerCloudTrailRole                               |
+|  2026-10-02T09:43:11+00:00 |  AWSControlTowerConfigAggregatorRoleForOrganizations         |
+|  2026-10-02T09:43:11+00:00 |  AWSControlTowerStackSetRole                                 |
+|  2026-09-20T10:17:52+00:00 |  AWSGlueServiceRole-PrivateEKS                               |
+|  2026-09-20T10:53:03+00:00 |  AWSGlueServiceRole-PrivateEKS-Spark                         |
+|  2026-10-02T12:09:02+00:00 |  AWSReservedSSO_AdministratorAccess_3394020a4123797a         |
+|  2026-02-07T10:25:07+00:00 |  AWSServiceRoleForAmazonEKS                                  |
+|  2026-02-07T11:48:36+00:00 |  AWSServiceRoleForAmazonEKSNodegroup                         |
+|  2026-07-23T18:51:21+00:00 |  AWSServiceRoleForAmazonSSM                                  |
+|  2026-07-22T10:38:29+00:00 |  AWSServiceRoleForAPIGateway                                 |
+|  2023-10-08T06:11:35+00:00 |  AWSServiceRoleForAutoScaling                                |
+|  2026-06-01T05:34:32+00:00 |  AWSServiceRoleForAwsUserNotifications                       |
+|  2026-07-15T08:35:37+00:00 |  AWSServiceRoleForClientVPN                                  |
+|  2026-07-15T08:35:37+00:00 |  AWSServiceRoleForClientVPNConnections                       |
+|  2026-10-02T10:09:35+00:00 |  AWSServiceRoleForCloudFormationStackSetsOrgAdmin            |
+|  2026-10-02T10:19:03+00:00 |  AWSServiceRoleForCloudTrail                                 |
+|  2026-05-11T18:06:56+00:00 |  AWSServiceRoleForConfig                                     |
+|  2026-09-29T10:36:01+00:00 |  AWSServiceRoleForECRPullThroughCache                        |
+|  2026-09-29T11:19:09+00:00 |  AWSServiceRoleForECRTemplate                                |
+|  2025-12-15T13:33:51+00:00 |  AWSServiceRoleForElasticLoadBalancing                       |
+|  2026-10-02T11:57:07+00:00 |  AWSServiceRoleForKeyManagementServiceMultiRegionKeys        |
+|  2025-12-15T10:10:04+00:00 |  AWSServiceRoleForNATGateway                                 |
+|  2026-08-17T17:12:02+00:00 |  AWSServiceRoleForNetworkFirewall                            |
+|  2026-05-01T09:41:51+00:00 |  AWSServiceRoleForOrganizations                              |
+|  2026-09-20T12:26:01+00:00 |  AWSServiceRoleForRedshift                                   |
+|  2026-05-11T09:24:17+00:00 |  AWSServiceRoleForResourceAccessManager                      |
+|  2025-12-15T04:25:05+00:00 |  AWSServiceRoleForResourceExplorer                           |
+|  2026-10-02T11:57:15+00:00 |  AWSServiceRoleForSSO                                        |
+|  2023-05-06T07:56:40+00:00 |  AWSServiceRoleForSupport                                    |
+|  2023-05-06T07:56:40+00:00 |  AWSServiceRoleForTrustedAdvisor                             |
+|  2026-06-07T10:14:53+00:00 |  CloudTrail_CloudWatchLogs_Role                              |
+|  2026-06-07T14:42:35+00:00 |  cloudwatch-to-elasticsearch-handler-role-91a8evmu           |
+|  2026-05-14T08:15:26+00:00 |  codebuild-s3-static-site-role                               |
+|  2026-07-29T06:38:19+00:00 |  ec2-ssm-managed-instance-role                               |
+|  2026-06-07T11:08:16+00:00 |  FluentBitCloudWatchRole                                     |
+|  2026-09-19T04:26:08+00:00 |  vpcflowlogsrole                                             |
++----------------------------+--------------------------------------------------------------+
+
+--- CUSTOMER MANAGED IAM POLICIES ---
+------------------------------------------------------------------------------------------------------------------------------
+|                                                        ListPolicies                                                        |
++------------------------------------------------------------------------------------+---------------------------------------+
+|                                         Arn                                        |                 Name                  |
++------------------------------------------------------------------------------------+---------------------------------------+
+|  arn:aws:iam::211811255273:policy/service-role/AWSControlTowerAdminPolicy          |  AWSControlTowerAdminPolicy           |
+|  arn:aws:iam::211811255273:policy/service-role/AWSControlTowerStackSetRolePolicy   |  AWSControlTowerStackSetRolePolicy    |
+|  arn:aws:iam::211811255273:policy/service-role/AWSControlTowerCloudTrailRolePolicy |  AWSControlTowerCloudTrailRolePolicy  |
++------------------------------------------------------------------------------------+---------------------------------------+
+
+--- IAM GROUPS ---
+
+==============================================================
+ GLOBAL S3
+==============================================================
+
+==============================================================
+ ROUTE 53
+==============================================================
+--- HOSTED ZONES ---
+
+--- HEALTH CHECKS ---
+
+==============================================================
+ CLOUDTRAIL
+==============================================================
+
+==============================================================
+ CLOUDFORMATION - ALL ENABLED REGIONS
+==============================================================
+
+--- ap-northeast-1 ---
+
+--- ap-northeast-2 ---
+
+--- ap-northeast-3 ---
+
+--- ap-south-1 ---
+
+--- ap-southeast-1 ---
+
+--- ap-southeast-2 ---
+
+--- ca-central-1 ---
+
+--- eu-central-1 ---
+
+--- eu-north-1 ---
+
+--- eu-west-1 ---
+
+--- eu-west-2 ---
+
+--- eu-west-3 ---
+
+--- sa-east-1 ---
+
+--- us-east-1 ---
+
+--- us-east-2 ---
+
+--- us-west-1 ---
+
+--- us-west-2 ---
+
+==============================================================
+ EBS SNAPSHOTS - ALL REGIONS
+==============================================================
+
+--- ap-northeast-1 ---
+
+--- ap-northeast-2 ---
+
+--- ap-northeast-3 ---
+
+--- ap-south-1 ---
+
+--- ap-southeast-1 ---
+
+--- ap-southeast-2 ---
+
+--- ca-central-1 ---
+
+--- eu-central-1 ---
+
+--- eu-north-1 ---
+
+--- eu-west-1 ---
+
+--- eu-west-2 ---
+
+--- eu-west-3 ---
+
+--- sa-east-1 ---
+
+--- us-east-1 ---
+
+--- us-east-2 ---
+
+--- us-west-1 ---
+
+--- us-west-2 ---

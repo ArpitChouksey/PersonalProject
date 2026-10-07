@@ -1,0 +1,643 @@
+{
+    "enabledControls": [
+        {
+            "arn": "arn:aws:controltower:us-east-1:211811255273:enabledcontrol/4IIN7H0IRK568UTL",
+            "controlIdentifier": "arn:aws:controltower:us-east-1::control/AWS-GR_CONFIG_ENABLED",
+            "targetIdentifier": "arn:aws:organizations::211811255273:ou/o-tiz1ddrmwn/ou-pyfi-bid35js9",
+            "statusSummary": {
+                "status": "SUCCEEDED"
+            },
+            "driftStatusSummary": {
+                "driftStatus": "NOT_CHECKING",
+                "types": {
+                    "inheritance": {
+                        "status": "IN_SYNC"
+                    },
+                    "resource": {
+                        "status": "NOT_CHECKING"
+                    }
+                }
+            }
+        },
+        {
+            "arn": "arn:aws:controltower:us-east-1:211811255273:enabledcontrol/14MNO81MYOKRRJZT",
+            "controlIdentifier": "arn:aws:controlcatalog:::control/4nsca5yf5oz41tr6r6bs5mmte",
+            "targetIdentifier": "arn:aws:organizations::211811255273:ou/o-tiz1ddrmwn/ou-pyfi-5gj2yd7l",
+            "statusSummary": {
+                "status": "SUCCEEDED",
+                "lastOperationIdentifier": "f5c15ffe-c4f6-435e-bd15-e24ed2acaac0"
+            },
+            "driftStatusSummary": {
+                "driftStatus": "NOT_CHECKING",
+                "types": {
+                    "inheritance": {
+                        "status": "IN_SYNC"
+                    },
+                    "resource": {
+                        "status": "NOT_CHECKING"
+                    }
+                }
+            }
+        },
+        {
+            "arn": "arn:aws:controltower:us-east-1:211811255273:enabledcontrol/MUQTCUMPRDNFOCZI",
+            "controlIdentifier": "arn:aws:controlcatalog:::control/e2saoisw5u8xe40acfetio41w",
+            "targetIdentifier": "arn:aws:organizations::211811255273:ou/o-tiz1ddrmwn/ou-pyfi-5gj2yd7l",
+            "statusSummary": {
+                "status": "SUCCEEDED",
+                "lastOperationIdentifier": "280d39c1-42e5-47db-be98-411380cc25af"
+            },
+            "driftStatusSummary": {
+                "driftStatus": "NOT_CHECKING",
+                "types": {
+                    "inheritance": {
+                        "status": "IN_SYNC"
+                    },
+                    "resource": {
+                        "status": "NOT_CHECKING"
+                    }
+                }
+            }
+        },
+        {
+            "arn": "arn:aws:controltower:us-east-1:211811255273:enabledcontrol/2JEZL49Z49YK87CF",
+            "controlIdentifier": "arn:aws:controltower:us-east-1::control/AWS-GR_REGION_DENY",
+            "targetIdentifier": "arn:aws:organizations::211811255273:ou/o-tiz1ddrmwn/ou-pyfi-tfwoi4hn",
+            "statusSummary": {
+                "status": "SUCCEEDED"
+            },
+            "driftStatusSummary": {
+                "driftStatus": "NOT_CHECKING",
+                "types": {
+                    "inheritance": {
+                        "status": "IN_SYNC"
+                    },
+                    "resource": {
+                        "status": "NOT_CHECKING"
+                    }
+                }
+            }
+        },
+        {
+            "arn": "arn:aws:controltower:us-east-1:211811255273:enabledcontrol/14MNTDW0U83EMOPZ",
+            "controlIdentifier": "arn:aws:controltower:us-east-1::control/AWS-GR_CONFIG_CHANGE_PROHIBITED",
+            "targetIdentifier": "arn:aws:organizations::211811255273:ou/o-tiz1ddrmwn/ou-pyfi-tfwoi4hn",
+            "statusSummary": {
+                "status": "SUCCEEDED"
+            },
+            "driftStatusSummary": {
+                "driftStatus": "NOT_CHECKING",
+                "types": {
+                    "inheritance": {
+                        "status": "IN_SYNC"
+                    },
+                    "resource": {
+                        "status": "NOT_CHECKING"
+                    }
+                }
+            }
+        },
+        {
+            "arn": "arn:aws:controltower:us-east-1:211811255273:enabledcontrol/A5NX1OUW0ETACT64",
+            "controlIdentifier": "arn:aws:controlcatalog:::control/4ywlfb9mlwmvnpurhucm6ue45",
+            "targetIdentifier": "arn:aws:organizations::211811255273:ou/o-tiz1ddrmwn/ou-pyfi-5gj2yd7l",
+            "statusSummary": {
+                "status": "SUCCEEDED",
+                "lastOperationIdentifier": "4ca1a276-b4f7-4819-ac3f-7e04ab482591"
+            },
+            "driftStatusSummary": {
+                "driftStatus": "NOT_CHECKING",
+                "types": {
+                    "inheritance": {
+                        "status": "IN_SYNC"
+                    },
+                    "resource": {
+                        "status": "NOT_CHECKING"
+                    }
+                }
+            }
+        },
+        {
+            "arn": "arn:aws:controltower:us-east-1:211811255273:enabledcontrol/299BMRTBB4M8XBAU",
+            "controlIdentifier": "arn:aws:controltower:us-east-1::control/AWS-GR_CLOUDWATCH_EVENTS_CHANGE_PROHIBITED",
+            "targetIdentifier": "arn:aws:organizations::211811255273:ou/o-tiz1ddrmwn/ou-pyfi-tfwoi4hn",
+            "statusSummary": {
+                "status": "SUCCEEDED"
+            },
+            "driftStatusSummary": {
+                "driftStatus": "NOT_CHECKING",
+                "types": {
+                    "inheritance": {
+                        "status": "IN_SYNC"
+                    },
+                    "resource": {
+                        "status": "NOT_CHECKING"
+                    }
+                }
+            }
+        },
+        {
+            "arn": "arn:aws:controltower:us-east-1:211811255273:enabledcontrol/911AEYCEF45K56C1",
+            "controlIdentifier": "arn:aws:controltower:us-east-1::control/AWS-GR_IAM_ROLE_CHANGE_PROHIBITED",
+            "targetIdentifier": "arn:aws:organizations::211811255273:ou/o-tiz1ddrmwn/ou-pyfi-bid35js9",
+            "statusSummary": {
+                "status": "SUCCEEDED"
+            },
+            "driftStatusSummary": {
+                "driftStatus": "NOT_CHECKING",
+                "types": {
+                    "inheritance": {
+                        "status": "IN_SYNC"
+                    },
+                    "resource": {
+                        "status": "NOT_CHECKING"
+                    }
+                }
+            }
+        },
+        {
+            "arn": "arn:aws:controltower:us-east-1:211811255273:enabledcontrol/MUQWA1R7N8FXEX6R",
+            "controlIdentifier": "arn:aws:controltower:us-east-1::control/AWS-GR_SNS_SUBSCRIPTION_CHANGE_PROHIBITED",
+            "targetIdentifier": "arn:aws:organizations::211811255273:ou/o-tiz1ddrmwn/ou-pyfi-tfwoi4hn",
+            "statusSummary": {
+                "status": "SUCCEEDED"
+            },
+            "driftStatusSummary": {
+                "driftStatus": "NOT_CHECKING",
+                "types": {
+                    "inheritance": {
+                        "status": "IN_SYNC"
+                    },
+                    "resource": {
+                        "status": "NOT_CHECKING"
+                    }
+                }
+            }
+        },
+        {
+            "arn": "arn:aws:controltower:us-east-1:211811255273:enabledcontrol/52TZ3WVD46JV3WNU",
+            "controlIdentifier": "arn:aws:controltower:us-east-1::control/AWS-GR_CLOUDWATCH_EVENTS_CHANGE_PROHIBITED",
+            "targetIdentifier": "arn:aws:organizations::211811255273:ou/o-tiz1ddrmwn/ou-pyfi-bid35js9",
+            "statusSummary": {
+                "status": "SUCCEEDED"
+            },
+            "driftStatusSummary": {
+                "driftStatus": "NOT_CHECKING",
+                "types": {
+                    "inheritance": {
+                        "status": "IN_SYNC"
+                    },
+                    "resource": {
+                        "status": "NOT_CHECKING"
+                    }
+                }
+            }
+        },
+        {
+            "arn": "arn:aws:controltower:us-east-1:211811255273:enabledcontrol/52TZ3WSF4F7YRN92",
+            "controlIdentifier": "arn:aws:controltower:us-east-1::control/AWS-GR_CONFIG_CHANGE_PROHIBITED",
+            "targetIdentifier": "arn:aws:organizations::211811255273:ou/o-tiz1ddrmwn/ou-pyfi-bid35js9",
+            "statusSummary": {
+                "status": "SUCCEEDED"
+            },
+            "driftStatusSummary": {
+                "driftStatus": "NOT_CHECKING",
+                "types": {
+                    "inheritance": {
+                        "status": "IN_SYNC"
+                    },
+                    "resource": {
+                        "status": "NOT_CHECKING"
+                    }
+                }
+            }
+        },
+        {
+            "arn": "arn:aws:controltower:us-east-1:211811255273:enabledcontrol/A5NX1PNA80BIY36B",
+            "controlIdentifier": "arn:aws:controlcatalog:::control/6g1vku0mw1b12o9jhuouxj8ia",
+            "targetIdentifier": "arn:aws:organizations::211811255273:ou/o-tiz1ddrmwn/ou-pyfi-5gj2yd7l",
+            "statusSummary": {
+                "status": "SUCCEEDED",
+                "lastOperationIdentifier": "6bf8745b-245a-4c95-a370-a85631105112"
+            },
+            "driftStatusSummary": {
+                "driftStatus": "NOT_CHECKING",
+                "types": {
+                    "inheritance": {
+                        "status": "IN_SYNC"
+                    },
+                    "resource": {
+                        "status": "NOT_CHECKING"
+                    }
+                }
+            }
+        },
+        {
+            "arn": "arn:aws:controltower:us-east-1:211811255273:enabledcontrol/19PHMRHG0IORK4A7",
+            "controlIdentifier": "arn:aws:controlcatalog:::control/aoa66btqlvrz0ztealide8ll7",
+            "targetIdentifier": "arn:aws:organizations::211811255273:ou/o-tiz1ddrmwn/ou-pyfi-5gj2yd7l",
+            "statusSummary": {
+                "status": "SUCCEEDED",
+                "lastOperationIdentifier": "c2f2b1c1-8a24-476a-ba16-53e262a95c32"
+            },
+            "driftStatusSummary": {
+                "driftStatus": "NOT_CHECKING",
+                "types": {
+                    "inheritance": {
+                        "status": "IN_SYNC"
+                    },
+                    "resource": {
+                        "status": "NOT_CHECKING"
+                    }
+                }
+            }
+        },
+        {
+            "arn": "arn:aws:controltower:us-east-1:211811255273:enabledcontrol/MUQVZL0MKPCAYMFM",
+            "controlIdentifier": "arn:aws:controltower:us-east-1::control/AWS-GR_SNS_SUBSCRIPTION_CHANGE_PROHIBITED",
+            "targetIdentifier": "arn:aws:organizations::211811255273:ou/o-tiz1ddrmwn/ou-pyfi-bid35js9",
+            "statusSummary": {
+                "status": "SUCCEEDED"
+            },
+            "driftStatusSummary": {
+                "driftStatus": "NOT_CHECKING",
+                "types": {
+                    "inheritance": {
+                        "status": "IN_SYNC"
+                    },
+                    "resource": {
+                        "status": "NOT_CHECKING"
+                    }
+                }
+            }
+        },
+        {
+            "arn": "arn:aws:controltower:us-east-1:211811255273:enabledcontrol/9119DI3E2O4P894F",
+            "controlIdentifier": "arn:aws:controlcatalog:::control/2d14h3lzbbwn90y08n8puvpma",
+            "targetIdentifier": "arn:aws:organizations::211811255273:ou/o-tiz1ddrmwn/ou-pyfi-5gj2yd7l",
+            "statusSummary": {
+                "status": "SUCCEEDED",
+                "lastOperationIdentifier": "b896426b-cc95-4fe4-8aa5-f21fb7c9c8b7"
+            },
+            "driftStatusSummary": {
+                "driftStatus": "NOT_CHECKING",
+                "types": {
+                    "inheritance": {
+                        "status": "IN_SYNC"
+                    },
+                    "resource": {
+                        "status": "NOT_CHECKING"
+                    }
+                }
+            }
+        },
+        {
+            "arn": "arn:aws:controltower:us-east-1:211811255273:enabledcontrol/19PHMPPE81P46P96",
+            "controlIdentifier": "arn:aws:controlcatalog:::control/8cclsjiy1o81kfsmzpt85nbjk",
+            "targetIdentifier": "arn:aws:organizations::211811255273:ou/o-tiz1ddrmwn/ou-pyfi-5gj2yd7l",
+            "statusSummary": {
+                "status": "SUCCEEDED",
+                "lastOperationIdentifier": "a6cdc2e6-e049-44c9-a92e-fad990f47177"
+            },
+            "driftStatusSummary": {
+                "driftStatus": "NOT_CHECKING",
+                "types": {
+                    "inheritance": {
+                        "status": "IN_SYNC"
+                    },
+                    "resource": {
+                        "status": "NOT_CHECKING"
+                    }
+                }
+            }
+        },
+        {
+            "arn": "arn:aws:controltower:us-east-1:211811255273:enabledcontrol/911AJ30TFKC8450T",
+            "controlIdentifier": "arn:aws:controltower:us-east-1::control/AWS-GR_LAMBDA_CHANGE_PROHIBITED",
+            "targetIdentifier": "arn:aws:organizations::211811255273:ou/o-tiz1ddrmwn/ou-pyfi-tfwoi4hn",
+            "statusSummary": {
+                "status": "SUCCEEDED"
+            },
+            "driftStatusSummary": {
+                "driftStatus": "NOT_CHECKING",
+                "types": {
+                    "inheritance": {
+                        "status": "IN_SYNC"
+                    },
+                    "resource": {
+                        "status": "NOT_CHECKING"
+                    }
+                }
+            }
+        },
+        {
+            "arn": "arn:aws:controltower:us-east-1:211811255273:enabledcontrol/14MNOOVHQ8MWGBUF",
+            "controlIdentifier": "arn:aws:controltower:us-east-1::control/AWS-GR_REGION_DENY",
+            "targetIdentifier": "arn:aws:organizations::211811255273:ou/o-tiz1ddrmwn/ou-pyfi-5gj2yd7l",
+            "statusSummary": {
+                "status": "SUCCEEDED"
+            },
+            "driftStatusSummary": {
+                "driftStatus": "NOT_CHECKING",
+                "types": {
+                    "inheritance": {
+                        "status": "IN_SYNC"
+                    },
+                    "resource": {
+                        "status": "NOT_CHECKING"
+                    }
+                }
+            }
+        },
+        {
+            "arn": "arn:aws:controltower:us-east-1:211811255273:enabledcontrol/911AEY6L1CX1MBB4",
+            "controlIdentifier": "arn:aws:controltower:us-east-1::control/AWS-GR_LAMBDA_CHANGE_PROHIBITED",
+            "targetIdentifier": "arn:aws:organizations::211811255273:ou/o-tiz1ddrmwn/ou-pyfi-bid35js9",
+            "statusSummary": {
+                "status": "SUCCEEDED"
+            },
+            "driftStatusSummary": {
+                "driftStatus": "NOT_CHECKING",
+                "types": {
+                    "inheritance": {
+                        "status": "IN_SYNC"
+                    },
+                    "resource": {
+                        "status": "NOT_CHECKING"
+                    }
+                }
+            }
+        },
+        {
+            "arn": "arn:aws:controltower:us-east-1:211811255273:enabledcontrol/4IIN9JJ94W98EOZ2",
+            "controlIdentifier": "arn:aws:controltower:us-east-1::control/AWS-GR_LOG_GROUP_POLICY",
+            "targetIdentifier": "arn:aws:organizations::211811255273:ou/o-tiz1ddrmwn/ou-pyfi-tfwoi4hn",
+            "statusSummary": {
+                "status": "SUCCEEDED"
+            },
+            "driftStatusSummary": {
+                "driftStatus": "NOT_CHECKING",
+                "types": {
+                    "inheritance": {
+                        "status": "IN_SYNC"
+                    },
+                    "resource": {
+                        "status": "NOT_CHECKING"
+                    }
+                }
+            }
+        },
+        {
+            "arn": "arn:aws:controltower:us-east-1:211811255273:enabledcontrol/KBBU3F74WM6BC9QW",
+            "controlIdentifier": "arn:aws:controlcatalog:::control/4t6npb1xfud01v5ihhj9ldfax",
+            "targetIdentifier": "arn:aws:organizations::211811255273:ou/o-tiz1ddrmwn/ou-pyfi-5gj2yd7l",
+            "statusSummary": {
+                "status": "SUCCEEDED",
+                "lastOperationIdentifier": "b2985cb0-e47d-4d50-8e71-e0c21a31d9ee"
+            },
+            "driftStatusSummary": {
+                "driftStatus": "NOT_CHECKING",
+                "types": {
+                    "inheritance": {
+                        "status": "IN_SYNC"
+                    },
+                    "resource": {
+                        "status": "NOT_CHECKING"
+                    }
+                }
+            }
+        },
+        {
+            "arn": "arn:aws:controltower:us-east-1:211811255273:enabledcontrol/14MNTDUVR4B4ASW6",
+            "controlIdentifier": "arn:aws:controltower:us-east-1::control/AWS-GR_CONFIG_ENABLED",
+            "targetIdentifier": "arn:aws:organizations::211811255273:ou/o-tiz1ddrmwn/ou-pyfi-tfwoi4hn",
+            "statusSummary": {
+                "status": "SUCCEEDED"
+            },
+            "driftStatusSummary": {
+                "driftStatus": "NOT_CHECKING",
+                "types": {
+                    "inheritance": {
+                        "status": "IN_SYNC"
+                    },
+                    "resource": {
+                        "status": "NOT_CHECKING"
+                    }
+                }
+            }
+        },
+        {
+            "arn": "arn:aws:controltower:us-east-1:211811255273:enabledcontrol/MUQWA2QSV1C35PUC",
+            "controlIdentifier": "arn:aws:controltower:us-east-1::control/AWS-GR_CONFIG_RULE_CHANGE_PROHIBITED",
+            "targetIdentifier": "arn:aws:organizations::211811255273:ou/o-tiz1ddrmwn/ou-pyfi-tfwoi4hn",
+            "statusSummary": {
+                "status": "SUCCEEDED"
+            },
+            "driftStatusSummary": {
+                "driftStatus": "NOT_CHECKING",
+                "types": {
+                    "inheritance": {
+                        "status": "IN_SYNC"
+                    },
+                    "resource": {
+                        "status": "NOT_CHECKING"
+                    }
+                }
+            }
+        },
+        {
+            "arn": "arn:aws:controltower:us-east-1:211811255273:enabledcontrol/299BBQ0XA8PNCAIH",
+            "controlIdentifier": "arn:aws:controlcatalog:::control/e8m8q8hlntzfkjhhf99yk84jl",
+            "targetIdentifier": "arn:aws:organizations::211811255273:ou/o-tiz1ddrmwn/ou-pyfi-5gj2yd7l",
+            "statusSummary": {
+                "status": "SUCCEEDED",
+                "lastOperationIdentifier": "c3ff84ef-2da1-48f4-9692-53e846601e3c"
+            },
+            "driftStatusSummary": {
+                "driftStatus": "NOT_CHECKING",
+                "types": {
+                    "inheritance": {
+                        "status": "IN_SYNC"
+                    },
+                    "resource": {
+                        "status": "NOT_CHECKING"
+                    }
+                }
+            }
+        },
+        {
+            "arn": "arn:aws:controltower:us-east-1:211811255273:enabledcontrol/4IIN7H75Z4IJ5TGQ",
+            "controlIdentifier": "arn:aws:controltower:us-east-1::control/AWS-GR_REGION_DENY",
+            "targetIdentifier": "arn:aws:organizations::211811255273:ou/o-tiz1ddrmwn/ou-pyfi-bid35js9",
+            "statusSummary": {
+                "status": "SUCCEEDED"
+            },
+            "driftStatusSummary": {
+                "driftStatus": "NOT_CHECKING",
+                "types": {
+                    "inheritance": {
+                        "status": "IN_SYNC"
+                    },
+                    "resource": {
+                        "status": "NOT_CHECKING"
+                    }
+                }
+            }
+        },
+        {
+            "arn": "arn:aws:controltower:us-east-1:211811255273:enabledcontrol/A5NY7TIOGW7JBVFD",
+            "controlIdentifier": "arn:aws:controltower:us-east-1::control/AWS-GR_LOG_GROUP_POLICY",
+            "targetIdentifier": "arn:aws:organizations::211811255273:ou/o-tiz1ddrmwn/ou-pyfi-bid35js9",
+            "statusSummary": {
+                "status": "SUCCEEDED"
+            },
+            "driftStatusSummary": {
+                "driftStatus": "NOT_CHECKING",
+                "types": {
+                    "inheritance": {
+                        "status": "IN_SYNC"
+                    },
+                    "resource": {
+                        "status": "NOT_CHECKING"
+                    }
+                }
+            }
+        },
+        {
+            "arn": "arn:aws:controltower:us-east-1:211811255273:enabledcontrol/MUQTCUKBWXIE4C5A",
+            "controlIdentifier": "arn:aws:controlcatalog:::control/8axz4m7a5i0p6djlcszljt4v1",
+            "targetIdentifier": "arn:aws:organizations::211811255273:ou/o-tiz1ddrmwn/ou-pyfi-5gj2yd7l",
+            "statusSummary": {
+                "status": "SUCCEEDED",
+                "lastOperationIdentifier": "44513256-273f-431d-883d-e0d8deb3952a"
+            },
+            "driftStatusSummary": {
+                "driftStatus": "NOT_CHECKING",
+                "types": {
+                    "inheritance": {
+                        "status": "IN_SYNC"
+                    },
+                    "resource": {
+                        "status": "NOT_CHECKING"
+                    }
+                }
+            }
+        },
+        {
+            "arn": "arn:aws:controltower:us-east-1:211811255273:enabledcontrol/14MNTDVEIOS85ZOY",
+            "controlIdentifier": "arn:aws:controltower:us-east-1::control/AWS-GR_SNS_CHANGE_PROHIBITED",
+            "targetIdentifier": "arn:aws:organizations::211811255273:ou/o-tiz1ddrmwn/ou-pyfi-tfwoi4hn",
+            "statusSummary": {
+                "status": "SUCCEEDED"
+            },
+            "driftStatusSummary": {
+                "driftStatus": "NOT_CHECKING",
+                "types": {
+                    "inheritance": {
+                        "status": "IN_SYNC"
+                    },
+                    "resource": {
+                        "status": "NOT_CHECKING"
+                    }
+                }
+            }
+        },
+        {
+            "arn": "arn:aws:controltower:us-east-1:211811255273:enabledcontrol/MUQVZL5G9AWV2X8N",
+            "controlIdentifier": "arn:aws:controltower:us-east-1::control/AWS-GR_SNS_CHANGE_PROHIBITED",
+            "targetIdentifier": "arn:aws:organizations::211811255273:ou/o-tiz1ddrmwn/ou-pyfi-bid35js9",
+            "statusSummary": {
+                "status": "SUCCEEDED"
+            },
+            "driftStatusSummary": {
+                "driftStatus": "NOT_CHECKING",
+                "types": {
+                    "inheritance": {
+                        "status": "IN_SYNC"
+                    },
+                    "resource": {
+                        "status": "NOT_CHECKING"
+                    }
+                }
+            }
+        },
+        {
+            "arn": "arn:aws:controltower:us-east-1:211811255273:enabledcontrol/14MNO8FG3KYF8BBG",
+            "controlIdentifier": "arn:aws:controlcatalog:::control/bd9x92s00ui6rbwqvl70gla3u",
+            "targetIdentifier": "arn:aws:organizations::211811255273:ou/o-tiz1ddrmwn/ou-pyfi-5gj2yd7l",
+            "statusSummary": {
+                "status": "SUCCEEDED",
+                "lastOperationIdentifier": "3293cfe6-6f8e-4d08-9fb6-7200a327ad89"
+            },
+            "driftStatusSummary": {
+                "driftStatus": "NOT_CHECKING",
+                "types": {
+                    "inheritance": {
+                        "status": "IN_SYNC"
+                    },
+                    "resource": {
+                        "status": "NOT_CHECKING"
+                    }
+                }
+            }
+        },
+        {
+            "arn": "arn:aws:controltower:us-east-1:211811255273:enabledcontrol/19PHMPP7I6YHHET9",
+            "controlIdentifier": "arn:aws:controlcatalog:::control/5lwgwp498974xwygy5ge7pxfz",
+            "targetIdentifier": "arn:aws:organizations::211811255273:ou/o-tiz1ddrmwn/ou-pyfi-5gj2yd7l",
+            "statusSummary": {
+                "status": "SUCCEEDED",
+                "lastOperationIdentifier": "86163ae9-11cb-43e7-81f4-c8776ce17511"
+            },
+            "driftStatusSummary": {
+                "driftStatus": "NOT_CHECKING",
+                "types": {
+                    "inheritance": {
+                        "status": "IN_SYNC"
+                    },
+                    "resource": {
+                        "status": "NOT_CHECKING"
+                    }
+                }
+            }
+        },
+        {
+            "arn": "arn:aws:controltower:us-east-1:211811255273:enabledcontrol/KBBWOY49SHQUC627",
+            "controlIdentifier": "arn:aws:controltower:us-east-1::control/AWS-GR_IAM_ROLE_CHANGE_PROHIBITED",
+            "targetIdentifier": "arn:aws:organizations::211811255273:ou/o-tiz1ddrmwn/ou-pyfi-tfwoi4hn",
+            "statusSummary": {
+                "status": "SUCCEEDED"
+            },
+            "driftStatusSummary": {
+                "driftStatus": "NOT_CHECKING",
+                "types": {
+                    "inheritance": {
+                        "status": "IN_SYNC"
+                    },
+                    "resource": {
+                        "status": "NOT_CHECKING"
+                    }
+                }
+            }
+        },
+        {
+            "arn": "arn:aws:controltower:us-east-1:211811255273:enabledcontrol/299BLQMARK8TH28N",
+            "controlIdentifier": "arn:aws:controltower:us-east-1::control/AWS-GR_CONFIG_RULE_CHANGE_PROHIBITED",
+            "targetIdentifier": "arn:aws:organizations::211811255273:ou/o-tiz1ddrmwn/ou-pyfi-bid35js9",
+            "statusSummary": {
+                "status": "SUCCEEDED"
+            },
+            "driftStatusSummary": {
+                "driftStatus": "NOT_CHECKING",
+                "types": {
+                    "inheritance": {
+                        "status": "IN_SYNC"
+                    },
+                    "resource": {
+                        "status": "NOT_CHECKING"
+                    }
+                }
+            }
+        }
+    ]
+}

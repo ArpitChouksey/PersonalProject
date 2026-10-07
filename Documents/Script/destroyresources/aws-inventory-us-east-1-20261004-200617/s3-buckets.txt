@@ -1,0 +1,7 @@
+{
+    "Buckets": [],
+    "Owner": {
+        "ID": "42b3ec6bb3dd226ef0ab044c7978a91e80a43570bc46c06b84958378ab80eb1d"
+    },
+    "Prefix": null
+}

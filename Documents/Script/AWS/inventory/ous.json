@@ -1,0 +1,22 @@
+{
+    "OrganizationalUnits": [
+        {
+            "Id": "ou-pyfi-5gj2yd7l",
+            "Arn": "arn:aws:organizations::211811255273:ou/o-tiz1ddrmwn/ou-pyfi-5gj2yd7l",
+            "Name": "Security OU",
+            "Path": "o-tiz1ddrmwn/r-pyfi/ou-pyfi-5gj2yd7l/"
+        },
+        {
+            "Id": "ou-pyfi-bid35js9",
+            "Arn": "arn:aws:organizations::211811255273:ou/o-tiz1ddrmwn/ou-pyfi-bid35js9",
+            "Name": "Infrastructure OU",
+            "Path": "o-tiz1ddrmwn/r-pyfi/ou-pyfi-bid35js9/"
+        },
+        {
+            "Id": "ou-pyfi-tfwoi4hn",
+            "Arn": "arn:aws:organizations::211811255273:ou/o-tiz1ddrmwn/ou-pyfi-tfwoi4hn",
+            "Name": "Workloads OU",
+            "Path": "o-tiz1ddrmwn/r-pyfi/ou-pyfi-tfwoi4hn/"
+        }
+    ]
+}
