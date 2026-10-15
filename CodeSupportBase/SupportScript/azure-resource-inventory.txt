@@ -1,0 +1,133 @@
+
+========== AZURE ACCOUNT ==========
+Subscription          SubscriptionId                        TenantId
+--------------------  ------------------------------------  ------------------------------------
+Azure subscription 1  440b48d6-073f-4588-9499-24c49906a898  bb2fca7b-da99-41c8-8fac-3d90c2682de1
+
+========== ALL RESOURCE IDS ==========
+Name                                                                  Type                                      Location      ResourceId
+--------------------------------------------------------------------  ----------------------------------------  ------------  ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+vnet-migration                                                        Microsoft.Network/virtualNetworks         centralindia  /subscriptions/440b48d6-073f-4588-9499-24c49906a898/resourceGroups/rg-migration-lab/providers/Microsoft.Network/virtualNetworks/vnet-migration
+nsg-application                                                       Microsoft.Network/networkSecurityGroups   centralindia  /subscriptions/440b48d6-073f-4588-9499-24c49906a898/resourceGroups/rg-migration-lab/providers/Microsoft.Network/networkSecurityGroups/nsg-application
+nsg-database                                                          Microsoft.Network/networkSecurityGroups   centralindia  /subscriptions/440b48d6-073f-4588-9499-24c49906a898/resourceGroups/rg-migration-lab/providers/Microsoft.Network/networkSecurityGroups/nsg-database
+rt-application                                                        Microsoft.Network/routeTables             centralindia  /subscriptions/440b48d6-073f-4588-9499-24c49906a898/resourceGroups/rg-migration-lab/providers/Microsoft.Network/routeTables/rt-application
+rt-database                                                           Microsoft.Network/routeTables             centralindia  /subscriptions/440b48d6-073f-4588-9499-24c49906a898/resourceGroups/rg-migration-lab/providers/Microsoft.Network/routeTables/rt-database
+pip-vpn-migration                                                     Microsoft.Network/publicIPAddresses       centralindia  /subscriptions/440b48d6-073f-4588-9499-24c49906a898/resourceGroups/rg-migration-lab/providers/Microsoft.Network/publicIPAddresses/pip-vpn-migration
+vng-migration                                                         Microsoft.Network/virtualNetworkGateways  centralindia  /subscriptions/440b48d6-073f-4588-9499-24c49906a898/resourceGroups/rg-migration-lab/providers/Microsoft.Network/virtualNetworkGateways/vng-migration
+lng-aws-migration-tunnel1                                             Microsoft.Network/localNetworkGateways    centralindia  /subscriptions/440b48d6-073f-4588-9499-24c49906a898/resourceGroups/rg-migration-lab/providers/Microsoft.Network/localNetworkGateways/lng-aws-migration-tunnel1
+connection-aws-migration-tunnel1                                      Microsoft.Network/connections             centralindia  /subscriptions/440b48d6-073f-4588-9499-24c49906a898/resourceGroups/rg-migration-lab/providers/Microsoft.Network/connections/connection-aws-migration-tunnel1
+vm-azure-connectivity-test_key                                        Microsoft.Compute/sshPublicKeys           centralindia  /subscriptions/440b48d6-073f-4588-9499-24c49906a898/resourceGroups/rg-migration-lab/providers/Microsoft.Compute/sshPublicKeys/vm-azure-connectivity-test_key
+vm-azure-connectivity-test-ip                                         Microsoft.Network/publicIPAddresses       centralindia  /subscriptions/440b48d6-073f-4588-9499-24c49906a898/resourceGroups/rg-migration-lab/providers/Microsoft.Network/publicIPAddresses/vm-azure-connectivity-test-ip
+vm-azure-connectivity-test568                                         Microsoft.Network/networkInterfaces       centralindia  /subscriptions/440b48d6-073f-4588-9499-24c49906a898/resourceGroups/rg-migration-lab/providers/Microsoft.Network/networkInterfaces/vm-azure-connectivity-test568
+vm-azure-connectivity-test                                            Microsoft.Compute/virtualMachines         centralindia  /subscriptions/440b48d6-073f-4588-9499-24c49906a898/resourceGroups/rg-migration-lab/providers/Microsoft.Compute/virtualMachines/vm-azure-connectivity-test
+vmazureconnectivitytest_key441                                        Microsoft.Compute/sshPublicKeys           centralindia  /subscriptions/440b48d6-073f-4588-9499-24c49906a898/resourceGroups/rg-migration-lab/providers/Microsoft.Compute/sshPublicKeys/vmazureconnectivitytest_key441
+vm-azure-connectivity-test796                                         Microsoft.Network/networkInterfaces       centralindia  /subscriptions/440b48d6-073f-4588-9499-24c49906a898/resourceGroups/rg-migration-lab/providers/Microsoft.Network/networkInterfaces/vm-azure-connectivity-test796
+vm-azure-connectivity-test_OsDisk_1_629dc317b088456e8bd23ad614da4d4b  Microsoft.Compute/disks                   centralindia  /subscriptions/440b48d6-073f-4588-9499-24c49906a898/resourceGroups/RG-MIGRATION-LAB/providers/Microsoft.Compute/disks/vm-azure-connectivity-test_OsDisk_1_629dc317b088456e8bd23ad614da4d4b
+
+========== RESOURCE GROUP ID ==========
+{
+  "id": "/subscriptions/440b48d6-073f-4588-9499-24c49906a898/resourceGroups/rg-migration-lab",
+  "location": "centralindia",
+  "name": "rg-migration-lab"
+}
+
+========== VNET AND SUBNET IDS ==========
+{
+  "addressSpace": [
+    "10.50.0.0/16"
+  ],
+  "id": "/subscriptions/440b48d6-073f-4588-9499-24c49906a898/resourceGroups/rg-migration-lab/providers/Microsoft.Network/virtualNetworks/vnet-migration",
+  "name": "vnet-migration",
+  "subnets": [
+    {
+      "id": "/subscriptions/440b48d6-073f-4588-9499-24c49906a898/resourceGroups/rg-migration-lab/providers/Microsoft.Network/virtualNetworks/vnet-migration/subnets/GatewaySubnet",
+      "name": "GatewaySubnet",
+      "prefix": null
+    },
+    {
+      "id": "/subscriptions/440b48d6-073f-4588-9499-24c49906a898/resourceGroups/rg-migration-lab/providers/Microsoft.Network/virtualNetworks/vnet-migration/subnets/ApplicationSubnet",
+      "name": "ApplicationSubnet",
+      "prefix": null
+    },
+    {
+      "id": "/subscriptions/440b48d6-073f-4588-9499-24c49906a898/resourceGroups/rg-migration-lab/providers/Microsoft.Network/virtualNetworks/vnet-migration/subnets/DatabaseSubnet",
+      "name": "DatabaseSubnet",
+      "prefix": null
+    }
+  ]
+}
+
+========== NETWORK SECURITY GROUP IDS ==========
+Name             Location
+---------------  ------------
+nsg-application  centralindia
+nsg-database     centralindia
+
+========== ROUTE TABLE IDS ==========
+[
+  {
+    "id": "/subscriptions/440b48d6-073f-4588-9499-24c49906a898/resourceGroups/rg-migration-lab/providers/Microsoft.Network/routeTables/rt-application",
+    "location": "centralindia",
+    "name": "rt-application",
+    "subnets": [
+      "/subscriptions/440b48d6-073f-4588-9499-24c49906a898/resourceGroups/rg-migration-lab/providers/Microsoft.Network/virtualNetworks/vnet-migration/subnets/ApplicationSubnet"
+    ]
+  },
+  {
+    "id": "/subscriptions/440b48d6-073f-4588-9499-24c49906a898/resourceGroups/rg-migration-lab/providers/Microsoft.Network/routeTables/rt-database",
+    "location": "centralindia",
+    "name": "rt-database",
+    "subnets": [
+      "/subscriptions/440b48d6-073f-4588-9499-24c49906a898/resourceGroups/rg-migration-lab/providers/Microsoft.Network/virtualNetworks/vnet-migration/subnets/DatabaseSubnet"
+    ]
+  }
+]
+
+========== VPN GATEWAY ==========
+{
+  "gatewayType": "Vpn",
+  "id": "/subscriptions/440b48d6-073f-4588-9499-24c49906a898/resourceGroups/rg-migration-lab/providers/Microsoft.Network/virtualNetworkGateways/vng-migration",
+  "location": "centralindia",
+  "name": "vng-migration",
+  "publicIPs": [
+    {
+      "name": "default",
+      "publicIPId": "/subscriptions/440b48d6-073f-4588-9499-24c49906a898/resourceGroups/rg-migration-lab/providers/Microsoft.Network/publicIPAddresses/pip-vpn-migration",
+      "subnetId": "/subscriptions/440b48d6-073f-4588-9499-24c49906a898/resourceGroups/rg-migration-lab/providers/Microsoft.Network/virtualNetworks/vnet-migration/subnets/GatewaySubnet"
+    }
+  ],
+  "sku": "VpnGw2AZ",
+  "vpnType": "RouteBased"
+}
+
+========== VPN PUBLIC IP ==========
+{
+  "allocation": "Static",
+  "id": "/subscriptions/440b48d6-073f-4588-9499-24c49906a898/resourceGroups/rg-migration-lab/providers/Microsoft.Network/publicIPAddresses/pip-vpn-migration",
+  "ipAddress": "4.186.53.6",
+  "name": "pip-vpn-migration",
+  "sku": "Standard"
+}
+
+========== AWS LOCAL NETWORK GATEWAY ==========
+{
+  "addressPrefixes": [
+    "10.60.0.0/16"
+  ],
+  "bgpSettings": null,
+  "gatewayIpAddress": "52.200.55.62",
+  "id": "/subscriptions/440b48d6-073f-4588-9499-24c49906a898/resourceGroups/rg-migration-lab/providers/Microsoft.Network/localNetworkGateways/lng-aws-migration-tunnel1",
+  "name": "lng-aws-migration-tunnel1"
+}
+
+========== VPN CONNECTION ==========
+{
+  "connectionStatus": "Connected",
+  "connectionType": "IPsec",
+  "id": "/subscriptions/440b48d6-073f-4588-9499-24c49906a898/resourceGroups/rg-migration-lab/providers/Microsoft.Network/connections/connection-aws-migration-tunnel1",
+  "localNetworkGateway2Id": "/subscriptions/440b48d6-073f-4588-9499-24c49906a898/resourceGroups/rg-migration-lab/providers/Microsoft.Network/localNetworkGateways/lng-aws-migration-tunnel1",
+  "name": "connection-aws-migration-tunnel1",
+  "virtualNetworkGateway1Id": "/subscriptions/440b48d6-073f-4588-9499-24c49906a898/resourceGroups/rg-migration-lab/providers/Microsoft.Network/virtualNetworkGateways/vng-migration"
+}
+
+========== INVENTORY COMPLETE ==========

@@ -1,0 +1,32 @@
+{
+    "DBSubnetGroups": [
+        {
+            "DBSubnetGroupName": "dbsubnet-aws-migration",
+            "DBSubnetGroupDescription": "DB subnet group for AWS-GCP migration pilot",
+            "VpcId": "vpc-02e169f095c5f6634",
+            "SubnetGroupStatus": "Complete",
+            "Subnets": [
+                {
+                    "SubnetIdentifier": "subnet-036ac31287669652b",
+                    "SubnetAvailabilityZone": {
+                        "Name": "us-east-1b"
+                    },
+                    "SubnetOutpost": {},
+                    "SubnetStatus": "Active"
+                },
+                {
+                    "SubnetIdentifier": "subnet-053127d8a691cfed2",
+                    "SubnetAvailabilityZone": {
+                        "Name": "us-east-1a"
+                    },
+                    "SubnetOutpost": {},
+                    "SubnetStatus": "Active"
+                }
+            ],
+            "DBSubnetGroupArn": "arn:aws:rds:us-east-1:211811255273:subgrp:dbsubnet-aws-migration",
+            "SupportedNetworkTypes": [
+                "IPV4"
+            ]
+        }
+    ]
+}

@@ -1,0 +1,121 @@
+{
+    "DBInstances": [
+        {
+            "DBInstanceIdentifier": "rds-migration-pilot",
+            "DBInstanceClass": "db.m5.large",
+            "Engine": "postgres",
+            "DBInstanceStatus": "available",
+            "MasterUsername": "postgres",
+            "Endpoint": {
+                "Address": "rds-migration-pilot.cqxeaypqjorg.us-east-1.rds.amazonaws.com",
+                "Port": 5432,
+                "HostedZoneId": "Z2R2ITUGPM61AM"
+            },
+            "AllocatedStorage": 200,
+            "InstanceCreateTime": "2026-10-14T18:44:07.899000+00:00",
+            "PreferredBackupWindow": "09:10-09:40",
+            "BackupRetentionPeriod": 7,
+            "DBSecurityGroups": [],
+            "VpcSecurityGroups": [
+                {
+                    "VpcSecurityGroupId": "sg-09438820790f36678",
+                    "Status": "active"
+                },
+                {
+                    "VpcSecurityGroupId": "sg-080e015290aabeaa0",
+                    "Status": "active"
+                },
+                {
+                    "VpcSecurityGroupId": "sg-00d0d47feceedcd09",
+                    "Status": "active"
+                }
+            ],
+            "DBParameterGroups": [
+                {
+                    "DBParameterGroupName": "default.postgres18",
+                    "ParameterApplyStatus": "in-sync"
+                }
+            ],
+            "AvailabilityZone": "us-east-1b",
+            "DBSubnetGroup": {
+                "DBSubnetGroupName": "dbsubnet-aws-migration",
+                "DBSubnetGroupDescription": "DB subnet group for AWS-GCP migration pilot",
+                "VpcId": "vpc-02e169f095c5f6634",
+                "SubnetGroupStatus": "Complete",
+                "Subnets": [
+                    {
+                        "SubnetIdentifier": "subnet-036ac31287669652b",
+                        "SubnetAvailabilityZone": {
+                            "Name": "us-east-1b"
+                        },
+                        "SubnetOutpost": {},
+                        "SubnetStatus": "Active"
+                    },
+                    {
+                        "SubnetIdentifier": "subnet-053127d8a691cfed2",
+                        "SubnetAvailabilityZone": {
+                            "Name": "us-east-1a"
+                        },
+                        "SubnetOutpost": {},
+                        "SubnetStatus": "Active"
+                    }
+                ]
+            },
+            "PreferredMaintenanceWindow": "thu:07:06-thu:07:36",
+            "UpgradeRolloutOrder": "second",
+            "PendingModifiedValues": {},
+            "LatestRestorableTime": "2026-10-15T05:01:33+00:00",
+            "MultiAZ": false,
+            "EngineVersion": "18.3",
+            "AutoMinorVersionUpgrade": true,
+            "ReadReplicaDBInstanceIdentifiers": [],
+            "LicenseModel": "postgresql-license",
+            "Iops": 3000,
+            "StorageThroughput": 125,
+            "OptionGroupMemberships": [
+                {
+                    "OptionGroupName": "default:postgres-18",
+                    "Status": "in-sync"
+                }
+            ],
+            "PubliclyAccessible": false,
+            "StorageType": "gp3",
+            "DbInstancePort": 0,
+            "StorageEncrypted": true,
+            "KmsKeyId": "arn:aws:kms:us-east-1:211811255273:key/d1bb5828-cca5-4e3c-9f30-84f6cc5d7709",
+            "DbiResourceId": "db-VQMFECR3YCRC4AUIE6IKGPKKDA",
+            "CACertificateIdentifier": "rds-ca-rsa2048-g1",
+            "DomainMemberships": [],
+            "CopyTagsToSnapshot": true,
+            "MonitoringInterval": 60,
+            "EnhancedMonitoringResourceArn": "arn:aws:logs:us-east-1:211811255273:log-group:RDSOSMetrics:log-stream:db-VQMFECR3YCRC4AUIE6IKGPKKDA",
+            "MonitoringRoleArn": "arn:aws:iam::211811255273:role/rds-monitoring-role",
+            "DBInstanceArn": "arn:aws:rds:us-east-1:211811255273:db:rds-migration-pilot",
+            "IAMDatabaseAuthenticationEnabled": false,
+            "DatabaseInsightsMode": "standard",
+            "PerformanceInsightsEnabled": true,
+            "PerformanceInsightsKMSKeyId": "arn:aws:kms:us-east-1:211811255273:key/d1bb5828-cca5-4e3c-9f30-84f6cc5d7709",
+            "PerformanceInsightsRetentionPeriod": 7,
+            "DeletionProtection": false,
+            "AssociatedRoles": [],
+            "MaxAllocatedStorage": 1000,
+            "TagList": [],
+            "CustomerOwnedIpEnabled": false,
+            "NetworkType": "IPV4",
+            "ActivityStreamStatus": "stopped",
+            "BackupTarget": "region",
+            "CertificateDetails": {
+                "CAIdentifier": "rds-ca-rsa2048-g1",
+                "ValidTill": "2027-10-14T18:42:49+00:00"
+            },
+            "MasterUserSecret": {
+                "SecretArn": "arn:aws:secretsmanager:us-east-1:211811255273:secret:rds!db-e1e2e080-02fd-4f9b-9507-5521dd4976d4-NgAkNp",
+                "SecretStatus": "active",
+                "KmsKeyId": "arn:aws:kms:us-east-1:211811255273:key/ccd6d793-cefb-44ed-9dc0-9571b6745bf1"
+            },
+            "DedicatedLogVolume": false,
+            "IsStorageConfigUpgradeAvailable": false,
+            "EngineLifecycleSupport": "open-source-rds-extended-support-disabled"
+        }
+    ]
+}

@@ -1,0 +1,131 @@
+{
+    "RouteTables": [
+        {
+            "Associations": [
+                {
+                    "Main": true,
+                    "RouteTableAssociationId": "rtbassoc-028d930bc36c410c0",
+                    "RouteTableId": "rtb-08e4f4d6dfca767db",
+                    "AssociationState": {
+                        "State": "associated"
+                    }
+                }
+            ],
+            "PropagatingVgws": [],
+            "RouteTableId": "rtb-08e4f4d6dfca767db",
+            "Routes": [
+                {
+                    "DestinationCidrBlock": "10.60.0.0/16",
+                    "GatewayId": "local",
+                    "Origin": "CreateRouteTable",
+                    "State": "active"
+                }
+            ],
+            "Tags": [],
+            "VpcId": "vpc-02e169f095c5f6634",
+            "OwnerId": "211811255273"
+        },
+        {
+            "Associations": [
+                {
+                    "Main": false,
+                    "RouteTableAssociationId": "rtbassoc-042698766d2dc4d72",
+                    "RouteTableId": "rtb-0bab8fb8514a21abe",
+                    "SubnetId": "subnet-036ac31287669652b",
+                    "AssociationState": {
+                        "State": "associated"
+                    }
+                },
+                {
+                    "Main": false,
+                    "RouteTableAssociationId": "rtbassoc-06ff0969bee3aeb80",
+                    "RouteTableId": "rtb-0bab8fb8514a21abe",
+                    "SubnetId": "subnet-053127d8a691cfed2",
+                    "AssociationState": {
+                        "State": "associated"
+                    }
+                }
+            ],
+            "PropagatingVgws": [],
+            "RouteTableId": "rtb-0bab8fb8514a21abe",
+            "Routes": [
+                {
+                    "DestinationCidrBlock": "10.60.0.0/16",
+                    "GatewayId": "local",
+                    "Origin": "CreateRouteTable",
+                    "State": "active"
+                }
+            ],
+            "Tags": [
+                {
+                    "Key": "Name",
+                    "Value": "rt-aws-migration-db"
+                }
+            ],
+            "VpcId": "vpc-02e169f095c5f6634",
+            "OwnerId": "211811255273"
+        },
+        {
+            "Associations": [
+                {
+                    "Main": true,
+                    "RouteTableAssociationId": "rtbassoc-01232418b77bfb95d",
+                    "RouteTableId": "rtb-02fcc850b63ff314b",
+                    "AssociationState": {
+                        "State": "associated"
+                    }
+                }
+            ],
+            "PropagatingVgws": [],
+            "RouteTableId": "rtb-02fcc850b63ff314b",
+            "Routes": [
+                {
+                    "DestinationCidrBlock": "172.31.0.0/16",
+                    "GatewayId": "local",
+                    "Origin": "CreateRouteTable",
+                    "State": "active"
+                },
+                {
+                    "DestinationCidrBlock": "0.0.0.0/0",
+                    "GatewayId": "igw-061f5761635fe7d15",
+                    "Origin": "CreateRoute",
+                    "State": "blackhole"
+                }
+            ],
+            "Tags": [],
+            "VpcId": "vpc-02da8402f60ac9b55",
+            "OwnerId": "211811255273"
+        },
+        {
+            "Associations": [
+                {
+                    "Main": false,
+                    "RouteTableAssociationId": "rtbassoc-0c309e74d74010624",
+                    "RouteTableId": "rtb-0d1981552d7aef4e3",
+                    "SubnetId": "subnet-01b71676776817849",
+                    "AssociationState": {
+                        "State": "associated"
+                    }
+                }
+            ],
+            "PropagatingVgws": [],
+            "RouteTableId": "rtb-0d1981552d7aef4e3",
+            "Routes": [
+                {
+                    "DestinationCidrBlock": "10.60.0.0/16",
+                    "GatewayId": "local",
+                    "Origin": "CreateRouteTable",
+                    "State": "active"
+                }
+            ],
+            "Tags": [
+                {
+                    "Key": "Name",
+                    "Value": "rt-aws-migration-app"
+                }
+            ],
+            "VpcId": "vpc-02e169f095c5f6634",
+            "OwnerId": "211811255273"
+        }
+    ]
+}

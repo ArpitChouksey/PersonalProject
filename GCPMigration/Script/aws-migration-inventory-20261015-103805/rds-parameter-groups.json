@@ -1,0 +1,10 @@
+{
+    "DBParameterGroups": [
+        {
+            "DBParameterGroupName": "default.postgres18",
+            "DBParameterGroupFamily": "postgres18",
+            "Description": "Default parameter group for postgres18",
+            "DBParameterGroupArn": "arn:aws:rds:us-east-1:211811255273:pg:default.postgres18"
+        }
+    ]
+}

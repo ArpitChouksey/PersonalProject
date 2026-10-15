@@ -1,0 +1,336 @@
+AWS ALL-REGIONS RESOURCE VALIDATION
+Account: 211811255273
+Caller: arn:aws:iam::211811255273:user/adminuser
+Date: Sun Oct 11 18:40:55 IST 2026
+Regions scanned: 17
+========================================
+
+========== REGION: ap-northeast-1 ==========
+--- VPCs ---
+--------------------------------------------------------------------
+|                           DescribeVpcs                           |
++----------------+----------+------------+-------------------------+
+|      CIDR      | Default  |   State    |           VPC           |
++----------------+----------+------------+-------------------------+
+|  172.31.0.0/16 |  True    |  available |  vpc-0cf4834f08cee5ab4  |
++----------------+----------+------------+-------------------------+
+--- Subnets ---
+--------------------------------------------------------------------------------------------
+|                                      DescribeSubnets                                     |
++-----------------+-----------------+----------------------------+-------------------------+
+|       AZ        |      CIDR       |          Subnet            |           VPC           |
++-----------------+-----------------+----------------------------+-------------------------+
+|  ap-northeast-1d|  172.31.16.0/20 |  subnet-08ba2b1911f223cf0  |  vpc-0cf4834f08cee5ab4  |
+|  ap-northeast-1c|  172.31.0.0/20  |  subnet-04dc4abb4150e2d60  |  vpc-0cf4834f08cee5ab4  |
+|  ap-northeast-1a|  172.31.32.0/20 |  subnet-0b0264504a77d1308  |  vpc-0cf4834f08cee5ab4  |
++-----------------+-----------------+----------------------------+-------------------------+
+--- Internet gateways ---
+[
+    {
+        "IGW": "igw-01f2397a26851b5fa",
+        "Attachments": [
+            {
+                "State": "available",
+                "VpcId": "vpc-0cf4834f08cee5ab4"
+            }
+        ]
+    }
+]
+--- NAT gateways ---
+No resources found.
+--- VPC endpoints ---
+No resources found.
+--- Route tables ---
+[
+    {
+        "RouteTable": "rtb-03cd7201ccf314545",
+        "VPC": "vpc-0cf4834f08cee5ab4",
+        "Associations": []
+    }
+]
+--- Security groups ---
+--------------------------------------------------------------
+|                   DescribeSecurityGroups                   |
++-----------------------+----------+-------------------------+
+|         Group         |  Name    |           VPC           |
++-----------------------+----------+-------------------------+
+|  sg-00c4026fc309e4e19 |  default |  vpc-0cf4834f08cee5ab4  |
++-----------------------+----------+-------------------------+
+--- Network ACLs ---
+---------------------------------------------------------------
+|                     DescribeNetworkAcls                     |
++------------------------+----------+-------------------------+
+|           ACL          | Default  |           VPC           |
++------------------------+----------+-------------------------+
+|  acl-0262db921e6903c82 |  True    |  vpc-0cf4834f08cee5ab4  |
++------------------------+----------+-------------------------+
+--- Network interfaces ---
+No resources found.
+--- Client VPN endpoints ---
+No resources found.
+--- Site-to-Site VPN connections ---
+No resources found.
+--- Customer gateways ---
+No resources found.
+--- Virtual private gateways ---
+[]
+--- Transit gateways ---
+No resources found.
+--- Transit gateway attachments ---
+No resources found.
+--- VPC peering connections ---
+No resources found.
+--- Elastic IP addresses ---
+No resources found.
+--- EC2 instances (all states) ---
+No resources found.
+--- RDS databases ---
+No resources found.
+--- RDS DB subnet groups ---
+No resources found.
+--- Load balancers ---
+No resources found.
+--- Classic load balancers ---
+No resources found.
+--- VPC flow logs ---
+No resources found.
+--- Network Firewall firewalls ---
+No resources found.
+--- EKS clusters ---
+--------------
+|ListClusters|
++------------+
+--- ECS clusters ---
+--------------
+|ListClusters|
++------------+
+
+========== REGION: ap-northeast-2 ==========
+--- VPCs ---
+--------------------------------------------------------------------
+|                           DescribeVpcs                           |
++----------------+----------+------------+-------------------------+
+|      CIDR      | Default  |   State    |           VPC           |
++----------------+----------+------------+-------------------------+
+|  172.31.0.0/16 |  True    |  available |  vpc-0b633bffa7f6086f3  |
++----------------+----------+------------+-------------------------+
+--- Subnets ---
+--------------------------------------------------------------------------------------------
+|                                      DescribeSubnets                                     |
++-----------------+-----------------+----------------------------+-------------------------+
+|       AZ        |      CIDR       |          Subnet            |           VPC           |
++-----------------+-----------------+----------------------------+-------------------------+
+|  ap-northeast-2b|  172.31.16.0/20 |  subnet-08b7d959140d53824  |  vpc-0b633bffa7f6086f3  |
+|  ap-northeast-2a|  172.31.0.0/20  |  subnet-08a80a6ac70dc304c  |  vpc-0b633bffa7f6086f3  |
+|  ap-northeast-2c|  172.31.32.0/20 |  subnet-0c86476dd6979597b  |  vpc-0b633bffa7f6086f3  |
+|  ap-northeast-2d|  172.31.48.0/20 |  subnet-05f99fe1cb92cc7ca  |  vpc-0b633bffa7f6086f3  |
++-----------------+-----------------+----------------------------+-------------------------+
+--- Internet gateways ---
+[
+    {
+        "IGW": "igw-05cbe9f611f3a737b",
+        "Attachments": [
+            {
+                "State": "available",
+                "VpcId": "vpc-0b633bffa7f6086f3"
+            }
+        ]
+    }
+]
+--- NAT gateways ---
+No resources found.
+--- VPC endpoints ---
+No resources found.
+--- Route tables ---
+[
+    {
+        "RouteTable": "rtb-010b96e60188a6b35",
+        "VPC": "vpc-0b633bffa7f6086f3",
+        "Associations": []
+    }
+]
+--- Security groups ---
+--------------------------------------------------------------
+|                   DescribeSecurityGroups                   |
++-----------------------+----------+-------------------------+
+|         Group         |  Name    |           VPC           |
++-----------------------+----------+-------------------------+
+|  sg-0e3007f646da81173 |  default |  vpc-0b633bffa7f6086f3  |
++-----------------------+----------+-------------------------+
+--- Network ACLs ---
+---------------------------------------------------------------
+|                     DescribeNetworkAcls                     |
++------------------------+----------+-------------------------+
+|           ACL          | Default  |           VPC           |
++------------------------+----------+-------------------------+
+|  acl-099f34a8937a4b8c0 |  True    |  vpc-0b633bffa7f6086f3  |
++------------------------+----------+-------------------------+
+--- Network interfaces ---
+No resources found.
+--- Client VPN endpoints ---
+No resources found.
+--- Site-to-Site VPN connections ---
+No resources found.
+--- Customer gateways ---
+No resources found.
+--- Virtual private gateways ---
+[]
+--- Transit gateways ---
+No resources found.
+--- Transit gateway attachments ---
+No resources found.
+--- VPC peering connections ---
+No resources found.
+--- Elastic IP addresses ---
+No resources found.
+--- EC2 instances (all states) ---
+No resources found.
+--- RDS databases ---
+No resources found.
+--- RDS DB subnet groups ---
+No resources found.
+--- Load balancers ---
+No resources found.
+--- Classic load balancers ---
+No resources found.
+--- VPC flow logs ---
+No resources found.
+--- Network Firewall firewalls ---
+No resources found.
+--- EKS clusters ---
+--------------
+|ListClusters|
++------------+
+--- ECS clusters ---
+--------------
+|ListClusters|
++------------+
+
+========== REGION: ap-northeast-3 ==========
+--- VPCs ---
+--------------------------------------------------------------------
+|                           DescribeVpcs                           |
++----------------+----------+------------+-------------------------+
+|      CIDR      | Default  |   State    |           VPC           |
++----------------+----------+------------+-------------------------+
+|  172.31.0.0/16 |  True    |  available |  vpc-0c9c6607af8e58687  |
++----------------+----------+------------+-------------------------+
+--- Subnets ---
+--------------------------------------------------------------------------------------------
+|                                      DescribeSubnets                                     |
++-----------------+-----------------+----------------------------+-------------------------+
+|       AZ        |      CIDR       |          Subnet            |           VPC           |
++-----------------+-----------------+----------------------------+-------------------------+
+|  ap-northeast-3a|  172.31.32.0/20 |  subnet-0c2bba98e4a9a0764  |  vpc-0c9c6607af8e58687  |
+|  ap-northeast-3b|  172.31.16.0/20 |  subnet-0d90f93902fc9a077  |  vpc-0c9c6607af8e58687  |
+|  ap-northeast-3c|  172.31.0.0/20  |  subnet-032aa7330b4d49225  |  vpc-0c9c6607af8e58687  |
++-----------------+-----------------+----------------------------+-------------------------+
+--- Internet gateways ---
+[
+    {
+        "IGW": "igw-01a8bf4b66d936244",
+        "Attachments": [
+            {
+                "State": "available",
+                "VpcId": "vpc-0c9c6607af8e58687"
+            }
+        ]
+    }
+]
+--- NAT gateways ---
+No resources found.
+--- VPC endpoints ---
+No resources found.
+--- Route tables ---
+[
+    {
+        "RouteTable": "rtb-0628be6a40625f021",
+        "VPC": "vpc-0c9c6607af8e58687",
+        "Associations": []
+    }
+]
+--- Security groups ---
+--------------------------------------------------------------
+|                   DescribeSecurityGroups                   |
++-----------------------+----------+-------------------------+
+|         Group         |  Name    |           VPC           |
++-----------------------+----------+-------------------------+
+|  sg-023a4a617f994b4ec |  default |  vpc-0c9c6607af8e58687  |
++-----------------------+----------+-------------------------+
+--- Network ACLs ---
+---------------------------------------------------------------
+|                     DescribeNetworkAcls                     |
++------------------------+----------+-------------------------+
+|           ACL          | Default  |           VPC           |
++------------------------+----------+-------------------------+
+|  acl-09bb739e146dd0515 |  True    |  vpc-0c9c6607af8e58687  |
++------------------------+----------+-------------------------+
+--- Network interfaces ---
+No resources found.
+--- Client VPN endpoints ---
+No resources found.
+--- Site-to-Site VPN connections ---
+No resources found.
+--- Customer gateways ---
+No resources found.
+--- Virtual private gateways ---
+[]
+--- Transit gateways ---
+No resources found.
+--- Transit gateway attachments ---
+No resources found.
+--- VPC peering connections ---
+No resources found.
+--- Elastic IP addresses ---
+No resources found.
+--- EC2 instances (all states) ---
+No resources found.
+--- RDS databases ---
+No resources found.
+--- RDS DB subnet groups ---
+No resources found.
+--- Load balancers ---
+No resources found.
+--- Classic load balancers ---
+No resources found.
+--- VPC flow logs ---
+No resources found.
+--- Network Firewall firewalls ---
+No resources found.
+--- EKS clusters ---
+--------------
+|ListClusters|
++------------+
+--- ECS clusters ---
+--------------
+|ListClusters|
++------------+
+
+========== REGION: ap-south-1 ==========
+--- VPCs ---
+No resources found.
+--- Subnets ---
+No resources found.
+--- Internet gateways ---
+[]
+--- NAT gateways ---
+No resources found.
+--- VPC endpoints ---
+No resources found.
+--- Route tables ---
+[]
+--- Security groups ---
+No resources found.
+--- Network ACLs ---
+No resources found.
+--- Network interfaces ---
+No resources found.
+--- Client VPN endpoints ---
+No resources found.
+--- Site-to-Site VPN connections ---
+No resources found.
+--- Customer gateways ---
+No resources found.
+--- Virtual private gateways ---
+[]
+--- Transit gateways ---
